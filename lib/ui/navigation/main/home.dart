@@ -186,9 +186,7 @@ class _ContainerHomeState extends State<ContainerHome> {
 
       print('HTTP_RESPONSE: $_map');
 
-      final response = Product.fromJson(_map[0]);
-
-
+      final response = User.fromJson(_map[0]);
 
       if (response.status == "01") {
 

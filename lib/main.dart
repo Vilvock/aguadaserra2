@@ -24,16 +24,8 @@ import 'package:flutter/services.dart';
 import 'config/preferences.dart';
 
 void main() async {
-  debugPrint("Starting the app");
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChannels.lifecycle.setMessageHandler((msg) async {
-    if (msg == AppLifecycleState.resumed.toString()) {
-      // final packageName = await PackageInfo.fromPlatform()
-      //     .then((packageInfo) => packageInfo.packageName);
-      // print('Nome do pacote: $packageName');
-    }
-    return null;
-  });
+
   await Preferences.init();
 
   if (Platform.isAndroid) {

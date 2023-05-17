@@ -31,6 +31,37 @@ class _Favorites extends State<Favorites> {
 
   final postRequest = PostRequest();
 
+
+  Future<void> deleteFavorite() async {
+    try {
+      final body = {
+        "id": "11",
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.DELETE_FAVORITE, body);
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      final response = Favorite.fromJson(_map[0]);
+
+      if (response.status == "01") {
+        setState(() {
+
+        });
+
+      } else {}
+      ApplicationMessages(context: context).showMessage(response.msg);
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
   Future<List<Map<String, dynamic>>> listFavorites() async {
     try {
       final body = {

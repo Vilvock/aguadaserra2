@@ -20,14 +20,14 @@ import '../../../components/dot_indicator.dart';
 import '../../../components/progress_hud.dart';
 import '../home.dart';
 
-class ProductDetail extends StatefulWidget {
-  const ProductDetail({Key? key}) : super(key: key);
+class OrderDetail extends StatefulWidget {
+  const OrderDetail({Key? key}) : super(key: key);
 
   @override
-  State<ProductDetail> createState() => _ProductDetail();
+  State<OrderDetail> createState() => _OrderDetail();
 }
 
-class _ProductDetail extends State<ProductDetail> {
+class _OrderDetail extends State<OrderDetail> {
   bool _isLoading = false;
   int _pageIndex = 0;
 
