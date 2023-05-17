@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
+import '../../../../../global/application_constant.dart';
 import '../../../../../res/dimens.dart';
 import '../../../../../res/owner_colors.dart';
 import '../../../../../res/strings.dart';
+import '../../../../../web_service/links.dart';
+import '../../../../../web_service/service_response.dart';
 import '../../../../components/custom_app_bar.dart';
 import '../../../../components/progress_hud.dart';
 
@@ -15,6 +20,30 @@ class Categories extends StatefulWidget {
 
 class _Categories extends State<Categories> {
   bool _isLoading = false;
+
+  final postRequest = PostRequest();
+
+  Future<List<Map<String, dynamic>>> listCategories() async {
+    try {
+      final body = {
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json =
+      await postRequest.sendPostRequest(Links.LIST_CATEGORIES, body);
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      return _map;
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

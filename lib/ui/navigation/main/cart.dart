@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
+import '../../../config/application_messages.dart';
+import '../../../global/application_constant.dart';
 import '../../../res/dimens.dart';
 import '../../../res/owner_colors.dart';
 import '../../../res/strings.dart';
+import '../../../web_service/links.dart';
+import '../../../web_service/service_response.dart';
 import '../../components/custom_app_bar.dart';
 import '../../components/progress_hud.dart';
 
@@ -15,6 +21,61 @@ class Cart extends StatefulWidget {
 
 class _Cart extends State<Cart> {
   bool _isLoading = false;
+
+
+  final postRequest = PostRequest();
+
+  Future<List<Map<String, dynamic>>> listCartItems() async {
+    try {
+      final body = {
+        "id_carrinho": 22,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json =
+      await postRequest.sendPostRequest(Links.LIST_CART_ITEMS, body);
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      return _map;
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
+  Future<void> saveAddress() async {
+    try {
+      final body = {
+        "id": 57,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.DELETE_ITEM_CART, body);
+      // final parsedResponse = jsonDecode(json); // pegar um objeto so
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      // final response = User.fromJson(_map[0]);
+      //
+      // if (response.status == "01") {
+      //   setState(() {});
+      //
+      // } else {}
+      // ApplicationMessages(context: context).showMessage(response.msg);
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
