@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../config/application_messages.dart';
@@ -116,10 +117,13 @@ class _ContainerHomeState extends State<ContainerHome> {
   @override
   void initState() {
     super.initState();
+
+    saveFcm();
   }
 
   late final validator;
   final postRequest = PostRequest();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   Future<List<Map<String, dynamic>>> listHighlightsRequest() async {
     try {
@@ -147,13 +151,13 @@ class _ContainerHomeState extends State<ContainerHome> {
 
   Future<void> saveFcm() async {
     try {
-      // await Preferences.init();
-      // String? savedFcmToken = await Preferences.getInstanceTokenFcm();
-      // String? currentFcmToken = await _firebaseMessaging.getToken();
-      // if (savedFcmToken != null && savedFcmToken == currentFcmToken) {
-      //   print('FCM: não salvou');
-      //   return;
-      // }
+      await Preferences.init();
+      String? savedFcmToken = await Preferences.getInstanceTokenFcm();
+      String? currentFcmToken = await _firebaseMessaging.getToken();
+      if (savedFcmToken != null && savedFcmToken == currentFcmToken) {
+        print('FCM: não salvou');
+        return;
+      }
 
       var _type = "";
 
@@ -168,7 +172,7 @@ class _ContainerHomeState extends State<ContainerHome> {
       final body = {
         "id_user": await Preferences.getUserData()!.id,
         "type": _type,
-        "registration_id": "",
+        "registration_id": currentFcmToken,
         "token": ApplicationConstant.TOKEN,
       };
 
@@ -184,8 +188,11 @@ class _ContainerHomeState extends State<ContainerHome> {
 
       final response = Product.fromJson(_map[0]);
 
+
+
       if (response.status == "01") {
 
+        await Preferences.saveInstanceTokenFcm("token", currentFcmToken!);
         setState(() {
 
         });

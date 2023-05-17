@@ -39,13 +39,13 @@ void main() async {
   if (Platform.isAndroid) {
     await Firebase.initializeApp();
   } else if (Platform.isIOS){
-    // await Firebase.initializeApp(
-    //     options: FirebaseOptions(
-    //   apiKey: WSConstants.API_KEY,
-    //   appId: WSConstants.APP_ID,
-    //   messagingSenderId: WSConstants.MESSGING_SENDER_ID,
-    //   projectId: WSConstants.PROJECT_ID,
-    // ));
+    await Firebase.initializeApp(
+        /*options: FirebaseOptions(
+      apiKey: WSConstants.API_KEY,
+      appId: WSConstants.APP_ID,
+      messagingSenderId: WSConstants.MESSGING_SENDER_ID,
+      projectId: WSConstants.PROJECT_ID,
+    )*/);
   }
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
