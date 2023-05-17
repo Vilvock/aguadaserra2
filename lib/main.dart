@@ -1,4 +1,6 @@
 // @dart=2.9
+import 'dart:io';
+
 import 'package:app/res/owner_colors.dart';
 import 'package:app/ui/navigation/auth/login.dart';
 import 'package:app/ui/navigation/auth/register.dart';
@@ -14,13 +16,66 @@ import 'package:app/ui/navigation/main/menu/categories/subcategories.dart';
 import 'package:app/ui/navigation/main/menu/user/profile.dart';
 import 'package:app/ui/navigation/main/product/product_detail.dart';
 import 'package:app/ui/navigation/utilities/pdf_viewer.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-void main() {
+import 'config/preferences.dart';
+
+void main() async {
+  debugPrint("Starting the app");
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChannels.lifecycle.setMessageHandler((msg) async {
+    if (msg == AppLifecycleState.resumed.toString()) {
+      // final packageName = await PackageInfo.fromPlatform()
+      //     .then((packageInfo) => packageInfo.packageName);
+      // print('Nome do pacote: $packageName');
+    }
+    return null;
+  });
+  await Preferences.init();
+
+  if (Platform.isAndroid) {
+    await Firebase.initializeApp();
+  } else if (Platform.isIOS){
+    // await Firebase.initializeApp(
+    //     options: FirebaseOptions(
+    //   apiKey: WSConstants.API_KEY,
+    //   appId: WSConstants.APP_ID,
+    //   messagingSenderId: WSConstants.MESSGING_SENDER_ID,
+    //   projectId: WSConstants.PROJECT_ID,
+    // ));
+  }
+
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Mensagem recebida: ${message.notification.title}');
+  });
+
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    print('Mensagem aberta: ${message.notification.title}');
+  });
+
+  Future<void> _firebaseMessagingBackgroundHandler(
+      RemoteMessage message) async {
+    print('Mensagem recebida em segundo plano: ${message.notification.title}');
+  }
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     title: "Água da Serra",
-    initialRoute:'/ui/splash',
+    initialRoute: '/ui/splash',
     color: OwnerColors.colorPrimary,
     routes: {
       '/ui/splash': (context) => Splash(),
@@ -37,7 +92,6 @@ void main() {
       '/ui/user_addresses': (context) => UserAddresses(),
       '/ui/method_payment': (context) => MethodPayment(),
       '/ui/sucess': (context) => Sucess()
-
 
       //lista horizontal
       // Container(

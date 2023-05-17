@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "556275768622",
+    "project_id": "agua-da-serra",
+    "storage_bucket": "agua-da-serra.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556275768622:android:ae0c6e98224035b5eeeebf",
+        "android_client_info": {
+          "package_name": "com.aguadaserra.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "556275768622-ji6baqtq5lmk71p7ba594bnsvj0ffajo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdqSIAJ6LvlaZS1AMBYlvbxJbIveZ8fmE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "556275768622-ji6baqtq5lmk71p7ba594bnsvj0ffajo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "556275768622-g47s9j9g5qoogcr9if2s3pt8secnfvq0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.aguadasera.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
