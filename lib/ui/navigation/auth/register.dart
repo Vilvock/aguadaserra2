@@ -126,14 +126,14 @@ class _RegisterState extends State<Register> {
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: CustomAppBar(),
+        // appBar: CustomAppBar(),
         body: Container(
-          // decoration: BoxDecoration(
-          //     gradient: LinearGradient(colors: [
-          //       OwnerColors.gradientFirstColor,
-          //       OwnerColors.gradientSecondaryColor,
-          //       OwnerColors.gradientThirdColor
-          //     ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
+          decoration: BoxDecoration(
+              gradient: LinearGradient(colors: [
+                OwnerColors.gradientFirstColor,
+                OwnerColors.gradientSecondaryColor,
+                OwnerColors.gradientThirdColor
+              ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
           child: Column(children: [
             Expanded(
                 child: SingleChildScrollView(
@@ -149,7 +149,7 @@ class _RegisterState extends State<Register> {
                           fontFamily: 'Inter',
                           fontSize: Dimens.textSize8,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: Colors.white,
                         ),
                       ),
                     ),
@@ -379,7 +379,7 @@ class _RegisterState extends State<Register> {
                             child: Text(
                               "Ao clicar no botão Criar conta, você aceita os termos de privacidade do aplicativo.",
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontSize: Dimens.textSize5,
                                 fontFamily: 'Inter',
                               ),
@@ -435,7 +435,7 @@ class _RegisterState extends State<Register> {
                             child: Text(
                               "Já possui uma conta? Entre aqui",
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontSize: Dimens.textSize5,
                                 fontFamily: 'Inter',
                               ),

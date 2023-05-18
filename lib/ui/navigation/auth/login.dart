@@ -98,18 +98,18 @@ class _LoginState extends State<Login> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(),
+      // appBar: CustomAppBar(),
       body: Container(
-        // decoration: BoxDecoration(
-        //     gradient: LinearGradient(colors: [
-        //       OwnerColors.gradientFirstColor,
-        //       OwnerColors.gradientSecondaryColor,
-        //       OwnerColors.gradientThirdColor
-        //     ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-        margin: EdgeInsets.all(Dimens.marginApplication),
+        decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+              OwnerColors.gradientFirstColor,
+              OwnerColors.gradientSecondaryColor,
+              OwnerColors.gradientThirdColor
+            ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
         child: Column(
           children: [
             Expanded(child: Container (
+              margin: EdgeInsets.all(Dimens.marginApplication),
               child: Column(
                 children: [
                   Container(
@@ -120,7 +120,7 @@ class _LoginState extends State<Login> {
                         fontFamily: 'Inter',
                         fontSize: Dimens.textSize8,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -195,7 +195,7 @@ class _LoginState extends State<Login> {
                     child: Text(
                       "Esqueceu sua senha?",
                       style: TextStyle(
-                        color: Colors.grey,
+                        color: Colors.white,
                         fontSize:Dimens.textSize5,
                         fontFamily: 'Inter',
                       ),
@@ -237,7 +237,7 @@ class _LoginState extends State<Login> {
                             child: Text(
                               "Ainda não possui uma conta? Entre aqui",
                               style: TextStyle(
-                                color: Colors.grey,
+                                color: Colors.white,
                                 fontSize: Dimens.textSize5,
                                 fontFamily: 'Inter',
                               ),
