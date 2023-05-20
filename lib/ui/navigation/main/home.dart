@@ -208,10 +208,7 @@ class _ContainerHomeState extends State<ContainerHome> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(title: "Início", isVisibleBackButton: false, isVisibleSearchButton: true,),
-        body: ProgressHUD(
-          inAsyncCall: _isLoading,
-          valueColor: AlwaysStoppedAnimation<Color>(OwnerColors.colorPrimary),
-          child: RefreshIndicator(
+        body: RefreshIndicator(
               onRefresh: _pullRefresh,
               child: Container(
                 child: SingleChildScrollView(
@@ -387,7 +384,7 @@ class _ContainerHomeState extends State<ContainerHome> {
                           } else if (snapshot.hasError) {
                             return Text('${snapshot.error}');
                           }
-                          return const CircularProgressIndicator();
+                          return Center( child: CircularProgressIndicator());
                         },
                       ),
                       Container(
@@ -424,7 +421,7 @@ class _ContainerHomeState extends State<ContainerHome> {
                   ),
                 ),
               )),
-        ));
+        );
   }
 
   Future<void> _pullRefresh() async {
