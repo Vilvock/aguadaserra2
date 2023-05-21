@@ -200,13 +200,6 @@ class _UserAddresses extends State<UserAddresses> {
                   padding: EdgeInsets.all(Dimens.paddingApplication),
                   child: Row(
                     children: [
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Radio(
-                            value: "radio value",
-                            groupValue: "group value",
-                            onChanged: (value) {}),
-                      ),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

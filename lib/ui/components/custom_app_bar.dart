@@ -85,7 +85,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     if (isVisibleAddressButton) {
       _widgetList.add(IconButton(
         icon: Icon(
-          Icons.add_location_alt,
+          Icons.add_location_alt_outlined,
           color: Colors.black,
         ),
         onPressed: () {

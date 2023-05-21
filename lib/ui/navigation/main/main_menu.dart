@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app/res/styles.dart';
 import 'package:flutter/material.dart';
 import '../../../config/application_messages.dart';
 import '../../../config/preferences.dart';
@@ -169,13 +170,8 @@ class _MainMenu extends State<MainMenu> {
                   Navigator.pushNamed(context, "/ui/user_addresses");
                 }),
 
-            Divider(
-              color: Colors.black12,
-              height: 2,
-              thickness: 1.5,
-              indent: Dimens.marginApplication,
-              endIndent: Dimens.marginApplication,
-            ),
+
+            Styles().div_horizontal,
             GestureDetector(
                 child: Container(
                   padding: EdgeInsets.all(Dimens.maxPaddingApplication),
@@ -215,13 +211,8 @@ class _MainMenu extends State<MainMenu> {
                 ),
                 onTap: () {Navigator.pushNamed(context, "/ui/categories");}
             ),
-            Divider(
-              color: Colors.black12,
-              height: 2,
-              thickness: 1.5,
-              indent: Dimens.marginApplication,
-              endIndent: Dimens.marginApplication,
-            ),
+
+            Styles().div_horizontal,
             GestureDetector(
                 child: Container(
                   padding: EdgeInsets.all(Dimens.maxPaddingApplication),
@@ -262,13 +253,8 @@ class _MainMenu extends State<MainMenu> {
                 ),
                 onTap: () {}),
 
-            Divider(
-              color: Colors.black12,
-              height: 2,
-              thickness: 1.5,
-              indent: Dimens.marginApplication,
-              endIndent: Dimens.marginApplication,
-            ),
+
+            Styles().div_horizontal,
 
             GestureDetector(
                 child: Container(
@@ -337,13 +323,7 @@ class _MainMenu extends State<MainMenu> {
                   );
                 }),
 
-            Divider(
-              color: Colors.black12,
-              height: 2,
-              thickness: 1.5,
-              indent: Dimens.marginApplication,
-              endIndent: Dimens.marginApplication,
-            ),
+            Styles().div_horizontal
           ],
         ),
       ),

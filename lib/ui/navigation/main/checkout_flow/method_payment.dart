@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../res/dimens.dart';
 import '../../../../res/owner_colors.dart';
+import '../../../../res/strings.dart';
+import '../../../../res/styles.dart';
 import '../../../components/custom_app_bar.dart';
 import '../../../components/progress_hud.dart';
 
@@ -22,6 +24,54 @@ class _MethodPayment extends State<MethodPayment> {
         body: Container(
             child: SingleChildScrollView(
                 child: Column(children: [
+          Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Dimens.minRadiusApplication),
+            ),
+            margin: EdgeInsets.all(Dimens.minMarginApplication),
+            child: InkWell(
+                onTap: () {
+
+                  Navigator.pushNamed(context, "/ui/user_addresses");
+                },
+                child: Container(
+                  padding: EdgeInsets.all(Dimens.paddingApplication),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Endereço selecionado",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: Dimens.textSize4,
+                                fontWeight: FontWeight.bold,
+                                color: OwnerColors.colorPrimaryDark,
+                              ),
+                            ),
+                            SizedBox(height: Dimens.minMarginApplication),
+                            Text(
+                              Strings.longLoremIpsum,
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: Dimens.textSize5,
+                                color: Colors.black,
+                              ),
+                            ),
+                            SizedBox(height: Dimens.minMarginApplication),
+                            Styles().div_horizontal
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                )),
+          ),
+          SizedBox(height: Dimens.minMarginApplication),
+          Styles().div_horizontal,
+          SizedBox(height: Dimens.minMarginApplication),
           InkWell(
               onTap: () {},
               child: Card(

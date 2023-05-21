@@ -1,5 +1,6 @@
 class Dimens {
 
+  static const double buttonPaddingApplication = 12.0;
 
   static const double textSize4 = 12.0;
   static const double textSize5 = 14.0;
