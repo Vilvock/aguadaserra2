@@ -37,7 +37,7 @@ class _HomeState extends State<Home> {
   int _selectedIndex = 0;
   List<Widget> _widgetOptions = [
     ContainerHome(),
-    Cart(),
+    CartShopping(),
     Orders(),
     Favorites(),
     MainMenu()

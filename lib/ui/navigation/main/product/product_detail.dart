@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app/model/cart.dart';
 import 'package:app/model/favorite.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ class _ProductDetail extends State<ProductDetail> {
   int _pageIndex = 0;
 
   late int _id;
+  int _quantity = 1;
 
   final postRequest = PostRequest();
 
@@ -45,7 +47,7 @@ class _ProductDetail extends State<ProductDetail> {
     super.dispose();
   }
 
-  Future<void> openCart() async {
+  Future<void> openCart(String unityItemValue, String quantity) async {
     try {
       final body = {
         "id_user": await Preferences.getUserData()!.id,
@@ -61,12 +63,15 @@ class _ProductDetail extends State<ProductDetail> {
 
       print('HTTP_RESPONSE: $_map');
 
-      final response = Favorite.fromJson(_map[0]);
+      final response = Cart.fromJson(_map[0]);
 
-      if (response.status == "01") {
-        setState(() {});
-      } else {}
-      ApplicationMessages(context: context).showMessage(response.msg);
+      if (response.carrinho_aberto.toString().isNotEmpty) {
+        setState(() {
+
+          addItemToCart(_id.toString(), unityItemValue, quantity, response.carrinho_aberto.toString());
+
+        });
+      }
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
     }
@@ -306,13 +311,17 @@ class _ProductDetail extends State<ProductDetail> {
                                           color: Colors.black),
                                       backgroundColor: Colors.white,
                                       onPressed: () {
-                                        // Add your onPressed code here!
+                                        if (_quantity == 1) return;
+
+                                        setState(() {
+                                          _quantity--;
+                                        });
                                       },
                                     ),
                                     SizedBox(
                                         width: Dimens.minMarginApplication),
                                     Text(
-                                      "1",
+                                      _quantity.toString(),
                                       style: TextStyle(
                                         fontFamily: 'Inter',
                                         fontSize: Dimens.textSize5,
@@ -327,7 +336,11 @@ class _ProductDetail extends State<ProductDetail> {
                                           color: Colors.black),
                                       backgroundColor: Colors.white,
                                       onPressed: () {
-                                        // Add your onPressed code here!
+
+                                        setState(() {
+                                          _quantity++;
+                                        });
+
                                       },
                                     ),
                                   ])
@@ -345,11 +358,15 @@ class _ProductDetail extends State<ProductDetail> {
                             margin: EdgeInsets.all(Dimens.minMarginApplication),
                             width: double.infinity,
                             child: ElevatedButton(
+                                onPressed: () {
+
+                                  openCart(response.valor, _quantity.toString());
+
+                                },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
                                       OwnerColors.colorPrimary),
                                 ),
-                                onPressed: () {},
                                 child: Row(
                                   children: [
                                     Icon(Icons.shopping_cart_outlined),

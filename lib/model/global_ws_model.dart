@@ -1,8 +1,8 @@
 class GlobalWSModel {
-  final int id;
-  final String status;
-  final String msg;
-  final int rows;
+  final dynamic id;
+  final dynamic status;
+  final dynamic msg;
+  final dynamic rows;
 
   GlobalWSModel({
     required this.id,
