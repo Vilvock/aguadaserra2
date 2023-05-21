@@ -81,7 +81,7 @@ class _CartShopping extends State<CartShopping> {
     }
   }
 
-  Future<List<dynamic>> listCartItems(String idCart) async {
+  Future<Cart> listCartItems(String idCart) async {
     try {
       final body = {"id_carrinho": idCart, "token": ApplicationConstant.TOKEN};
 
@@ -97,7 +97,7 @@ class _CartShopping extends State<CartShopping> {
 
       // setState(() {});
 
-      return response.itens;
+      return response;
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
     }
@@ -144,20 +144,23 @@ class _CartShopping extends State<CartShopping> {
                     height: double.infinity,
                     child: RefreshIndicator(
                       onRefresh: _pullRefresh,
-                      child: FutureBuilder<List<dynamic>>(
+                      child: FutureBuilder<Cart>(
                         future:
                             listCartItems(response.carrinho_aberto.toString()),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
+
+                            final response = snapshot.data!;
+
                             return Stack(children: [
                               ListView.builder(
                                 padding: EdgeInsets.only(bottom: 300),
-                                itemCount: snapshot.data!.length,
+                                itemCount: snapshot.data!.itens.length,
                                 itemBuilder: (context, index) {
-                                  final response =
-                                      Item.fromJson(snapshot.data![index]);
+                                  final responseList =
+                                      Item.fromJson(snapshot.data!.itens[index]);
 
-                                  if (response.rows != 0) {
+                                  if (responseList.rows != 0) {
                                     return Card(
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(
@@ -183,7 +186,7 @@ class _CartShopping extends State<CartShopping> {
                                                     child: Image.network(
                                                       ApplicationConstant
                                                               .URL_PRODUCT_PHOTO +
-                                                          response.url_foto
+                                                          responseList.url_foto
                                                               .toString(),
                                                       height: 90,
                                                       width: 90,
@@ -199,7 +202,7 @@ class _CartShopping extends State<CartShopping> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    response.nome_produto,
+                                                    responseList.nome_produto,
                                                     maxLines: 1,
                                                     overflow:
                                                         TextOverflow.ellipsis,
@@ -230,7 +233,7 @@ class _CartShopping extends State<CartShopping> {
                                                       height: Dimens
                                                           .marginApplication),
                                                   Text(
-                                                    response.valor_uni,
+                                                    responseList.valor_uni,
                                                     style: TextStyle(
                                                       fontFamily: 'Inter',
                                                       fontSize:
@@ -298,7 +301,7 @@ class _CartShopping extends State<CartShopping> {
                                                         ),
                                                         onTap: () => {
                                                           deleteItemCart(
-                                                              response.id_item
+                                                              responseList.id_item
                                                                   .toString())
                                                         },
                                                       )
@@ -368,7 +371,7 @@ class _CartShopping extends State<CartShopping> {
                                                 ),
                                               ),
                                               Text(
-                                                "-- , --",
+                                                response.total,
                                                 style: TextStyle(
                                                   fontFamily: 'Inter',
                                                   fontSize: Dimens.textSize6,
