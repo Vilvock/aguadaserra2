@@ -82,6 +82,9 @@ flutter:
     - images/intro3_image.png
     - images/map_image256.png
     - images/person.jpg
+    - images/credit_card.png
+    - images/qr_code.png
+    - images/ticket.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

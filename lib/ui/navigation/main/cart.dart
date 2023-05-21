@@ -120,6 +120,7 @@ class _CartShopping extends State<CartShopping> {
       final response = Cart.fromJson(_map[0]);
 
       if (response.status == "01") {
+        setState(() {});
       } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
@@ -153,134 +154,167 @@ class _CartShopping extends State<CartShopping> {
                                 padding: EdgeInsets.only(bottom: 300),
                                 itemCount: snapshot.data!.length,
                                 itemBuilder: (context, index) {
-                                  return Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          Dimens.minRadiusApplication),
-                                    ),
-                                    margin: EdgeInsets.all(
-                                        Dimens.minMarginApplication),
-                                    child: Container(
-                                      padding: EdgeInsets.all(
-                                          Dimens.paddingApplication),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                              margin: EdgeInsets.only(
-                                                  right: Dimens
-                                                      .minMarginApplication),
-                                              child: ClipRRect(
-                                                  borderRadius: BorderRadius
-                                                      .circular(Dimens
-                                                          .minRadiusApplication),
-                                                  child: Image.asset(
-                                                    'images/person.jpg',
-                                                    height: 90,
-                                                    width: 90,
-                                                  ))),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  Strings.shortLoremIpsum,
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontFamily: 'Inter',
-                                                    fontSize: Dimens.textSize6,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                    height: Dimens
-                                                        .minMarginApplication),
-                                                Text(
-                                                  Strings.longLoremIpsum,
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontFamily: 'Inter',
-                                                    fontSize: Dimens.textSize5,
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                    height: Dimens
-                                                        .marginApplication),
-                                                Text(
-                                                  "R\$ 50,00",
-                                                  style: TextStyle(
-                                                    fontFamily: 'Inter',
-                                                    fontSize: Dimens.textSize6,
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                    height: Dimens
-                                                        .minMarginApplication),
-                                                Divider(
-                                                  color: Colors.black12,
-                                                  height: 2,
-                                                  thickness: 1.5,
-                                                ),
-                                                SizedBox(
-                                                    height: Dimens
-                                                        .minMarginApplication),
-                                                IntrinsicHeight(
-                                                    child: Row(
-                                                  children: [
-                                                    Icon(
-                                                        size: 20,
-                                                        Icons
-                                                            .favorite_border_outlined),
-                                                    Text(
-                                                      "Mover para os favoritos",
-                                                      style: TextStyle(
-                                                        fontFamily: 'Inter',
-                                                        fontSize:
-                                                            Dimens.textSize4,
-                                                        color: Colors.black,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                        width: Dimens
-                                                            .minMarginApplication),
-                                                    VerticalDivider(
-                                                      color: Colors.black12,
-                                                      width: 2,
-                                                      thickness: 1.5,
-                                                    ),
-                                                    SizedBox(
-                                                        width: Dimens
-                                                            .minMarginApplication),
-                                                    Icon(
-                                                        size: 20,
-                                                        Icons.delete_outline),
-                                                    Text(
-                                                      "Remover",
-                                                      style: TextStyle(
-                                                        fontFamily: 'Inter',
-                                                        fontSize:
-                                                            Dimens.textSize4,
-                                                        color: Colors.black,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ))
-                                              ],
-                                            ),
-                                          )
-                                        ],
+                                  final response =
+                                      Item.fromJson(snapshot.data![index]);
+
+                                  if (response.rows != 0) {
+                                    return Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            Dimens.minRadiusApplication),
                                       ),
-                                    ),
-                                  );
+                                      margin: EdgeInsets.all(
+                                          Dimens.minMarginApplication),
+                                      child: Container(
+                                        padding: EdgeInsets.all(
+                                            Dimens.paddingApplication),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                                margin: EdgeInsets.only(
+                                                    right: Dimens
+                                                        .minMarginApplication),
+                                                child: ClipRRect(
+                                                    borderRadius: BorderRadius
+                                                        .circular(Dimens
+                                                            .minRadiusApplication),
+                                                    child: Image.network(
+                                                      ApplicationConstant
+                                                              .URL_PRODUCT_PHOTO +
+                                                          response.url_foto
+                                                              .toString(),
+                                                      height: 90,
+                                                      width: 90,
+                                                      errorBuilder: (context,
+                                                              exception,
+                                                              stackTrack) =>
+                                                          Icon(Icons.error,
+                                                              size: 90),
+                                                    ))),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    response.nome_produto,
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      fontFamily: 'Inter',
+                                                      fontSize:
+                                                          Dimens.textSize6,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                  // SizedBox(
+                                                  //     height: Dimens
+                                                  //         .minMarginApplication),
+                                                  // Text(
+                                                  //   Strings.longLoremIpsum,
+                                                  //   maxLines: 2,
+                                                  //   overflow:
+                                                  //       TextOverflow.ellipsis,
+                                                  //   style: TextStyle(
+                                                  //     fontFamily: 'Inter',
+                                                  //     fontSize: Dimens.textSize5,
+                                                  //     color: Colors.black,
+                                                  //   ),
+                                                  // ),
+                                                  SizedBox(
+                                                      height: Dimens
+                                                          .marginApplication),
+                                                  Text(
+                                                    response.valor_uni,
+                                                    style: TextStyle(
+                                                      fontFamily: 'Inter',
+                                                      fontSize:
+                                                          Dimens.textSize6,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                      height: Dimens
+                                                          .minMarginApplication),
+                                                  Divider(
+                                                    color: Colors.black12,
+                                                    height: 2,
+                                                    thickness: 1.5,
+                                                  ),
+                                                  SizedBox(
+                                                      height: Dimens
+                                                          .minMarginApplication),
+                                                  IntrinsicHeight(
+                                                      child: Row(
+                                                    children: [
+                                                      Icon(
+                                                          size: 20,
+                                                          Icons
+                                                              .favorite_border_outlined),
+                                                      Text(
+                                                        "Mover para os favoritos",
+                                                        style: TextStyle(
+                                                          fontFamily: 'Inter',
+                                                          fontSize:
+                                                              Dimens.textSize4,
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                          width: Dimens
+                                                              .minMarginApplication),
+                                                      VerticalDivider(
+                                                        color: Colors.black12,
+                                                        width: 2,
+                                                        thickness: 1.5,
+                                                      ),
+                                                      SizedBox(
+                                                          width: Dimens
+                                                              .minMarginApplication),
+                                                      GestureDetector(
+                                                        child: Row(
+                                                          children: [
+                                                            Icon(
+                                                                size: 20,
+                                                                Icons
+                                                                    .delete_outline),
+                                                            Text(
+                                                              "Remover",
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'Inter',
+                                                                fontSize: Dimens
+                                                                    .textSize4,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        onTap: () => {
+                                                          deleteItemCart(
+                                                              response.id_item
+                                                                  .toString())
+                                                        },
+                                                      )
+                                                    ],
+                                                  ))
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    return Text('${snapshot.error}');
+                                  }
+                                  return Container(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height, child: Center(child: CircularProgressIndicator()));
                                 },
                               ),
                               Column(
@@ -387,7 +421,7 @@ class _CartShopping extends State<CartShopping> {
                           } else if (snapshot.hasError) {
                             return Text('${snapshot.error}');
                           }
-                          return const CircularProgressIndicator();
+                          return Center(child: CircularProgressIndicator());
                         },
                       ),
                     )));

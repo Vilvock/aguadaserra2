@@ -36,9 +36,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             margin: EdgeInsets.only(left: Dimens.minMarginApplication),
             child: Text(
               title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontFamily: 'Inter',
-                fontSize: Dimens.textSize7,
+                fontSize: Dimens.textSize6,
                 color: Colors.black,
               ),
             ),
