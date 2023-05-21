@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../config/preferences.dart';
 import '../../../../../global/application_constant.dart';
+import '../../../../../model/product.dart';
 import '../../../../../res/dimens.dart';
 import '../../../../../res/owner_colors.dart';
 import '../../../../../res/strings.dart';
@@ -24,11 +25,11 @@ class _Products extends State<Products> {
 
   final postRequest = PostRequest();
 
-  Future<List<Map<String, dynamic>>> listProducts() async {
+  Future<List<Map<String, dynamic>>> listProducts(String idSubcategory) async {
     try {
       final body = {
         "id_user": await Preferences.getUserData()!.id,
-        "id_subcategoria": 1,
+        "id_subcategoria": idSubcategory,
         "token": ApplicationConstant.TOKEN
       };
 
@@ -53,134 +54,154 @@ class _Products extends State<Products> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(title: "Produtos", isVisibleBackButton: true),
-        body: ProgressHUD(
-          inAsyncCall: _isLoading,
-          valueColor: AlwaysStoppedAnimation<Color>(OwnerColors.colorPrimary),
-          child: RefreshIndicator(
-            onRefresh: _pullRefresh,
-            child: ListView.builder(
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return InkWell(
-                    onTap: () =>
-                    {Navigator.pushNamed(context, "/ui/product_detail")},
-                    child: Card(
+      body: RefreshIndicator(
+        onRefresh: _pullRefresh,
+        child: FutureBuilder<List<Map<String, dynamic>>>(
+          future: listProducts("1"),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final responseItem = Product.fromJson(snapshot.data![0]);
+
+              if (responseItem.rows != 0) {
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    final response = Product.fromJson(snapshot.data![index]);
+
+                    return Card(
+                      margin: EdgeInsets.all(Dimens.minMarginApplication),
                       shape: RoundedRectangleBorder(
                         borderRadius:
                         BorderRadius.circular(Dimens.minRadiusApplication),
                       ),
-                      margin: EdgeInsets.all(Dimens.minMarginApplication),
-                      child: Container(
-                        padding: EdgeInsets.all(Dimens.paddingApplication),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                                margin: EdgeInsets.only(
-                                    right: Dimens.minMarginApplication),
-                                child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimens.minRadiusApplication),
-                                    child: Image.asset(
-                                      'images/person.jpg',
-                                      height: 90,
-                                      width: 90,
-                                    ))),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    Strings.shortLoremIpsum,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontSize: Dimens.textSize6,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  SizedBox(height: Dimens.minMarginApplication),
-                                  Text(
-                                    Strings.longLoremIpsum,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontSize: Dimens.textSize5,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  SizedBox(height: Dimens.marginApplication),
-                                  Text(
-                                    "R\$ 50,00",
-                                    style: TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontSize: Dimens.textSize6,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  SizedBox(height: Dimens.minMarginApplication),
-                                  Divider(
-                                    color: Colors.black12,
-                                    height: 2,
-                                    thickness: 1.5,
-                                  ),
-                                  SizedBox(height: Dimens.minMarginApplication),
-                                  IntrinsicHeight(
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                              size: 20, Icons.shopping_cart_outlined),
-                                          Text(
-                                            "Adicionar ao carrinho",
-                                            style: TextStyle(
-                                              fontFamily: 'Inter',
-                                              fontSize: Dimens.textSize4,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                              width: Dimens.minMarginApplication),
-                                          VerticalDivider(
-                                            color: Colors.black12,
-                                            width: 2,
-                                            thickness: 1.5,
-                                          ),
-                                          SizedBox(
-                                              width: Dimens.minMarginApplication),
-                                          Icon(size: 20, Icons.delete_outline),
-                                          Text(
-                                            "Remover",
-                                            style: TextStyle(
-                                              fontFamily: 'Inter',
-                                              fontSize: Dimens.textSize4,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ],
-                                      ))
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ));
-              },
-            ),
-          ),
+                      child: InkWell(
+                          onTap: () => {
+                            Navigator.pushNamed(
+                                context, "/ui/product_detail",
+                                arguments: {
+                                  "id_product": response.id,
+                                })
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(Dimens.paddingApplication),
+                            // child: Row(
+                            //   crossAxisAlignment: CrossAxisAlignment.start,
+                            //   children: [
+                            //     Container(
+                            //         margin: EdgeInsets.only(
+                            //             right: Dimens.minMarginApplication),
+                            //         child: ClipRRect(
+                            //             borderRadius: BorderRadius.circular(
+                            //                 Dimens.minRadiusApplication),
+                            //             child: Image.network(
+                            //               ApplicationConstant.URL_PRODUCT_PHOTO + response.url_foto.toString(),
+                            //               height: 90,
+                            //               width: 90,
+                            //               errorBuilder: (context, exception, stackTrack) => Icon(Icons.error, size: 90),
+                            //             ))),
+                            //     Expanded(
+                            //       child: Column(
+                            //         crossAxisAlignment: CrossAxisAlignment.start,
+                            //         children: [
+                            //           Text(
+                            //             response.nome,
+                            //             maxLines: 1,
+                            //             overflow: TextOverflow.ellipsis,
+                            //             style: TextStyle(
+                            //               fontFamily: 'Inter',
+                            //               fontSize: Dimens.textSize6,
+                            //               fontWeight: FontWeight.bold,
+                            //               color: Colors.black,
+                            //             ),
+                            //           ),
+                            //           SizedBox(
+                            //               height: Dimens.minMarginApplication),
+                            //           Text(
+                            //             response.descricao,
+                            //             maxLines: 2,
+                            //             overflow: TextOverflow.ellipsis,
+                            //             style: TextStyle(
+                            //               fontFamily: 'Inter',
+                            //               fontSize: Dimens.textSize5,
+                            //               color: Colors.black,
+                            //             ),
+                            //           ),
+                            //           SizedBox(height: Dimens.marginApplication),
+                            //           Text(
+                            //             response.valor,
+                            //             style: TextStyle(
+                            //               fontFamily: 'Inter',
+                            //               fontSize: Dimens.textSize6,
+                            //               color: Colors.black,
+                            //             ),
+                            //           ),
+                            //           SizedBox(
+                            //               height: Dimens.minMarginApplication),
+                            //           Divider(
+                            //             color: Colors.black12,
+                            //             height: 2,
+                            //             thickness: 1.5,
+                            //           ),
+                            //           SizedBox(
+                            //               height: Dimens.minMarginApplication),
+                            //           IntrinsicHeight(
+                            //               child: Row(
+                            //                 children: [
+                            //                   Icon(
+                            //                       size: 20,
+                            //                       Icons.shopping_cart_outlined),
+                            //                   Text(
+                            //                     "Adicionar ao carrinho",
+                            //                     style: TextStyle(
+                            //                       fontFamily: 'Inter',
+                            //                       fontSize: Dimens.textSize4,
+                            //                       color: Colors.black,
+                            //                     ),
+                            //                   ),
+                            //                   SizedBox(
+                            //                       width: Dimens.minMarginApplication),
+                            //                   VerticalDivider(
+                            //                     color: Colors.black12,
+                            //                     width: 2,
+                            //                     thickness: 1.5,
+                            //                   ),
+                            //                   SizedBox(
+                            //                       width: Dimens.minMarginApplication),
+                            //                   Icon(size: 20, Icons.delete_outline),
+                            //                   Text(
+                            //                     "Remover",
+                            //                     style: TextStyle(
+                            //                       fontFamily: 'Inter',
+                            //                       fontSize: Dimens.textSize4,
+                            //                       color: Colors.black,
+                            //                     ),
+                            //                   ),
+                            //                 ],
+                            //               ))
+                            //         ],
+                            //       ),
+                            //     )
+                            //   ],
+                            // ),
+                          )),
+                    );
+                  },
+                );
+              }
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+            return const CircularProgressIndicator();
+          },
         ),
+      ),
     );
   }
 
   Future<void> _pullRefresh() async {
     setState(() {
       _isLoading = true;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Sending Message"),
-      ));
+
       _isLoading = false;
     });
   }

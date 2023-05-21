@@ -21,7 +21,7 @@ import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 import '../../components/dot_indicator.dart';
 import '../../components/progress_hud.dart';
-import 'cart.dart';
+import 'cart_shopping.dart';
 import 'favorites.dart';
 import 'main_menu.dart';
 import 'orders.dart';
