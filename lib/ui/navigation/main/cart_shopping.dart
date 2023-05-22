@@ -34,29 +34,6 @@ class _CartShopping extends State<CartShopping> {
     super.initState();
   }
 
-  Future<List<Map<String, dynamic>>> listFavorites() async {
-    try {
-      final body = {
-        "id_user": /*await Preferences.getUserData()!.id*/ "6",
-        "token": ApplicationConstant.TOKEN
-      };
-
-      print('HTTP_BODY: $body');
-
-      final json =
-          await postRequest.sendPostRequest(Links.LIST_FAVORITES, body);
-
-      List<Map<String, dynamic>> _map = [];
-      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
-
-      print('HTTP_RESPONSE: $_map');
-
-      return _map;
-    } catch (e) {
-      throw Exception('HTTP_ERROR: $e');
-    }
-  }
-
   Future<List<Map<String, dynamic>>> openCart() async {
     try {
       final body = {
