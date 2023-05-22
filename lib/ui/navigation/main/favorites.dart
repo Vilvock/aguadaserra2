@@ -65,7 +65,7 @@ class _Favorites extends State<Favorites> {
   Future<List<Map<String, dynamic>>> listFavorites() async {
     try {
       final body = {
-        "id_user": /*await Preferences.getUserData()!.id*/"6",
+        "id_user": await Preferences.getUserData()!.id,
         "token": ApplicationConstant.TOKEN
       };
 

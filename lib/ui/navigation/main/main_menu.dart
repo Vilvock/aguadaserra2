@@ -212,7 +212,7 @@ class _MainMenu extends State<MainMenu> {
                   ),
                 ),
                 onTap: () {
-                  Navigator.pushNamed(context, "/ui/user_addresses");
+                  Navigator.pushNamed(context, "/ui/payments");
                 }),
 
 

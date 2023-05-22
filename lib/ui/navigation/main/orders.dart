@@ -35,7 +35,7 @@ class _Orders extends State<Orders> {
   Future<List<Map<String, dynamic>>> listOrders() async {
     try {
       final body = {
-        "id_user": /*await Preferences.getUserData()!.id*/"6",
+        "id_user": await Preferences.getUserData()!.id,
         "token": ApplicationConstant.TOKEN
       };
 

@@ -10,6 +10,8 @@ import '../../../config/preferences.dart';
 import '../../../config/useful.dart';
 import '../../../config/validator.dart';
 import '../../../global/application_constant.dart';
+import '../../../model/cart.dart';
+import '../../../model/favorite.dart';
 import '../../../model/product.dart';
 import '../../../model/user.dart';
 import '../../../res/dimens.dart';
@@ -114,6 +116,11 @@ class BottomNavBar extends StatelessWidget {
 class _ContainerHomeState extends State<ContainerHome> {
   bool _isLoading = false;
   int _pageIndex = 0;
+  late int _idCart;
+
+  late final validator;
+  final postRequest = PostRequest();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   @override
   void initState() {
@@ -122,9 +129,65 @@ class _ContainerHomeState extends State<ContainerHome> {
     saveFcm();
   }
 
-  late final validator;
-  final postRequest = PostRequest();
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  Future<void> openCart(String idProduct, String unityItemValue, String quantity) async {
+    try {
+      final body = {
+        "id_user": await Preferences.getUserData()!.id,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.OPENED_CART, body);
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      final response = Cart.fromJson(_map[0]);
+
+      if (response.carrinho_aberto.toString().isNotEmpty) {
+        // setState(() {
+
+          addItemToCart(idProduct, unityItemValue, quantity, response.carrinho_aberto.toString());
+
+        // });
+      }
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
+  Future<void> addItemToCart(String idProduct, String unityItemValue, String quantity, String idCart) async {
+    try {
+      final body = {
+        "id_carrinho": idCart,
+        "id_produto": idProduct,
+        "valor_uni": unityItemValue,
+        "qtd": quantity,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.ADD_ITEM_CART, body);
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      final response = Cart.fromJson(_map[0]);
+
+      if (response.status == "01") {
+        // setState(() {});
+      } else {}
+      ApplicationMessages(context: context).showMessage(response.msg);
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
 
   Future<List<Map<String, dynamic>>> listHighlightsRequest() async {
     try {
@@ -294,7 +357,7 @@ class _ContainerHomeState extends State<ContainerHome> {
                                       Dimens.minMarginApplication),
                                   child: Container(
                                     padding: EdgeInsets.all(
-                                        Dimens.paddingApplication),
+                                        Dimens.minPaddingApplication),
                                     child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -364,16 +427,18 @@ class _ContainerHomeState extends State<ContainerHome> {
                                             ],
                                           ),
                                         ),
-                                        FloatingActionButton(
-                                          mini: true,
-                                          child: Icon(
-                                              Icons.favorite_border_outlined,
-                                              color: Colors.black),
-                                          backgroundColor: Colors.white,
-                                          onPressed: () {
-                                            // Add your onPressed code here!
-                                          },
+                                        IconButton(
+                                          icon: Icon(Icons.shopping_cart,
+                                              color: Colors.black38),
+                                          onPressed: () =>
+                                          {openCart(response.id.toString(), response.valor, 1.toString())},
                                         ),
+                                        IconButton(
+                                          icon: Icon(Icons.favorite,
+                                              color: Colors.black38),
+                                          onPressed: () =>
+                                          {},
+                                        )
                                       ],
                                     ),
                                   ),

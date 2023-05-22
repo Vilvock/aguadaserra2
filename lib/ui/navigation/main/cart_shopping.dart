@@ -11,6 +11,7 @@ import '../../../global/application_constant.dart';
 import '../../../res/dimens.dart';
 import '../../../res/owner_colors.dart';
 import '../../../res/strings.dart';
+import '../../../res/styles.dart';
 import '../../../web_service/links.dart';
 import '../../../web_service/service_response.dart';
 import '../../components/custom_app_bar.dart';
@@ -371,12 +372,7 @@ class _CartShopping extends State<CartShopping> {
                                           Container(
                                             width: double.infinity,
                                             child: ElevatedButton(
-                                                style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          OwnerColors
-                                                              .colorPrimary),
-                                                ),
+                                                style: Styles().styleDefaultButton,
                                                 onPressed: () {
                                                   Navigator.pushNamed(context,
                                                       "/ui/method_payment",
@@ -387,15 +383,7 @@ class _CartShopping extends State<CartShopping> {
                                                 child: Text(
                                                   "Avançar",
                                                   textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontSize:
-                                                          Dimens.textSize8,
-                                                      color: Colors.white,
-                                                      fontFamily: 'Inter',
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      decoration:
-                                                          TextDecoration.none),
+                                                  style: Styles().styleDefaultTextButton
                                                 )),
                                           ),
                                         ]),
