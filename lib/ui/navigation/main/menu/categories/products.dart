@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../../../../../config/preferences.dart';
+import '../../../../../config/useful.dart';
 import '../../../../../global/application_constant.dart';
 import '../../../../../model/product.dart';
 import '../../../../../res/dimens.dart';
@@ -14,7 +15,7 @@ import '../../../../components/custom_app_bar.dart';
 import '../../../../components/progress_hud.dart';
 
 class Products extends StatefulWidget {
-  const Products ({Key? key}) : super(key: key);
+  const Products({Key? key}) : super(key: key);
 
   @override
   State<Products> createState() => _Products();
@@ -35,8 +36,7 @@ class _Products extends State<Products> {
 
       print('HTTP_BODY: $body');
 
-      final json =
-      await postRequest.sendPostRequest(Links.LIST_PRODUCTS, body);
+      final json = await postRequest.sendPostRequest(Links.LIST_PRODUCTS, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -52,8 +52,8 @@ class _Products extends State<Products> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: CustomAppBar(title: "Produtos", isVisibleBackButton: true),
+      resizeToAvoidBottomInset: false,
+      appBar: CustomAppBar(title: "Produtos", isVisibleBackButton: true),
       body: RefreshIndicator(
         onRefresh: _pullRefresh,
         child: FutureBuilder<List<Map<String, dynamic>>>(
@@ -68,123 +68,100 @@ class _Products extends State<Products> {
                   itemBuilder: (context, index) {
                     final response = Product.fromJson(snapshot.data![index]);
 
-                    return Card(
-                      margin: EdgeInsets.all(Dimens.minMarginApplication),
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                        BorderRadius.circular(Dimens.minRadiusApplication),
-                      ),
-                      child: InkWell(
-                          onTap: () => {
-                            Navigator.pushNamed(
-                                context, "/ui/product_detail",
-                                arguments: {
-                                  "id_product": response.id,
-                                })
-                          },
+                    return InkWell(
+                        onTap: () => {
+                              Navigator.pushNamed(context, "/ui/product_detail",
+                                  arguments: {
+                                    "id_product": response.id,
+                                  })
+                            },
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                Dimens.minRadiusApplication),
+                          ),
+                          margin: EdgeInsets.all(Dimens.minMarginApplication),
                           child: Container(
-                            padding: EdgeInsets.all(Dimens.paddingApplication),
-                            // child: Row(
-                            //   crossAxisAlignment: CrossAxisAlignment.start,
-                            //   children: [
-                            //     Container(
-                            //         margin: EdgeInsets.only(
-                            //             right: Dimens.minMarginApplication),
-                            //         child: ClipRRect(
-                            //             borderRadius: BorderRadius.circular(
-                            //                 Dimens.minRadiusApplication),
-                            //             child: Image.network(
-                            //               ApplicationConstant.URL_PRODUCT_PHOTO + response.url_foto.toString(),
-                            //               height: 90,
-                            //               width: 90,
-                            //               errorBuilder: (context, exception, stackTrack) => Icon(Icons.error, size: 90),
-                            //             ))),
-                            //     Expanded(
-                            //       child: Column(
-                            //         crossAxisAlignment: CrossAxisAlignment.start,
-                            //         children: [
-                            //           Text(
-                            //             response.nome,
-                            //             maxLines: 1,
-                            //             overflow: TextOverflow.ellipsis,
-                            //             style: TextStyle(
-                            //               fontFamily: 'Inter',
-                            //               fontSize: Dimens.textSize6,
-                            //               fontWeight: FontWeight.bold,
-                            //               color: Colors.black,
-                            //             ),
-                            //           ),
-                            //           SizedBox(
-                            //               height: Dimens.minMarginApplication),
-                            //           Text(
-                            //             response.descricao,
-                            //             maxLines: 2,
-                            //             overflow: TextOverflow.ellipsis,
-                            //             style: TextStyle(
-                            //               fontFamily: 'Inter',
-                            //               fontSize: Dimens.textSize5,
-                            //               color: Colors.black,
-                            //             ),
-                            //           ),
-                            //           SizedBox(height: Dimens.marginApplication),
-                            //           Text(
-                            //             response.valor,
-                            //             style: TextStyle(
-                            //               fontFamily: 'Inter',
-                            //               fontSize: Dimens.textSize6,
-                            //               color: Colors.black,
-                            //             ),
-                            //           ),
-                            //           SizedBox(
-                            //               height: Dimens.minMarginApplication),
-                            //           Divider(
-                            //             color: Colors.black12,
-                            //             height: 2,
-                            //             thickness: 1.5,
-                            //           ),
-                            //           SizedBox(
-                            //               height: Dimens.minMarginApplication),
-                            //           IntrinsicHeight(
-                            //               child: Row(
-                            //                 children: [
-                            //                   Icon(
-                            //                       size: 20,
-                            //                       Icons.shopping_cart_outlined),
-                            //                   Text(
-                            //                     "Adicionar ao carrinho",
-                            //                     style: TextStyle(
-                            //                       fontFamily: 'Inter',
-                            //                       fontSize: Dimens.textSize4,
-                            //                       color: Colors.black,
-                            //                     ),
-                            //                   ),
-                            //                   SizedBox(
-                            //                       width: Dimens.minMarginApplication),
-                            //                   VerticalDivider(
-                            //                     color: Colors.black12,
-                            //                     width: 2,
-                            //                     thickness: 1.5,
-                            //                   ),
-                            //                   SizedBox(
-                            //                       width: Dimens.minMarginApplication),
-                            //                   Icon(size: 20, Icons.delete_outline),
-                            //                   Text(
-                            //                     "Remover",
-                            //                     style: TextStyle(
-                            //                       fontFamily: 'Inter',
-                            //                       fontSize: Dimens.textSize4,
-                            //                       color: Colors.black,
-                            //                     ),
-                            //                   ),
-                            //                 ],
-                            //               ))
-                            //         ],
-                            //       ),
-                            //     )
-                            //   ],
-                            // ),
-                          )),
-                    );
+                            padding:
+                                EdgeInsets.all(Dimens.minPaddingApplication),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                    margin: EdgeInsets.only(
+                                        right: Dimens.minMarginApplication),
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                            Dimens.minRadiusApplication),
+                                        child: Image.network(
+                                          ApplicationConstant
+                                                  .URL_PRODUCT_PHOTO +
+                                              response.url_foto.toString(),
+                                          height: 90,
+                                          width: 90,
+                                          errorBuilder: (context, exception,
+                                                  stackTrack) =>
+                                              Icon(Icons.error, size: 90),
+                                        ))),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        response.nome,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontSize: Dimens.textSize6,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                          height: Dimens.minMarginApplication),
+                                      Text(
+                                        Useful().removeAllHtmlTags(
+                                            response.descricao),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontSize: Dimens.textSize5,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                          height: Dimens.marginApplication),
+                                      Text(
+                                        response.valor,
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontSize: Dimens.textSize6,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.shopping_cart,
+                                      color: Colors.black38),
+                                  onPressed: () => {
+                                    // openCart(response.id.toString(),
+                                    //     response.valor, 1.toString())
+                                  },
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.favorite,
+                                      color: Colors.black38),
+                                  onPressed: () => {},
+                                )
+                              ],
+                            ),
+                          ),
+                        ));
                   },
                 );
               }
