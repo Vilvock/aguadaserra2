@@ -6,6 +6,7 @@ import 'package:app/ui/navigation/auth/login.dart';
 import 'package:app/ui/navigation/auth/register.dart';
 import 'package:app/ui/navigation/intro/onboarding.dart';
 import 'package:app/ui/navigation/intro/splash.dart';
+import 'package:app/ui/navigation/main/checkout_flow/checkout.dart';
 import 'package:app/ui/navigation/main/checkout_flow/method_payment.dart';
 import 'package:app/ui/navigation/main/checkout_flow/sucess.dart';
 import 'package:app/ui/navigation/main/home.dart';
@@ -83,6 +84,7 @@ void main() async {
       '/ui/product_detail': (context) => ProductDetail(),
       '/ui/user_addresses': (context) => UserAddresses(),
       '/ui/method_payment': (context) => MethodPayment(),
+      '/ui/checkout': (context) => Checkout(),
       '/ui/sucess': (context) => Sucess()
 
       //lista horizontal

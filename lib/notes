@@ -9,7 +9,7 @@
 calcular frete v
 
 fazer pagamento pix com maximo de dados dinamicos
- e tela de sucesso (tela de revisar compra antes)
+ e tela de sucesso (tela de revisar compra antes) (ver se o id pedido é o id do carrinho)
 
 colocar dados categorias, sub e produtos
 

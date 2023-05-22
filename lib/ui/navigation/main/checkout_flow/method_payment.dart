@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app/model/freight.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../config/application_messages.dart';
@@ -24,8 +25,10 @@ class MethodPayment extends StatefulWidget {
 
 class _MethodPayment extends State<MethodPayment>
     with TickerProviderStateMixin {
+
   int _idAddress = 29;
-  int _idCart = 29;
+  late int _idCart;
+  late String _totalValue;
 
   final postRequest = PostRequest();
   late TabController _tabController;
@@ -62,143 +65,10 @@ class _MethodPayment extends State<MethodPayment>
 
       print('HTTP_RESPONSE: $parsedResponse');
 
-      final response = User.fromJson(parsedResponse);
-      //
-      // if (response.status == "01") {
-      // setState(() {
-      //
-      // });
-      // } else {}
-    } catch (e) {
-      throw Exception('HTTP_ERROR: $e');
-    }
-  }
+      final response = Freight.fromJson(parsedResponse);
 
-  Future<void> payWithCreditCard(
-      String idOrder, String totalValue, String idCreditCard) async {
-    try {
-      final body = {
-        "id_usuario": await Preferences.getUserData()!.id,
-        "id_pedido": idOrder,
-        "tipo_pagamento": ApplicationConstant.CREDIT_CARD,
-        "payment_id": "",
-        "valor": totalValue,
-        "card": idCreditCard,
-        "token": ApplicationConstant.TOKEN
-      };
+      _totalValue = response.valor_total;
 
-      print('HTTP_BODY: $body');
-
-      final json = await postRequest.sendPostRequest(Links.ADD_PAYMENT, body);
-
-      List<Map<String, dynamic>> _map = [];
-      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
-
-      print('HTTP_RESPONSE: $_map');
-
-      final response = User.fromJson(_map[0]);
-
-      if (response.status == "01") {
-        setState(() {});
-      } else {}
-      ApplicationMessages(context: context).showMessage(response.msg);
-    } catch (e) {
-      throw Exception('HTTP_ERROR: $e');
-    }
-  }
-
-  Future<void> payWithTicketWithOutAddress(
-      String idOrder, String totalValue) async {
-    try {
-      final body = {
-        "id_pedido": idOrder,
-        "id_usuario": await Preferences.getUserData()!.id,
-        "tipo_pagamento": ApplicationConstant.TICKET_IN_TERM,
-        "valor": totalValue,
-        "token": ApplicationConstant.TOKEN
-      };
-
-      print('HTTP_BODY: $body');
-
-      final json = await postRequest.sendPostRequest(Links.ADD_PAYMENT, body);
-
-      List<Map<String, dynamic>> _map = [];
-      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
-
-      print('HTTP_RESPONSE: $_map');
-
-      final response = User.fromJson(_map[0]);
-
-      if (response.status == "01") {
-        setState(() {});
-      } else {}
-      ApplicationMessages(context: context).showMessage(response.msg);
-    } catch (e) {
-      throw Exception('HTTP_ERROR: $e');
-    }
-  }
-
-  Future<void> payWithTicket(String idOrder, String totalValue) async {
-    try {
-      final body = {
-        "id_pedido": idOrder,
-        "id_usuario": await Preferences.getUserData()!.id,
-        "tipo_pagamento": ApplicationConstant.TICKET,
-        "valor": totalValue,
-        "cep": "90690-040",
-        "estado": "RS",
-        "cidade": "Porto Alegre",
-        "endereco": "Rua Antonio carlos tibiricça",
-        "bairro": "Petroópolis",
-        "numero": "7464",
-        "token": ApplicationConstant.TOKEN
-      };
-
-      print('HTTP_BODY: $body');
-
-      final json = await postRequest.sendPostRequest(Links.ADD_PAYMENT, body);
-
-      List<Map<String, dynamic>> _map = [];
-      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
-
-      print('HTTP_RESPONSE: $_map');
-
-      final response = User.fromJson(_map[0]);
-
-      if (response.status == "01") {
-        setState(() {});
-      } else {}
-      ApplicationMessages(context: context).showMessage(response.msg);
-    } catch (e) {
-      throw Exception('HTTP_ERROR: $e');
-    }
-  }
-
-  Future<void> payWithPIX(String idOrder, String totalValue) async {
-    try {
-      final body = {
-        "id_pedido": idOrder,
-        "id_usuario": await Preferences.getUserData()!.id,
-        "tipo_pagamento": ApplicationConstant.PIX,
-        "valor": totalValue,
-        "token": ApplicationConstant.TOKEN
-      };
-
-      print('HTTP_BODY: $body');
-
-      final json = await postRequest.sendPostRequest(Links.ADD_PAYMENT, body);
-
-      List<Map<String, dynamic>> _map = [];
-      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
-
-      print('HTTP_RESPONSE: $_map');
-
-      final response = User.fromJson(_map[0]);
-
-      if (response.status == "01") {
-        setState(() {});
-      } else {}
-      ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
     }
@@ -423,7 +293,16 @@ class _MethodPayment extends State<MethodPayment>
           Styles().div_horizontal,
           SizedBox(height: Dimens.minMarginApplication),
           InkWell(
-              onTap: () {},
+              onTap: () {
+
+                Navigator.pushNamed(context,
+                    "/ui/checkout",
+                    arguments: {
+                      "id_cart": _idCart,
+                      "total_value": _totalValue,
+                    });
+
+              },
               child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius:
