@@ -56,7 +56,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar:
-      BottomNavBar(currentIndex: _selectedIndex, onTap: _onItemTapped),
+          BottomNavBar(currentIndex: _selectedIndex, onTap: _onItemTapped),
     );
   }
 }
@@ -137,7 +137,7 @@ class _ContainerHomeState extends State<ContainerHome> {
       print('HTTP_BODY: $body');
 
       final json =
-      await postRequest.sendPostRequest(Links.LIST_HIGHLIGHTS, body);
+          await postRequest.sendPostRequest(Links.LIST_HIGHLIGHTS, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -179,8 +179,7 @@ class _ContainerHomeState extends State<ContainerHome> {
 
       print('HTTP_BODY: $body');
 
-      final json =
-      await postRequest.sendPostRequest(Links.SAVE_FCM, body);
+      final json = await postRequest.sendPostRequest(Links.SAVE_FCM, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -191,12 +190,8 @@ class _ContainerHomeState extends State<ContainerHome> {
 
       if (response.status == "01") {
         await Preferences.saveInstanceTokenFcm("token", currentFcmToken!);
-        setState(() {
-
-        });
-      } else {
-
-      }
+        setState(() {});
+      } else {}
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
     }
@@ -206,9 +201,11 @@ class _ContainerHomeState extends State<ContainerHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(title: "Início",
+      appBar: CustomAppBar(
+        title: "Início",
         isVisibleBackButton: false,
-        isVisibleSearchButton: true,),
+        isVisibleSearchButton: true,
+      ),
       body: RefreshIndicator(
           onRefresh: _pullRefresh,
           child: Container(
@@ -232,8 +229,7 @@ class _ContainerHomeState extends State<ContainerHome> {
                     children: [
                       ...List.generate(
                           carouselItems.length,
-                              (index) =>
-                              Padding(
+                          (index) => Padding(
                                 padding: const EdgeInsets.only(right: 4),
                                 child: DotIndicator(
                                     isActive: index == _pageIndex,
@@ -278,18 +274,17 @@ class _ContainerHomeState extends State<ContainerHome> {
                           shrinkWrap: true,
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) {
-                            final response = Product.fromJson(
-                                snapshot.data![index]);
+                            final response =
+                                Product.fromJson(snapshot.data![index]);
 
                             return InkWell(
-                                onTap: () =>
-                                {
-                                  Navigator.pushNamed(
-                                      context, "/ui/product_detail",
-                                      arguments: {
-                                        "id_product": response.id,
-                                      })
-                                },
+                                onTap: () => {
+                                      Navigator.pushNamed(
+                                          context, "/ui/product_detail",
+                                          arguments: {
+                                            "id_product": response.id,
+                                          })
+                                    },
                                 child: Card(
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(
@@ -302,44 +297,42 @@ class _ContainerHomeState extends State<ContainerHome> {
                                         Dimens.paddingApplication),
                                     child: Row(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Container(
                                             margin: EdgeInsets.only(
                                                 right: Dimens
                                                     .minMarginApplication),
                                             child: ClipRRect(
-                                                borderRadius: BorderRadius
-                                                    .circular(Dimens
-                                                    .minRadiusApplication),
+                                                borderRadius:
+                                                    BorderRadius.circular(Dimens
+                                                        .minRadiusApplication),
                                                 child: Image.network(
                                                   ApplicationConstant
-                                                      .URL_PRODUCT_PHOTO +
+                                                          .URL_PRODUCT_PHOTO +
                                                       response.url_foto
                                                           .toString(),
                                                   height: 90,
                                                   width: 90,
                                                   errorBuilder: (context,
-                                                      exception, stackTrack) =>
+                                                          exception,
+                                                          stackTrack) =>
                                                       Icon(Icons.error,
                                                           size: 90),
                                                 ))),
                                         Expanded(
                                           child: Column(
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 response.nome,
                                                 maxLines: 1,
-                                                overflow:
-                                                TextOverflow.ellipsis,
+                                                overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(
                                                   fontFamily: 'Inter',
-                                                  fontSize:
-                                                  Dimens.textSize6,
-                                                  fontWeight:
-                                                  FontWeight.bold,
+                                                  fontSize: Dimens.textSize6,
+                                                  fontWeight: FontWeight.bold,
                                                   color: Colors.black,
                                                 ),
                                               ),
@@ -350,24 +343,21 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                 Useful().removeAllHtmlTags(
                                                     response.descricao),
                                                 maxLines: 2,
-                                                overflow:
-                                                TextOverflow.ellipsis,
+                                                overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(
                                                   fontFamily: 'Inter',
-                                                  fontSize:
-                                                  Dimens.textSize5,
+                                                  fontSize: Dimens.textSize5,
                                                   color: Colors.black,
                                                 ),
                                               ),
                                               SizedBox(
-                                                  height: Dimens
-                                                      .marginApplication),
+                                                  height:
+                                                      Dimens.marginApplication),
                                               Text(
                                                 response.valor,
                                                 style: TextStyle(
                                                   fontFamily: 'Inter',
-                                                  fontSize:
-                                                  Dimens.textSize6,
+                                                  fontSize: Dimens.textSize6,
                                                   color: Colors.black,
                                                 ),
                                               ),
@@ -377,8 +367,7 @@ class _ContainerHomeState extends State<ContainerHome> {
                                         FloatingActionButton(
                                           mini: true,
                                           child: Icon(
-                                              Icons
-                                                  .favorite_border_outlined,
+                                              Icons.favorite_border_outlined,
                                               color: Colors.black),
                                           backgroundColor: Colors.white,
                                           onPressed: () {
@@ -422,13 +411,25 @@ class _ContainerHomeState extends State<ContainerHome> {
                       future: listHighlightsRequest(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
+                          var gridItems = <Widget>[];
+
+                          for (var i = 0; i < snapshot.data!.length; i++) {
+                            final response =
+                                Product.fromJson(snapshot.data![i]);
+                            gridItems.add(GridItemBuilder(
+                                image: response.url_foto,
+                                name: response.nome,
+                                value: response.valor,
+                                id: response.id));
+                          }
+
                           return Container(
                             child: GridView.count(
                               childAspectRatio: 0.75,
                               primary: false,
                               shrinkWrap: true,
                               crossAxisCount: 2,
-                              children: gridlItems,
+                              children: gridItems,
                             ),
                           );
                         } else if (snapshot.hasError) {
@@ -436,7 +437,6 @@ class _ContainerHomeState extends State<ContainerHome> {
                         }
                         return Center(child: CircularProgressIndicator());
                       })
-
                 ],
               ),
             ),
@@ -482,19 +482,18 @@ class CarouselItemBuilder extends StatelessWidget {
   }
 }
 
-final List<Widget> gridlItems = [
-  GridItemBuilder(image: ''),
-  GridItemBuilder(image: ''),
-  GridItemBuilder(image: ''),
-  GridItemBuilder(image: ''),
-  GridItemBuilder(image: ''),
-  GridItemBuilder(image: ''),
-];
-
 class GridItemBuilder extends StatelessWidget {
+  final int id;
   final String image;
+  final String name;
+  final String value;
 
-  const GridItemBuilder({Key? key, required this.image});
+  const GridItemBuilder(
+      {Key? key,
+      required this.image,
+      required this.name,
+      required this.value,
+      required this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -504,21 +503,32 @@ class GridItemBuilder extends StatelessWidget {
           borderRadius: BorderRadius.circular(Dimens.minRadiusApplication),
         ),
         margin: EdgeInsets.all(Dimens.minMarginApplication),
-        child: Container(
-            child: Column(
+        child: InkWell(
+            onTap: () => {
+                  Navigator.pushNamed(context, "/ui/product_detail",
+                      arguments: {
+                        "id_product": id,
+                      })
+                },
+            child: Container(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                     width: double.infinity,
                     child: ClipRRect(
                         borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(
-                                Dimens.minRadiusApplication),
-                            topRight: Radius.circular(
-                                Dimens.minRadiusApplication)),
-                        child: Image.asset(
+                            topLeft:
+                                Radius.circular(Dimens.minRadiusApplication),
+                            topRight:
+                                Radius.circular(Dimens.minRadiusApplication)),
+                        child: Image.network(
+                          ApplicationConstant.URL_PRODUCT_PHOTO +
+                              image.toString(),
                           fit: BoxFit.fitWidth,
-                          'images/person.jpg',
                           height: 140,
+                          errorBuilder: (context, exception, stackTrack) =>
+                              Icon(Icons.error, size: 140),
                         ))),
                 SizedBox(height: Dimens.minMarginApplication),
                 Container(
@@ -538,7 +548,7 @@ class GridItemBuilder extends StatelessWidget {
                       //     spacing: 0.0),
                       // SizedBox(height: Dimens.minMarginApplication),
                       Text(
-                        Strings.longLoremIpsum,
+                        name,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -549,7 +559,7 @@ class GridItemBuilder extends StatelessWidget {
                       ),
                       SizedBox(height: Dimens.marginApplication),
                       Text(
-                        "50,00",
+                        value,
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontSize: Dimens.textSize6,
@@ -560,7 +570,7 @@ class GridItemBuilder extends StatelessWidget {
                   ),
                 )
               ],
-            )),
+            ))),
       ),
     );
   }
