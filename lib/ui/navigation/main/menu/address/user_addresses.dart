@@ -9,6 +9,7 @@ import '../../../../../model/user.dart';
 import '../../../../../res/dimens.dart';
 import '../../../../../res/owner_colors.dart';
 import '../../../../../res/strings.dart';
+import '../../../../../res/styles.dart';
 import '../../../../../web_service/links.dart';
 import '../../../../../web_service/service_response.dart';
 import '../../../../components/custom_app_bar.dart';
@@ -104,7 +105,8 @@ class _UserAddresses extends State<UserAddresses> {
 
       print('HTTP_BODY: $body');
 
-      final json = await postRequest.sendPostRequest(Links.UPDATE_ADDRESS, body);
+      final json =
+          await postRequest.sendPostRequest(Links.UPDATE_ADDRESS, body);
       // final parsedResponse = jsonDecode(json); // pegar um objeto so
 
       List<Map<String, dynamic>> _map = [];
@@ -127,14 +129,12 @@ class _UserAddresses extends State<UserAddresses> {
 
   Future<void> deleteAddress() async {
     try {
-      final body = {
-        "id_endereco": 32,
-        "token": ApplicationConstant.TOKEN
-      };
+      final body = {"id_endereco": 32, "token": ApplicationConstant.TOKEN};
 
       print('HTTP_BODY: $body');
 
-      final json = await postRequest.sendPostRequest(Links.DELETE_ADDRESS, body);
+      final json =
+          await postRequest.sendPostRequest(Links.DELETE_ADDRESS, body);
       final parsedResponse = jsonDecode(json);
 
       print('HTTP_RESPONSE: $parsedResponse');
@@ -142,9 +142,7 @@ class _UserAddresses extends State<UserAddresses> {
       final response = User.fromJson(parsedResponse);
       //
       // if (response.status == "01") {
-      setState(() {
-
-      });
+      setState(() {});
       // } else {}
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
@@ -153,15 +151,11 @@ class _UserAddresses extends State<UserAddresses> {
 
   Future<List<Map<String, dynamic>>> findAddress() async {
     try {
-      final body = {
-        "id_endereco": 29,
-        "token": ApplicationConstant.TOKEN
-      };
+      final body = {"id_endereco": 29, "token": ApplicationConstant.TOKEN};
 
       print('HTTP_BODY: $body');
 
-      final json =
-      await postRequest.sendPostRequest(Links.FIND_ADDRESS, body);
+      final json = await postRequest.sendPostRequest(Links.FIND_ADDRESS, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -182,61 +176,70 @@ class _UserAddresses extends State<UserAddresses> {
           title: "Meus Endereços",
           isVisibleBackButton: true,
           isVisibleAddressButton: true),
-      body: ProgressHUD(
-        inAsyncCall: _isLoading,
-        valueColor: AlwaysStoppedAnimation<Color>(OwnerColors.colorPrimary),
-        child: RefreshIndicator(
-          onRefresh: _pullRefresh,
-          child: ListView.builder(
-            itemCount: 10,
-            itemBuilder: (context, index) {
-              return Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(Dimens.minRadiusApplication),
-                ),
-                margin: EdgeInsets.all(Dimens.minMarginApplication),
-                child: Container(
-                  padding: EdgeInsets.all(Dimens.paddingApplication),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+      body: RefreshIndicator(
+        onRefresh: _pullRefresh,
+        child: FutureBuilder<List<Map<String, dynamic>>>(
+          future: listAddresses(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final firstItem = User.fromJson(snapshot.data![0]);
+
+              if (firstItem.rows != 0) {
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+
+                    final response = User.fromJson(snapshot.data![index]);
+                    return Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(Dimens.minRadiusApplication),
+                      ),
+                      margin: EdgeInsets.all(Dimens.minMarginApplication),
+                      child: Container(
+                        padding: EdgeInsets.all(Dimens.paddingApplication),
+                        child: Row(
                           children: [
-                            Text(
-                              "Endereço selecionado",
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: Dimens.textSize4,
-                                fontWeight: FontWeight.bold,
-                                color: OwnerColors.colorPrimaryDark,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Endereço selecionado",
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: Dimens.textSize4,
+                                      fontWeight: FontWeight.bold,
+                                      color: OwnerColors.colorPrimaryDark,
+                                    ),
+                                  ),
+                                  SizedBox(height: Dimens.minMarginApplication),
+                                  Text(
+                                    response.endereco_completo,
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: Dimens.textSize5,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  SizedBox(height: Dimens.minMarginApplication),
+
+                                  Styles().div_horizontal
+                                ],
                               ),
-                            ),
-                            SizedBox(height: Dimens.minMarginApplication),
-                            Text(
-                              Strings.longLoremIpsum,
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: Dimens.textSize5,
-                                color: Colors.black,
-                              ),
-                            ),
-                            SizedBox(height: Dimens.minMarginApplication),
-                            Divider(
-                              color: Colors.black12,
-                              height: 2,
-                              thickness: 1.5,
-                            ),
+                            )
                           ],
                         ),
-                      )
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
+                      ),
+                    );
+                  },
+                );
+              }
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+            return const CircularProgressIndicator();
+          },
         ),
       ),
     );
@@ -245,9 +248,7 @@ class _UserAddresses extends State<UserAddresses> {
   Future<void> _pullRefresh() async {
     setState(() {
       _isLoading = true;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Sending Message"),
-      ));
+
       _isLoading = false;
     });
   }

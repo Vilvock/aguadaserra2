@@ -1,6 +1,6 @@
 - tamanhos dos botoes trocar para wrap
 - terminar de config alert generic dialog (cores botoes)
 
-- chaamr setstae sem precisar ficar chamando api
+- fazer troca de enderecos dinamica no pagamento
 
 botao carrinho no produto, ja pra setar quantidade e ir direto carrinho (home)

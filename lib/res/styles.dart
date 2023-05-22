@@ -37,8 +37,8 @@ class Styles {
     color: Colors.black12,
     height: 2,
     thickness: 1.5,
-    indent: Dimens.marginApplication,
-    endIndent: Dimens.marginApplication,
+    indent: Dimens.minMarginApplication,
+    endIndent: Dimens.minMarginApplication,
   );
 
   var div_vertical = VerticalDivider(

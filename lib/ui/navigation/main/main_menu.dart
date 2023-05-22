@@ -172,6 +172,51 @@ class _MainMenu extends State<MainMenu> {
 
 
             Styles().div_horizontal,
+
+            GestureDetector(
+                child: Container(
+                  padding: EdgeInsets.all(Dimens.maxPaddingApplication),
+                  child: Row(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.all(Dimens.minMarginApplication),
+                        child:
+                        Icon(Icons.monetization_on_outlined, color: Colors.black),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Meus pegamentos",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: Dimens.textSize5,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            SizedBox(height: Dimens.minMarginApplication),
+                            Text(
+                              "Visualize seu histórico de pagamentos",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: Dimens.textSize4,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, "/ui/user_addresses");
+                }),
+
+
+            Styles().div_horizontal,
             GestureDetector(
                 child: Container(
                   padding: EdgeInsets.all(Dimens.maxPaddingApplication),

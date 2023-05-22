@@ -7,13 +7,33 @@ class User extends GlobalWSModel{
   final String documento;
   final String celular;
   final String avatar;
+  final String cep;
+  final String uf;
+  final String cidade;
+  final String endereco;
+  final String bairro;
+  final String numero;
+  final String complemento;
+  final String latitude;
+  final String longitude;
+  final String endereco_completo;
 
   User({
     required this.nome,
     required this.email,
     required this.documento,
     required this.celular,
-    required this.avatar, required super.status, required super.msg, required super.id, required super.rows,
+    required this.avatar,
+    required this.cep,
+    required this.uf,
+    required this.cidade,
+    required this.endereco,
+    required this.bairro,
+    required this.numero,
+    required this.complemento,
+    required this.latitude,
+    required this.longitude,
+    required this.endereco_completo, required super.status, required super.msg, required super.id, required super.rows,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -23,6 +43,16 @@ class User extends GlobalWSModel{
       documento: json['documento'],
       celular: json['celular'],
       avatar: json['avatar'],
+      cep: json['cep'],
+      uf: json['uf'],
+      cidade: json['cidade'],
+      endereco: json['endereco'],
+      bairro: json['bairro'],
+      numero: json['numero'],
+      complemento: json['complemento'],
+      latitude: json['latitude'],
+      longitude: json['longitude'],
+      endereco_completo: json['endereco_completo'],
       status: json['status'],
       msg: json['msg'],
       id: json['id'],

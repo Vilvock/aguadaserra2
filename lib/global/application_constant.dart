@@ -13,4 +13,9 @@ class ApplicationConstant {
   static const String FCM_TYPE_IOS = "2";
 
 
+  static const int CREDIT_CARD = 1;
+  static const int TICKET = 2;
+  static const int PIX = 3;
+  static const int TICKET_IN_TERM = 4;
+
 }
