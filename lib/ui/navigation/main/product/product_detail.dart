@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:app/config/useful.dart';
 import 'package:app/model/cart.dart';
 import 'package:app/model/favorite.dart';
+import 'package:app/res/styles.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -227,17 +229,17 @@ class _ProductDetail extends State<ProductDetail> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  SmoothStarRating(
-                                      allowHalfRating: true,
-                                      onRated: (v) {},
-                                      starCount: 5,
-                                      rating: 2,
-                                      size: 24.0,
-                                      isReadOnly: true,
-                                      color: Colors.amber,
-                                      borderColor: Colors.amber,
-                                      spacing: 0.0),
-                                  SizedBox(height: Dimens.minMarginApplication),
+                                  // SmoothStarRating(
+                                  //     allowHalfRating: true,
+                                  //     onRated: (v) {},
+                                  //     starCount: 5,
+                                  //     rating: 2,
+                                  //     size: 24.0,
+                                  //     isReadOnly: true,
+                                  //     color: Colors.amber,
+                                  //     borderColor: Colors.amber,
+                                  //     spacing: 0.0),
+                                  // SizedBox(height: Dimens.minMarginApplication),
                                   Text(
                                     response.nome,
                                     style: TextStyle(
@@ -249,7 +251,7 @@ class _ProductDetail extends State<ProductDetail> {
                                   ),
                                   SizedBox(height: Dimens.marginApplication),
                                   Text(
-                                    response.descricao,
+                                    Useful().removeAllHtmlTags(response.descricao),
                                     /*maxLines: 2,*/
                                     // overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
@@ -263,19 +265,19 @@ class _ProductDetail extends State<ProductDetail> {
                                     children: [
                                       SizedBox(
                                           width: Dimens.minMarginApplication),
-                                      Text(
-                                        "Avaliações (xx)",
-                                        /*maxLines: 2,*/
-                                        // overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontFamily: 'Inter',
-                                          fontSize: Dimens.textSize4,
-                                          color: Colors.black45,
-                                        ),
-                                      ),
+                                      // Text(
+                                      //   "Avaliações (xx)",
+                                      //   /*maxLines: 2,*/
+                                      //   // overflow: TextOverflow.ellipsis,
+                                      //   style: TextStyle(
+                                      //     fontFamily: 'Inter',
+                                      //     fontSize: Dimens.textSize4,
+                                      //     color: Colors.black45,
+                                      //   ),
+                                      // ),
                                     ],
                                   ),
-                                  SizedBox(height: Dimens.marginApplication),
+                                  // SizedBox(height: Dimens.marginApplication),
                                   Text(
                                     response.valor,
                                     style: TextStyle(
@@ -284,14 +286,14 @@ class _ProductDetail extends State<ProductDetail> {
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  Text(
-                                    "(50% desconto)",
-                                    style: TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontSize: Dimens.textSize4,
-                                      color: OwnerColors.colorPrimaryDark,
-                                    ),
-                                  ),
+                                  // Text(
+                                  //   "(50% desconto)",
+                                  //   style: TextStyle(
+                                  //     fontFamily: 'Inter',
+                                  //     fontSize: Dimens.textSize4,
+                                  //     color: OwnerColors.colorPrimaryDark,
+                                  //   ),
+                                  // ),
                                   SizedBox(height: Dimens.marginApplication),
                                   Row(children: [
                                     Text(
@@ -363,10 +365,7 @@ class _ProductDetail extends State<ProductDetail> {
                                   openCart(response.valor, _quantity.toString());
 
                                 },
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      OwnerColors.colorPrimary),
-                                ),
+                                style: Styles().styleDefaultButton,
                                 child: Row(
                                   children: [
                                     Icon(Icons.shopping_cart_outlined),
@@ -375,13 +374,7 @@ class _ProductDetail extends State<ProductDetail> {
                                     Text(
                                       "Adicionar ao carrinho",
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: Dimens.textSize8,
-                                          color: Colors.white,
-                                          fontFamily: 'Inter',
-                                          fontWeight: FontWeight.normal,
-                                          decoration: TextDecoration.none),
-                                    )
+                                      style: Styles().styleDefaultTextButton,)
                                   ],
                                 )))
                       ],

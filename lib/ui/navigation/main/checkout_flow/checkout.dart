@@ -187,11 +187,10 @@ class _Checkout extends State<Checkout> {
 
       if (response.status == "01") {
         Navigator.pushNamed(context,
-          "/ui/sucess", /*
+          "/ui/sucess",
           arguments: {
             "id_cart": _idCart,
-            "total_value": _totalValue,
-          }*/);
+          });
       } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
@@ -293,11 +292,6 @@ class _Checkout extends State<Checkout> {
 
                                           return InkWell(
                                               onTap: () => {
-                                                Navigator.pushNamed(
-                                                    context, "/ui/product_detail",
-                                                    arguments: {
-                                                      "id_product": response.id,
-                                                    })
                                               },
                                               child: Card(
                                                 shape: RoundedRectangleBorder(
