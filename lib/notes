@@ -1,6 +1,18 @@
-- tamanhos dos botoes trocar para wrap
-- terminar de config alert generic dialog (cores botoes)
+- tamanhos dos botoes trocar para o do styles
 
 - fazer troca de enderecos dinamica no pagamento
 
-botao carrinho no produto, ja pra setar quantidade e ir direto carrinho (home)
+
+
+
+
+calcular frete v
+
+fazer pagamento pix com maximo de dados dinamicos
+ e tela de sucesso (tela de revisar compra antes)
+
+colocar dados categorias, sub e produtos
+
+details produto
+
+botao carrinho no produto, ja pra setar quantidade e ir direto carrinho

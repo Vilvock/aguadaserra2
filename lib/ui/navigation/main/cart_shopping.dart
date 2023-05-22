@@ -75,6 +75,8 @@ class _CartShopping extends State<CartShopping> {
 
       final response = Cart.fromJson(_map[0]);
 
+      _idCart = response.carrinho_aberto;
+
       return _map;
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
@@ -400,7 +402,10 @@ class _CartShopping extends State<CartShopping> {
                                                 ),
                                                 onPressed: () {
                                                   Navigator.pushNamed(context,
-                                                      "/ui/method_payment");
+                                                      "/ui/method_payment",
+                                                      arguments: {
+                                                        "id_cart": _idCart,
+                                                      });
                                                 },
                                                 child: Text(
                                                   "Avançar",

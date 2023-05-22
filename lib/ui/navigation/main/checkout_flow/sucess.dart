@@ -30,9 +30,7 @@ class _Sucess extends State<Sucess> {
   Future<void> _pullRefresh() async {
     setState(() {
       _isLoading = true;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Sending Message"),
-      ));
+
       _isLoading = false;
     });
   }

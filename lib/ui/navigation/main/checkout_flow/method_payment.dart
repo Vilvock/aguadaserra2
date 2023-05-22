@@ -24,6 +24,9 @@ class MethodPayment extends StatefulWidget {
 
 class _MethodPayment extends State<MethodPayment>
     with TickerProviderStateMixin {
+  int _idAddress = 29;
+  int _idCart = 29;
+
   final postRequest = PostRequest();
   late TabController _tabController;
 
@@ -43,7 +46,36 @@ class _MethodPayment extends State<MethodPayment>
     super.dispose();
   }
 
-  Future<void> payWithCreditCard(String idOrder, String totalValue, String idCreditCard) async {
+  Future<void> calculeFreightValue() async {
+    try {
+      final body = {
+        "id_endereco": _idAddress,
+        "id_carrinho": _idCart,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json =
+          await postRequest.sendPostRequest(Links.CALCULE_FREIGHT, body);
+      final parsedResponse = jsonDecode(json);
+
+      print('HTTP_RESPONSE: $parsedResponse');
+
+      final response = User.fromJson(parsedResponse);
+      //
+      // if (response.status == "01") {
+      // setState(() {
+      //
+      // });
+      // } else {}
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
+  Future<void> payWithCreditCard(
+      String idOrder, String totalValue, String idCreditCard) async {
     try {
       final body = {
         "id_usuario": await Preferences.getUserData()!.id,
@@ -57,8 +89,7 @@ class _MethodPayment extends State<MethodPayment>
 
       print('HTTP_BODY: $body');
 
-      final json =
-      await postRequest.sendPostRequest(Links.ADD_PAYMENT, body);
+      final json = await postRequest.sendPostRequest(Links.ADD_PAYMENT, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -68,22 +99,16 @@ class _MethodPayment extends State<MethodPayment>
       final response = User.fromJson(_map[0]);
 
       if (response.status == "01") {
-
-        setState(() {
-
-        });
-
-
-      } else {
-
-      }
+        setState(() {});
+      } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
     }
   }
 
-  Future<void> payWithTicketWithOutAddress(String idOrder, String totalValue) async {
+  Future<void> payWithTicketWithOutAddress(
+      String idOrder, String totalValue) async {
     try {
       final body = {
         "id_pedido": idOrder,
@@ -95,8 +120,7 @@ class _MethodPayment extends State<MethodPayment>
 
       print('HTTP_BODY: $body');
 
-      final json =
-      await postRequest.sendPostRequest(Links.ADD_PAYMENT, body);
+      final json = await postRequest.sendPostRequest(Links.ADD_PAYMENT, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -106,15 +130,8 @@ class _MethodPayment extends State<MethodPayment>
       final response = User.fromJson(_map[0]);
 
       if (response.status == "01") {
-
-        setState(() {
-
-        });
-
-
-      } else {
-
-      }
+        setState(() {});
+      } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
@@ -127,7 +144,7 @@ class _MethodPayment extends State<MethodPayment>
         "id_pedido": idOrder,
         "id_usuario": await Preferences.getUserData()!.id,
         "tipo_pagamento": ApplicationConstant.TICKET,
-        "valor": totalValue ,
+        "valor": totalValue,
         "cep": "90690-040",
         "estado": "RS",
         "cidade": "Porto Alegre",
@@ -139,8 +156,7 @@ class _MethodPayment extends State<MethodPayment>
 
       print('HTTP_BODY: $body');
 
-      final json =
-      await postRequest.sendPostRequest(Links.ADD_PAYMENT, body);
+      final json = await postRequest.sendPostRequest(Links.ADD_PAYMENT, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -150,15 +166,8 @@ class _MethodPayment extends State<MethodPayment>
       final response = User.fromJson(_map[0]);
 
       if (response.status == "01") {
-
-        setState(() {
-
-        });
-
-
-      } else {
-
-      }
+        setState(() {});
+      } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
@@ -177,8 +186,7 @@ class _MethodPayment extends State<MethodPayment>
 
       print('HTTP_BODY: $body');
 
-      final json =
-      await postRequest.sendPostRequest(Links.ADD_PAYMENT, body);
+      final json = await postRequest.sendPostRequest(Links.ADD_PAYMENT, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -188,15 +196,8 @@ class _MethodPayment extends State<MethodPayment>
       final response = User.fromJson(_map[0]);
 
       if (response.status == "01") {
-
-        setState(() {
-
-        });
-
-
-      } else {
-
-      }
+        setState(() {});
+      } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
@@ -205,7 +206,10 @@ class _MethodPayment extends State<MethodPayment>
 
   Future<List<Map<String, dynamic>>> findAddress() async {
     try {
-      final body = {"id_endereco": 29, "token": ApplicationConstant.TOKEN};
+      final body = {
+        "id_endereco": _idAddress,
+        "token": ApplicationConstant.TOKEN
+      };
 
       print('HTTP_BODY: $body');
 
@@ -216,6 +220,8 @@ class _MethodPayment extends State<MethodPayment>
 
       print('HTTP_RESPONSE: $_map');
 
+      calculeFreightValue();
+
       return _map;
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
@@ -224,6 +230,11 @@ class _MethodPayment extends State<MethodPayment>
 
   @override
   Widget build(BuildContext context) {
+    Map data = {};
+    data = ModalRoute.of(context)!.settings.arguments as Map;
+
+    _idCart = data['id_cart'];
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(
@@ -237,23 +248,30 @@ class _MethodPayment extends State<MethodPayment>
               tabs: [
                 Container(
                   child: Text(
-                    'Entrega',
-                    style: TextStyle(fontSize: 20),
+                    "Entrega",
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: Dimens.textSize6,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 Container(
-                  child: Text(
-                    'Retirada no local',
-                    style: TextStyle(fontSize: 20),
+                    child: Text(
+                  "Retirada no local",
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: Dimens.textSize6,
+                    fontWeight: FontWeight.bold,
                   ),
-                )
+                ))
               ],
-              unselectedLabelColor: const Color(0xffacb3bf),
-              indicatorColor: Color(0xFFffac81),
+              unselectedLabelColor: Colors.grey,
+              indicatorColor: OwnerColors.colorPrimaryDark,
               labelColor: Colors.black,
               indicatorSize: TabBarIndicatorSize.tab,
-              indicatorWeight: 3.0,
-              indicatorPadding: EdgeInsets.all(10),
+              indicatorWeight: 2.0,
+              indicatorPadding: EdgeInsets.all(Dimens.minPaddingApplication),
               isScrollable: false,
               controller: _tabController,
             ),
@@ -271,22 +289,24 @@ class _MethodPayment extends State<MethodPayment>
                         if (response.rows != 0) {
                           return Card(
                             shape: RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.circular(Dimens.minRadiusApplication),
+                              borderRadius: BorderRadius.circular(
+                                  Dimens.minRadiusApplication),
                             ),
                             margin: EdgeInsets.all(Dimens.minMarginApplication),
                             child: InkWell(
                                 onTap: () {
-                                  Navigator.pushNamed(context, "/ui/user_addresses");
+                                  Navigator.pushNamed(
+                                      context, "/ui/user_addresses");
                                 },
                                 child: Container(
-                                  padding: EdgeInsets.all(Dimens.paddingApplication),
+                                  padding:
+                                      EdgeInsets.all(Dimens.paddingApplication),
                                   child: Row(
                                     children: [
                                       Expanded(
                                         child: Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               "Endereço selecionado",
@@ -294,11 +314,13 @@ class _MethodPayment extends State<MethodPayment>
                                                 fontFamily: 'Inter',
                                                 fontSize: Dimens.textSize4,
                                                 fontWeight: FontWeight.bold,
-                                                color: OwnerColors.colorPrimaryDark,
+                                                color: OwnerColors
+                                                    .colorPrimaryDark,
                                               ),
                                             ),
                                             SizedBox(
-                                                height: Dimens.minMarginApplication),
+                                                height: Dimens
+                                                    .minMarginApplication),
                                             Text(
                                               response.endereco_completo,
                                               style: TextStyle(
@@ -308,7 +330,8 @@ class _MethodPayment extends State<MethodPayment>
                                               ),
                                             ),
                                             SizedBox(
-                                                height: Dimens.minMarginApplication),
+                                                height: Dimens
+                                                    .minMarginApplication),
                                             Styles().div_horizontal
                                           ],
                                         ),
@@ -324,12 +347,78 @@ class _MethodPayment extends State<MethodPayment>
                       return const CircularProgressIndicator();
                     }),
               ),
-              Container(
-                child: Text("sign up"),
-              )
+              Container( padding: EdgeInsets.all(Dimens.paddingApplication), child: Column(
+                  crossAxisAlignment:
+                  CrossAxisAlignment.start, children: [
+                Text(
+                  "Escolha a data e horário para retirada",
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: Dimens.textSize6,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(height: Dimens.marginApplication),
+                TextField(
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: OwnerColors.colorPrimary, width: 1.5),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                    ),
+                    hintText: 'Data',
+                    hintStyle: TextStyle(color: Colors.grey),
+                    border: OutlineInputBorder(
+                      borderRadius:
+                      BorderRadius.circular(Dimens.radiusApplication),
+                      borderSide: BorderSide.none,
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding:
+                    EdgeInsets.all(Dimens.textFieldPaddingApplication),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: Dimens.textSize5,
+                  ),
+                ),
+                SizedBox(height: Dimens.marginApplication),
+                TextField(
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: OwnerColors.colorPrimary, width: 1.5),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                    ),
+                    hintText: 'Horário',
+                    hintStyle: TextStyle(color: Colors.grey),
+                    border: OutlineInputBorder(
+                      borderRadius:
+                      BorderRadius.circular(Dimens.radiusApplication),
+                      borderSide: BorderSide.none,
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding:
+                    EdgeInsets.all(Dimens.textFieldPaddingApplication),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: Dimens.textSize5,
+                  ),
+                ),
+              ]),)
+
             ]),
           ),
-
           SizedBox(height: Dimens.minMarginApplication),
           Styles().div_horizontal,
           SizedBox(height: Dimens.minMarginApplication),
