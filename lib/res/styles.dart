@@ -13,12 +13,16 @@ class Styles {
     backgroundColor: MaterialStateProperty.all(OwnerColors.colorPrimary),
   );
 
+  var styleAlternativeButton = ButtonStyle(
+    padding: MaterialStateProperty.all<EdgeInsets>(
+        EdgeInsets.all(Dimens.buttonPaddingApplication)),
+    backgroundColor: MaterialStateProperty.all(OwnerColors.colorPrimaryDark),
+  );
+
   var styleDefaultTextButton = TextStyle(
       fontFamily: 'Inter',
-      fontSize: Dimens.textSize8,
-      color: Colors.white,
-      fontWeight: FontWeight.normal,
-      decoration: TextDecoration.none);
+      fontSize: Dimens.textSize7,
+      color: Colors.white);
 
   var styleTitleText = TextStyle(
     fontFamily: 'Inter',

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:app/model/cart.dart';
 import 'package:app/model/favorite.dart';
+import 'package:app/res/styles.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -189,8 +190,7 @@ class _Checkout extends State<Checkout> {
         resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(
             title: "Revisão do pedido",
-            isVisibleBackButton: true,
-            isVisibleFavoriteButton: true),
+        isVisibleBackButton: true,),
         body: RefreshIndicator(
             onRefresh: _pullRefresh,
             child: /*FutureBuilder<List<Map<String, dynamic>>>(
@@ -363,27 +363,24 @@ class _Checkout extends State<Checkout> {
                       margin: EdgeInsets.all(Dimens.minMarginApplication),
                       width: double.infinity,
                       child: ElevatedButton(
-                          onPressed: () {},
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                OwnerColors.colorPrimary),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(Icons.shopping_cart_outlined),
-                              SizedBox(width: Dimens.minMarginApplication),
+                          onPressed: () {
+                            Navigator.pushNamed(context,
+                                "/ui/sucess",/*
+                                arguments: {
+                                  "id_cart": _idCart,
+                                  "total_value": _totalValue,
+                                }*/);
+
+                          },
+                          style: Styles().styleDefaultButton,
+                          child: Container(child:
                               Text(
-                                "Adicionar ao carrinho",
+                                "Fazer pedido",
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: Dimens.textSize8,
-                                    color: Colors.white,
-                                    fontFamily: 'Inter',
-                                    fontWeight: FontWeight.normal,
-                                    decoration: TextDecoration.none),
-                              )
-                            ],
-                          )))
+                                style: Styles().styleDefaultTextButton
+                              ))
+
+                          ))
                 ],
               )
             ])));
