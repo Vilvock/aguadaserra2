@@ -12,6 +12,7 @@ import 'package:smooth_star_rating/smooth_star_rating.dart';
 import '../../../../config/application_messages.dart';
 import '../../../../config/preferences.dart';
 import '../../../../global/application_constant.dart';
+import '../../../../model/photo.dart';
 import '../../../../model/product.dart';
 import '../../../../res/dimens.dart';
 import '../../../../res/owner_colors.dart';
@@ -190,6 +191,13 @@ class _ProductDetail extends State<ProductDetail> {
 
                   final response = Product.fromJson(snapshot.data![0]);
 
+                  var items = <Widget>[];
+
+                  for (var i = 0; i < snapshot.data!.length; i++) {
+                    final photo = Photo.fromJson(response.galeria_fotos[i]);
+                    items.add(CarouselItemBuilder(image: photo.url));
+                  }
+
                   return Stack(children: [
                     SingleChildScrollView(
                         child: Container(
@@ -197,7 +205,7 @@ class _ProductDetail extends State<ProductDetail> {
                       child: Column(
                         children: [
                           CarouselSlider(
-                            items: carouselItems,
+                            items: items,
                             options: CarouselOptions(
                               height: 160,
                               autoPlay: false,
@@ -212,7 +220,7 @@ class _ProductDetail extends State<ProductDetail> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               ...List.generate(
-                                  carouselItems.length,
+                                  items.length,
                                   (index) => Padding(
                                         padding:
                                             const EdgeInsets.only(right: 4),
@@ -394,5 +402,34 @@ class _ProductDetail extends State<ProductDetail> {
 
       _isLoading = false;
     });
+  }
+}
+
+class CarouselItemBuilder extends StatelessWidget {
+  final String image;
+
+  const CarouselItemBuilder({Key? key, required this.image});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Dimens.minRadiusApplication),
+        ),
+        margin: EdgeInsets.all(Dimens.minMarginApplication),
+        child: Container(
+          /*width: MediaQuery.of(context).size.width * 0.90,*/
+          child: Image.network(
+            ApplicationConstant.URL_PRODUCT_PHOTO +
+                image.toString(),
+            fit: BoxFit.fitWidth,
+            height: 140,
+            errorBuilder: (context, exception, stackTrack) =>
+                Icon(Icons.error, size: 140),
+          ),
+        ),
+      ),
+    );
   }
 }
