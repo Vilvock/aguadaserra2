@@ -213,7 +213,18 @@ class _Favorites extends State<Favorites> {
                                     ))
                                   ],
                                 ),
-                              )
+                              ),
+                              Align(
+                                  alignment: AlignmentDirectional.topEnd,
+                                  child: IconButton(
+                                    icon: Icon(
+                                      Icons.close,
+                                      color: Colors.black,
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  )),
                             ],
                           ),
                         ),
