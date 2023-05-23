@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,7 +33,7 @@ class _ProfileState extends State<Profile> {
   final postRequest = PostRequest();
   User? _profileResponse;
 
-  Future<void> loadProfileRequest() async {
+  Future<Map<String, dynamic>> loadProfileRequest() async {
     try {
       final body = {
         "id": await Preferences.getUserData()!.id,
@@ -60,6 +59,8 @@ class _ProfileState extends State<Profile> {
         cellphoneController.text = _profileResponse!.celular.toString();
       });
       // } else {}
+
+      return parsedResponse;
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
     }
@@ -91,11 +92,8 @@ class _ProfileState extends State<Profile> {
       final response = User.fromJson(_map[0]);
 
       if (response.status == "01") {
-
         loadProfileRequest();
-      } else {
-
-      }
+      } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
@@ -124,7 +122,6 @@ class _ProfileState extends State<Profile> {
       final response = User.fromJson(_map[0]);
 
       if (response.status == "01") {
-
         setState(() {
           _profileResponse = response;
 
@@ -132,11 +129,8 @@ class _ProfileState extends State<Profile> {
           coPasswordController.text = "";
         });
 
-
         loadProfileRequest();
-      } else {
-
-      }
+      } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
@@ -179,29 +173,45 @@ class _ProfileState extends State<Profile> {
                 margin: EdgeInsets.all(Dimens.marginApplication),
                 child: Column(
                   children: [
-                    Container(
-                        width: 128,
-                        height: 128,
-                        margin:
-                            EdgeInsets.only(right: Dimens.marginApplication),
-                        child: Stack(alignment: Alignment.center, children: [
-                          CircleAvatar(
-                            backgroundImage: AssetImage('images/person.jpg'),
-                            radius: 64,
-                          ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: FloatingActionButton(
-                              mini: true,
+                    FutureBuilder<Map<String, dynamic>>(
+                      future: loadProfileRequest(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          final response = User.fromJson(snapshot.data!);
+
+                          return Container(
+                            height: 128,
+                              width: 128,
+                              margin: EdgeInsets.only(
+                                  right: Dimens.marginApplication),
                               child:
-                                  Icon(Icons.camera_alt, color: Colors.black),
-                              backgroundColor: Colors.white,
-                              onPressed: () {
-                                // Add your onPressed code here!
-                              },
-                            ),
-                          )
-                        ])),
+                                  Stack(alignment: Alignment.center, children: [
+                                    ClipOval(
+                                      child: SizedBox.fromSize(
+                                        size: Size.fromRadius(72), // Image radius
+                                        child: Image.network(ApplicationConstant.URL_AVATAR +
+                                            response.avatar.toString(), /*fit: BoxFit.cover*/),
+                                      ),
+                                    ),
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: FloatingActionButton(
+                                    mini: true,
+                                    child: Icon(Icons.camera_alt,
+                                        color: Colors.black),
+                                    backgroundColor: Colors.white,
+                                    onPressed: () {
+                                      // Add your onPressed code here!
+                                    },
+                                  ),
+                                )
+                              ]));
+                        } else if (snapshot.hasError) {
+                          return Text('${snapshot.error}');
+                        }
+                        return Center(child: CircularProgressIndicator());
+                      },
+                    ),
                     SizedBox(height: Dimens.marginApplication),
                     TextField(
                       controller: fantasyNameController,
@@ -337,10 +347,15 @@ class _ProfileState extends State<Profile> {
                                 OwnerColors.colorPrimary),
                           ),
                           onPressed: () {
-                            if (!validator.validateGenericTextField(fantasyNameController.text, "Nome fantasia")) return;
-                            if (!validator.validateEmail(emailController.text)) return;
-                            if (!validator.validateCNPJ(cnpjController.text)) return;
-                            if (!validator.validateCellphone(cellphoneController.text)) return;
+                            if (!validator.validateGenericTextField(
+                                fantasyNameController.text, "Nome fantasia"))
+                              return;
+                            if (!validator.validateEmail(emailController.text))
+                              return;
+                            if (!validator.validateCNPJ(cnpjController.text))
+                              return;
+                            if (!validator.validateCellphone(
+                                cellphoneController.text)) return;
 
                             updateUserDataRequest(
                                 fantasyNameController.text,
@@ -448,12 +463,13 @@ class _ProfileState extends State<Profile> {
                                 OwnerColors.colorPrimary),
                           ),
                           onPressed: () {
-
-                            if (!validator.validatePassword(passwordController.text)) return;
-                            if (!validator.validateCoPassword(passwordController.text, coPasswordController.text)) return;
+                            if (!validator.validatePassword(
+                                passwordController.text)) return;
+                            if (!validator.validateCoPassword(
+                                passwordController.text,
+                                coPasswordController.text)) return;
 
                             updatePasswordRequest(passwordController.text);
-
                           },
                           child: Text(
                             "Atualizar senha",

@@ -49,12 +49,6 @@ class _MainMenu extends State<MainMenu> {
       print('HTTP_RESPONSE: $parsedResponse');
 
       final response = User.fromJson(parsedResponse);
-      //
-      // if (response.status == "01") {
-      setState(() {
-        _profileResponse = response;
-      });
-      // } else {}
 
       return parsedResponse;
     } catch (e) {
@@ -115,27 +109,13 @@ class _MainMenu extends State<MainMenu> {
                             Container(
                               margin: EdgeInsets.only(
                                   right: Dimens.marginApplication),
-                              child: CircleAvatar(
-                                  radius: 42,
-                                  backgroundColor:
-                                  OwnerColors
-                                      .categoryLightGrey,
-                                  child: Image.network(
-                                    ApplicationConstant
-                                        .URL_AVATAR +
-                                        response.avatar
-                                            .toString(),
-                                    height: 42,
-                                    width: 42,
-                                    errorBuilder: (context,
-                                        exception,
-                                        stackTrack) =>
-                                        Image.asset(
-                                          'images/no_picture.png',
-                                          height: 42,
-                                          width: 42,
-                                        ),
-                                  )),
+                              child: ClipOval(
+                                child: SizedBox.fromSize(
+                                  size: Size.fromRadius(32), // Image radius
+                                  child: Image.network(ApplicationConstant.URL_AVATAR +
+                                      response.avatar.toString(), /*fit: BoxFit.cover*/),
+                                ),
+                              ),
                             ),
                             Expanded(
                               child: Column(
