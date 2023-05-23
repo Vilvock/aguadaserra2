@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:app/ui/components/alert_dialog_add_item.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ import '../../../model/user.dart';
 import '../../../res/dimens.dart';
 import '../../../res/owner_colors.dart';
 import '../../../res/strings.dart';
+import '../../../res/styles.dart';
 import '../../../web_service/links.dart';
 import '../../../web_service/service_response.dart';
 import '../../components/custom_app_bar.dart';
@@ -129,7 +131,28 @@ class _ContainerHomeState extends State<ContainerHome> {
     saveFcm();
   }
 
-  Future<void> openCart(String idProduct, String unityItemValue, String quantity) async {
+  Future<List<Map<String, dynamic>>> listCategories() async {
+    try {
+      final body = {"token": ApplicationConstant.TOKEN};
+
+      print('HTTP_BODY: $body');
+
+      final json =
+          await postRequest.sendPostRequest(Links.LIST_CATEGORIES, body);
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      return _map;
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
+  Future<void> openCart(
+      String idProduct, String unityItemValue, String quantity) async {
     try {
       final body = {
         "id_user": await Preferences.getUserData()!.id,
@@ -150,7 +173,8 @@ class _ContainerHomeState extends State<ContainerHome> {
       if (response.carrinho_aberto.toString().isNotEmpty) {
         // setState(() {
 
-          addItemToCart(idProduct, unityItemValue, quantity, response.carrinho_aberto.toString());
+        addItemToCart(idProduct, unityItemValue, quantity,
+            response.carrinho_aberto.toString());
 
         // });
       }
@@ -159,7 +183,8 @@ class _ContainerHomeState extends State<ContainerHome> {
     }
   }
 
-  Future<void> addItemToCart(String idProduct, String unityItemValue, String quantity, String idCart) async {
+  Future<void> addItemToCart(String idProduct, String unityItemValue,
+      String quantity, String idCart) async {
     try {
       final body = {
         "id_carrinho": idCart,
@@ -301,6 +326,92 @@ class _ContainerHomeState extends State<ContainerHome> {
                               )),
                     ],
                   ),
+                  FutureBuilder<List<Map<String, dynamic>>>(
+                      future: listCategories(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          final responseItem =
+                              Product.fromJson(snapshot.data![0]);
+
+                          if (responseItem.rows != 0) {
+                            return Container(
+                              height: 140,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (context, index) {
+                                  final response =
+                                      Product.fromJson(snapshot.data![index]);
+                                  return InkWell(
+                                      onTap: () => {
+                                            Navigator.pushNamed(
+                                                context, "/ui/subcategories",
+                                                arguments: {
+                                                  "id_category": response.id,
+                                                })
+                                          },
+                                      child: Column(children: [
+                                        Container(
+                                            width: 84,
+                                            height: 84,
+                                            margin: EdgeInsets.all(
+                                                Dimens.minMarginApplication),
+                                            child: Stack(
+                                                alignment: Alignment.center,
+                                                children: [
+                                                  CircleAvatar(
+                                                      radius: 48,
+                                                      backgroundColor:
+                                                          OwnerColors
+                                                              .categoryLightGrey,
+                                                      child: Image.network(
+                                                        ApplicationConstant
+                                                                .URL_CATEGORIES +
+                                                            response.url
+                                                                .toString(),
+                                                        height: 42,
+                                                        width: 42,
+                                                        errorBuilder: (context,
+                                                                exception,
+                                                                stackTrack) =>
+                                                            Image.asset(
+                                                          'images/no_picture.png',
+                                                          height: 42,
+                                                        ),
+                                                      )),
+                                                  // Align(
+                                                  //   alignment: Alignment.bottomRight,
+                                                  //   child: FloatingActionButton(
+                                                  //     mini: true,
+                                                  //     child:
+                                                  //     Icon(Icons.camera_alt, color: Colors.black),
+                                                  //     backgroundColor: Colors.white,
+                                                  //     onPressed: () {
+                                                  //       // Add your onPressed code here!
+                                                  //     },
+                                                  //   ),
+                                                  // )
+                                                ])),
+                                        Text(
+                                          response.nome,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontFamily: 'Inter',
+                                            fontSize: Dimens.textSize5,
+                                          ),
+                                        ),
+                                      ]));
+                                },
+                              ),
+                            );
+                          }
+                        } else if (snapshot.hasError) {
+                          return Text('${snapshot.error}');
+                        }
+                        return const CircularProgressIndicator();
+                      }),
+                  SizedBox(height: Dimens.marginApplication),
                   Container(
                     margin: EdgeInsets.only(
                         left: Dimens.marginApplication,
@@ -429,16 +540,30 @@ class _ContainerHomeState extends State<ContainerHome> {
                                           ),
                                         ),
                                         IconButton(
-                                          icon: Icon(Icons.shopping_cart,
-                                              color: Colors.black38),
-                                          onPressed: () =>
-                                          {openCart(response.id.toString(), response.valor, 1.toString())},
-                                        ),
+                                            icon: Icon(Icons.shopping_cart,
+                                                color: Colors.black38),
+                                            onPressed: () => {
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return AddItemAlertDialog(
+                                                            btnConfirm: Container(
+                                                                margin: EdgeInsets.only(top: Dimens.marginApplication),
+                                                                width: double.infinity,
+                                                                height: 50,
+                                                                child: ElevatedButton(
+                                                                    style: Styles().styleDefaultButton,
+                                                                    onPressed: () {
+                                                                      openCart(response.id.toString(), response.valor, 1.toString());
+                                                                    },
+                                                                    child: Text("Adicionar ao carrinho", style: Styles().styleDefaultTextButton))));
+                                                      })
+                                                }),
                                         IconButton(
                                           icon: Icon(Icons.favorite,
                                               color: Colors.black38),
-                                          onPressed: () =>
-                                          {},
+                                          onPressed: () => {},
                                         )
                                       ],
                                     ),
