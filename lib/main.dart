@@ -16,6 +16,7 @@ import 'package:app/ui/navigation/main/menu/categories/products.dart';
 import 'package:app/ui/navigation/main/menu/categories/subcategories.dart';
 import 'package:app/ui/navigation/main/menu/payments/payments.dart';
 import 'package:app/ui/navigation/main/menu/user/profile.dart';
+import 'package:app/ui/navigation/main/notifications.dart';
 import 'package:app/ui/navigation/main/product/product_detail.dart';
 import 'package:app/ui/navigation/utilities/pdf_viewer.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -87,7 +88,8 @@ void main() async {
       '/ui/method_payment': (context) => MethodPayment(),
       '/ui/checkout': (context) => Checkout(),
       '/ui/payments': (context) => Payment(),
-      '/ui/sucess': (context) => Sucess()
+      '/ui/success': (context) => Success(),
+      '/ui/notifications': (context) => Notifications(),
 
       //lista horizontal
       // Container(

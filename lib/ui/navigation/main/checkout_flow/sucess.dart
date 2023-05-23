@@ -14,14 +14,14 @@ import '../../../../web_service/service_response.dart';
 import '../../../components/custom_app_bar.dart';
 import '../../../components/progress_hud.dart';
 
-class Sucess extends StatefulWidget {
-  const Sucess({Key? key}) : super(key: key);
+class Success extends StatefulWidget {
+  const Success({Key? key}) : super(key: key);
 
   @override
-  State<Sucess> createState() => _Sucess();
+  State<Success> createState() => _Success();
 }
 
-class _Sucess extends State<Sucess> {
+class _Success extends State<Success> {
   bool _isLoading = false;
   late int _idCart;
 

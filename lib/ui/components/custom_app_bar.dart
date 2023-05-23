@@ -112,14 +112,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ));
     }
 
-    if (isVisibleSearchButton) {
+    if (isVisibleNotificationsButton) {
       _widgetList.add(IconButton(
         icon: Icon(
           Icons.notifications_none,
           color: Colors.black,
         ),
         onPressed: () {
-
+          Navigator.pushNamed(context, "/ui/notifications");
         },
       ));
     }

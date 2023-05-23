@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app/res/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -340,12 +341,8 @@ class _ProfileState extends State<Profile> {
                           top: Dimens.marginApplication,
                           bottom: Dimens.marginApplication),
                       width: double.infinity,
-                      height: 50,
                       child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                OwnerColors.colorPrimary),
-                          ),
+                          style: Styles().styleDefaultButton,
                           onPressed: () {
                             if (!validator.validateGenericTextField(
                                 fantasyNameController.text, "Nome fantasia"))
@@ -365,12 +362,7 @@ class _ProfileState extends State<Profile> {
                           },
                           child: Text(
                             "Atualizar dados",
-                            style: TextStyle(
-                                fontSize: Dimens.textSize8,
-                                color: Colors.white,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.normal,
-                                decoration: TextDecoration.none),
+                            style: Styles().styleDefaultTextButton,
                           )),
                     ),
                     SizedBox(height: Dimens.marginApplication),
@@ -456,12 +448,8 @@ class _ProfileState extends State<Profile> {
                     Container(
                       margin: EdgeInsets.only(top: Dimens.marginApplication),
                       width: double.infinity,
-                      height: 50,
                       child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                OwnerColors.colorPrimary),
-                          ),
+                          style: Styles().styleDefaultButton,
                           onPressed: () {
                             if (!validator.validatePassword(
                                 passwordController.text)) return;
@@ -473,12 +461,7 @@ class _ProfileState extends State<Profile> {
                           },
                           child: Text(
                             "Atualizar senha",
-                            style: TextStyle(
-                                fontSize: Dimens.textSize8,
-                                color: Colors.white,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.normal,
-                                decoration: TextDecoration.none),
+                            style: Styles().styleDefaultTextButton,
                           )),
                     ),
                   ],
