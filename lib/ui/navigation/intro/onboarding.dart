@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/res/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -103,10 +104,7 @@ class _OnboardingState extends State<Onboarding> {
                         width: double.infinity,
                         height: 50,
                         child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                  OwnerColors.colorPrimary),
-                            ),
+                            style: Styles().styleDefaultButton,
                             onPressed: () {
                               Navigator.pushAndRemoveUntil(
                                   context,
@@ -115,13 +113,8 @@ class _OnboardingState extends State<Onboarding> {
                                   ModalRoute.withName("/ui/login"));
                             },
                             child: Text(
-                              "Entrar",
-                              style: TextStyle(
-                                  fontSize: Dimens.textSize8,
-                                  color: Colors.white,
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.normal,
-                                  decoration: TextDecoration.none),
+                              "Pular",
+                              style: Styles().styleDefaultTextButton,
                             )),
                       ),
                       Text(

@@ -1,6 +1,4 @@
-- tamanhos dos botoes trocar para o do styles
 
-- fazer troca de enderecos dinamica no pagamento
 
 
 
@@ -9,11 +7,9 @@
 
 - categorias abaixo do banner
 
+- fazer troca de enderecos dinamica no pagamento
 
 
-
-
-
-fazer pagamento pix com maximo de dados dinamicos v (ver se o id pedido é o id do carrinho) (TEM QUE FAZER O ADD PEDIDO)
+ (ver se o id pedido é o id do carrinho) (TEM QUE FAZER O ADD PEDIDO)
 
 botao carrinho no produto, ja pra setar quantidade e ir direto carrinho
