@@ -34,6 +34,33 @@ class _MainMenu extends State<MainMenu> {
   final postRequest = PostRequest();
   User? _profileResponse;
 
+  Future<Map<String, dynamic>> loadProfileRequest() async {
+    try {
+      final body = {
+        "id": await Preferences.getUserData()!.id,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.LOAD_PROFILE, body);
+      final parsedResponse = jsonDecode(json);
+
+      print('HTTP_RESPONSE: $parsedResponse');
+
+      final response = User.fromJson(parsedResponse);
+      //
+      // if (response.status == "01") {
+      setState(() {
+        _profileResponse = response;
+      });
+      // } else {}
+
+      return parsedResponse;
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
 
   Future<void> disableAccount() async {
     try {
@@ -45,7 +72,7 @@ class _MainMenu extends State<MainMenu> {
       print('HTTP_BODY: $body');
 
       final json =
-      await postRequest.sendPostRequest(Links.DISABLE_ACCOUNT, body);
+          await postRequest.sendPostRequest(Links.DISABLE_ACCOUNT, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -55,14 +82,8 @@ class _MainMenu extends State<MainMenu> {
       final response = User.fromJson(_map[0]);
 
       if (response.status == "01") {
-
-        setState(() {
-
-        });
-
-      } else {
-
-      }
+        setState(() {});
+      } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
@@ -78,55 +99,84 @@ class _MainMenu extends State<MainMenu> {
         child: Column(
           children: [
             // Expanded(
-            Material(
-                elevation: Dimens.elevationApplication,
-                child: Container(
-                  padding: EdgeInsets.all(Dimens.paddingApplication),
-                  color: Colors.black12,
-                  child: Row(
-                    children: [
-                      Container(
-                        margin:
-                        EdgeInsets.only(right: Dimens.marginApplication),
-                        child: CircleAvatar(
-                          backgroundImage: AssetImage('images/person.jpg'),
-                          radius: 32,
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+            FutureBuilder<Map<String, dynamic>>(
+              future: loadProfileRequest(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final response = User.fromJson(snapshot.data!);
+
+                  return Material(
+                      elevation: Dimens.elevationApplication,
+                      child: Container(
+                        padding: EdgeInsets.all(Dimens.paddingApplication),
+                        color: Colors.black12,
+                        child: Row(
                           children: [
-                            Text(
-                              "Lorem Ipsum Nome",
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: Dimens.textSize6,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                            Container(
+                              margin: EdgeInsets.only(
+                                  right: Dimens.marginApplication),
+                              child: CircleAvatar(
+                                  radius: 42,
+                                  backgroundColor:
+                                  OwnerColors
+                                      .categoryLightGrey,
+                                  child: Image.network(
+                                    ApplicationConstant
+                                        .URL_AVATAR +
+                                        response.avatar
+                                            .toString(),
+                                    height: 42,
+                                    width: 42,
+                                    errorBuilder: (context,
+                                        exception,
+                                        stackTrack) =>
+                                        Image.asset(
+                                          'images/no_picture.png',
+                                          height: 42,
+                                          width: 42,
+                                        ),
+                                  )),
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    response.nome,
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: Dimens.textSize6,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  SizedBox(height: Dimens.minMarginApplication),
+                                  Text(
+                                    response.email,
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: Dimens.textSize5,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            SizedBox(height: Dimens.minMarginApplication),
-                            Text(
-                              "email@email.com.br",
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: Dimens.textSize5,
-                                color: Colors.black,
-                              ),
-                            ),
+                            IconButton(
+                              icon: Icon(Icons.arrow_forward_ios,
+                                  color: Colors.black38),
+                              onPressed: () =>
+                                  {Navigator.pushNamed(context, "/ui/profile")},
+                            )
                           ],
                         ),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.arrow_forward_ios,
-                            color: Colors.black38),
-                        onPressed: () =>
-                        {Navigator.pushNamed(context, "/ui/profile")},
-                      )
-                    ],
-                  ),
-                )),
+                      ));
+                } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+                return Center(child: CircularProgressIndicator());
+              },
+            ),
 
             GestureDetector(
                 child: Container(
@@ -136,7 +186,7 @@ class _MainMenu extends State<MainMenu> {
                       Container(
                         margin: EdgeInsets.all(Dimens.minMarginApplication),
                         child:
-                        Icon(Icons.pin_drop_outlined, color: Colors.black),
+                            Icon(Icons.pin_drop_outlined, color: Colors.black),
                       ),
                       Expanded(
                         child: Column(
@@ -170,7 +220,6 @@ class _MainMenu extends State<MainMenu> {
                   Navigator.pushNamed(context, "/ui/user_addresses");
                 }),
 
-
             Styles().div_horizontal,
 
             GestureDetector(
@@ -180,8 +229,8 @@ class _MainMenu extends State<MainMenu> {
                     children: [
                       Container(
                         margin: EdgeInsets.all(Dimens.minMarginApplication),
-                        child:
-                        Icon(Icons.monetization_on_outlined, color: Colors.black),
+                        child: Icon(Icons.monetization_on_outlined,
+                            color: Colors.black),
                       ),
                       Expanded(
                         child: Column(
@@ -214,7 +263,6 @@ class _MainMenu extends State<MainMenu> {
                 onTap: () {
                   Navigator.pushNamed(context, "/ui/payments");
                 }),
-
 
             Styles().div_horizontal,
             GestureDetector(
@@ -254,8 +302,9 @@ class _MainMenu extends State<MainMenu> {
                     ],
                   ),
                 ),
-                onTap: () {Navigator.pushNamed(context, "/ui/categories");}
-            ),
+                onTap: () {
+                  Navigator.pushNamed(context, "/ui/categories");
+                }),
 
             Styles().div_horizontal,
             GestureDetector(
@@ -297,7 +346,6 @@ class _MainMenu extends State<MainMenu> {
                   ),
                 ),
                 onTap: () {}),
-
 
             Styles().div_horizontal,
 
@@ -353,7 +401,6 @@ class _MainMenu extends State<MainMenu> {
                           btnConfirm: TextButton(
                               child: Text(Strings.yes),
                               onPressed: () async {
-
                                 await Preferences.init();
                                 Preferences.clearUserData();
 
@@ -362,7 +409,6 @@ class _MainMenu extends State<MainMenu> {
                                     MaterialPageRoute(
                                         builder: (context) => Login()),
                                     ModalRoute.withName("/ui/login"));
-
                               }));
                     },
                   );

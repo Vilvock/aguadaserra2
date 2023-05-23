@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../../../config/application_messages.dart';
 import '../../../../config/preferences.dart';
 import '../../../../global/application_constant.dart';
+import '../../../../model/cart.dart';
 import '../../../../model/user.dart';
 import '../../../../res/dimens.dart';
 import '../../../../res/owner_colors.dart';
@@ -25,7 +26,6 @@ class MethodPayment extends StatefulWidget {
 
 class _MethodPayment extends State<MethodPayment>
     with TickerProviderStateMixin {
-
   int _idAddress = 29;
   late int _idCart;
   late String _totalValue;
@@ -49,6 +49,50 @@ class _MethodPayment extends State<MethodPayment>
     super.dispose();
   }
 
+  Future<List<Map<String, dynamic>>> addOrder(
+      String idCart,
+      String typeDelivery,
+      String idAddress,
+      String scheduleWithdrawalId,
+      String dateWithdrawal,
+      String typePayment,
+      String cartValue,
+      String freightValue,
+      String totalValue,
+      String obs) async {
+    try {
+      final body = {
+        "id_user": await Preferences.getUserData()!.id,
+        "id_carrinho": idCart,
+        "tipo_entrega": typeDelivery,
+        "id_endereco": idAddress,
+        "hora_retirada_id": scheduleWithdrawalId,
+        "metodo_pagamento": typePayment,
+        "data_retirada": dateWithdrawal,
+        "valor": cartValue,
+        "valor_frete": freightValue,
+        "valor_total": totalValue,
+        "obs": obs,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.ADD_ORDER, body);
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      final response = Cart.fromJson(_map[0]);
+
+      return _map;
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
   Future<void> calculeFreightValue() async {
     try {
       final body = {
@@ -68,7 +112,6 @@ class _MethodPayment extends State<MethodPayment>
       final response = Freight.fromJson(parsedResponse);
 
       _totalValue = response.valor_total;
-
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
     }
@@ -217,76 +260,80 @@ class _MethodPayment extends State<MethodPayment>
                       return const CircularProgressIndicator();
                     }),
               ),
-              Container( padding: EdgeInsets.all(Dimens.paddingApplication), child: Column(
-                  crossAxisAlignment:
-                  CrossAxisAlignment.start, children: [
-                Text(
-                  "Escolha a data e horário para retirada",
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: Dimens.textSize6,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.black,
-                  ),
-                ),
-                SizedBox(height: Dimens.marginApplication),
-                TextField(
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: OwnerColors.colorPrimary, width: 1.5),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                    ),
-                    hintText: 'Data',
-                    hintStyle: TextStyle(color: Colors.grey),
-                    border: OutlineInputBorder(
-                      borderRadius:
-                      BorderRadius.circular(Dimens.radiusApplication),
-                      borderSide: BorderSide.none,
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                    contentPadding:
-                    EdgeInsets.all(Dimens.textFieldPaddingApplication),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: Dimens.textSize5,
-                  ),
-                ),
-                SizedBox(height: Dimens.marginApplication),
-                TextField(
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: OwnerColors.colorPrimary, width: 1.5),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                    ),
-                    hintText: 'Horário',
-                    hintStyle: TextStyle(color: Colors.grey),
-                    border: OutlineInputBorder(
-                      borderRadius:
-                      BorderRadius.circular(Dimens.radiusApplication),
-                      borderSide: BorderSide.none,
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                    contentPadding:
-                    EdgeInsets.all(Dimens.textFieldPaddingApplication),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: Dimens.textSize5,
-                  ),
-                ),
-              ]),)
-
+              Container(
+                padding: EdgeInsets.all(Dimens.paddingApplication),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Escolha a data e horário para retirada",
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: Dimens.textSize6,
+                          fontWeight: FontWeight.w300,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: Dimens.marginApplication),
+                      TextField(
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: OwnerColors.colorPrimary, width: 1.5),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 1.0),
+                          ),
+                          hintText: 'Data',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.circular(Dimens.radiusApplication),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding: EdgeInsets.all(
+                              Dimens.textFieldPaddingApplication),
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: Dimens.textSize5,
+                        ),
+                      ),
+                      SizedBox(height: Dimens.marginApplication),
+                      TextField(
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: OwnerColors.colorPrimary, width: 1.5),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 1.0),
+                          ),
+                          hintText: 'Horário',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.circular(Dimens.radiusApplication),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding: EdgeInsets.all(
+                              Dimens.textFieldPaddingApplication),
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: Dimens.textSize5,
+                        ),
+                      ),
+                    ]),
+              )
             ]),
           ),
           SizedBox(height: Dimens.minMarginApplication),
@@ -294,14 +341,10 @@ class _MethodPayment extends State<MethodPayment>
           SizedBox(height: Dimens.minMarginApplication),
           InkWell(
               onTap: () {
-
-                Navigator.pushNamed(context,
-                    "/ui/checkout",
-                    arguments: {
-                      "id_cart": _idCart,
-                      "total_value": _totalValue,
-                    });
-
+                Navigator.pushNamed(context, "/ui/checkout", arguments: {
+                  "id_cart": _idCart,
+                  "total_value": _totalValue,
+                });
               },
               child: Card(
                   shape: RoundedRectangleBorder(

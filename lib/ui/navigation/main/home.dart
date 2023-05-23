@@ -360,7 +360,7 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                 alignment: Alignment.center,
                                                 children: [
                                                   CircleAvatar(
-                                                      radius: 48,
+                                                      radius: 42,
                                                       backgroundColor:
                                                           OwnerColors
                                                               .categoryLightGrey,
@@ -377,6 +377,7 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                             Image.asset(
                                                           'images/no_picture.png',
                                                           height: 42,
+                                                              width: 42,
                                                         ),
                                                       )),
                                                   // Align(
