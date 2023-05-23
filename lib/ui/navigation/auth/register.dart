@@ -14,6 +14,7 @@ import '../../../res/dimens.dart';
 import '../../../res/owner_colors.dart';
 import '../../../web_service/links.dart';
 import '../../../web_service/service_response.dart';
+import '../../components/alert_dialog_sucess.dart';
 import '../../components/custom_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -27,8 +28,6 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-
-
   late bool _passwordVisible;
   late bool _passwordVisible2;
 
@@ -78,17 +77,17 @@ class _RegisterState extends State<Register> {
       final response = User.fromJson(_map[0]);
 
       if (response.status == "01") {
-        setState(() {
-          _registerResponse = response;
-          saveUserToPreferences(_registerResponse!);
-
-          Navigator.of(context).pop();
-
-          // Navigator.pushAndRemoveUntil(
-          //     context,
-          //     MaterialPageRoute(builder: (context) => Home()),
-          //     ModalRoute.withName("/ui/home"));
-        });
+        SucessAlertDialog(
+            btnConfirm: Container(
+                margin: EdgeInsets.only(top: Dimens.marginApplication),
+                width: double.infinity,
+                child: ElevatedButton(
+                    style: Styles().styleDefaultButton,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child:
+                        Text("Ok", style: Styles().styleDefaultTextButton))));
       } else {
         ApplicationMessages(context: context).showMessage(response.msg);
       }

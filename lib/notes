@@ -3,13 +3,11 @@
 
 
 
-(tela sucesso cadastro, com msg)
-
-- categorias abaixo do banner v
+(tela sucesso cadastro, com msg) xv
 
 - fazer troca de enderecos dinamica no pagamento
 
 
  (ver se o id pedido é o id do carrinho) (TEM QUE FAZER O ADD PEDIDO)
 
-botao carrinho no produto, ja pra setar quantidade e ir direto carrinho
+botao carrinho no produto, ja pra setar quantidade e ir direto carrinho xv
