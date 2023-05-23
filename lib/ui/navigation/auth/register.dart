@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ffi';
 
+import 'package:app/res/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../config/application_messages.dart';
@@ -26,9 +27,16 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+
+
+  late bool _passwordVisible;
+  late bool _passwordVisible2;
+
   @override
   void initState() {
     super.initState();
+    _passwordVisible = false;
+    _passwordVisible2 = false;
   }
 
   late Validator validator;
@@ -46,17 +54,15 @@ class _RegisterState extends State<Register> {
       String longitude) async {
     try {
       final body = {
-
-          "razao_social": socialReason,
-          "nome_fantasia": fantasyName,
-          "cnpj": cnpj,
-          "email": email,
-          "celular": cellphone,
-          "password": password,
-          "latitude": latitude,
-          "longitude": longitude,
-          "token": ApplicationConstant.TOKEN
-
+        "razao_social": socialReason,
+        "nome_fantasia": fantasyName,
+        "cnpj": cnpj,
+        "email": email,
+        "celular": cellphone,
+        "password": password,
+        "latitude": latitude,
+        "longitude": longitude,
+        "token": ApplicationConstant.TOKEN
       };
 
       print('HTTP_BODY: $body');
@@ -76,7 +82,6 @@ class _RegisterState extends State<Register> {
           _registerResponse = response;
           saveUserToPreferences(_registerResponse!);
 
-
           Navigator.of(context).pop();
 
           // Navigator.pushAndRemoveUntil(
@@ -85,9 +90,7 @@ class _RegisterState extends State<Register> {
           //     ModalRoute.withName("/ui/home"));
         });
       } else {
-
         ApplicationMessages(context: context).showMessage(response.msg);
-
       }
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
@@ -130,10 +133,10 @@ class _RegisterState extends State<Register> {
         body: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
-                OwnerColors.gradientFirstColor,
-                OwnerColors.gradientSecondaryColor,
-                OwnerColors.gradientThirdColor
-              ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
+            OwnerColors.gradientFirstColor,
+            OwnerColors.gradientSecondaryColor,
+            OwnerColors.gradientThirdColor
+          ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
           child: Column(children: [
             Expanded(
                 child: SingleChildScrollView(
@@ -141,6 +144,11 @@ class _RegisterState extends State<Register> {
                 margin: EdgeInsets.all(Dimens.marginApplication),
                 child: Column(
                   children: [
+                    Image.asset(
+                      'images/main_logo_1.png',
+                      height: 70,
+                    ),
+                    SizedBox(height: 24),
                     Container(
                       width: double.infinity,
                       child: Text(
@@ -309,6 +317,20 @@ class _RegisterState extends State<Register> {
                     TextField(
                       controller: passwordController,
                       decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                            icon: Icon(
+                              // Based on passwordVisible state choose the icon
+                              _passwordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: OwnerColors.colorPrimary,
+                            ),
+                            onPressed: () {
+                              // Update the state i.e. toogle the state of passwordVisible variable
+                              setState(() {
+                                _passwordVisible = !_passwordVisible;
+                              });
+                            }),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                               color: OwnerColors.colorPrimary, width: 1.5),
@@ -330,7 +352,7 @@ class _RegisterState extends State<Register> {
                             EdgeInsets.all(Dimens.textFieldPaddingApplication),
                       ),
                       keyboardType: TextInputType.visiblePassword,
-                      obscureText: true,
+                      obscureText: !_passwordVisible,
                       enableSuggestions: false,
                       autocorrect: false,
                       style: TextStyle(
@@ -342,6 +364,20 @@ class _RegisterState extends State<Register> {
                     TextField(
                       controller: coPasswordController,
                       decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                            icon: Icon(
+                              // Based on passwordVisible state choose the icon
+                              _passwordVisible2
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: OwnerColors.colorPrimary,
+                            ),
+                            onPressed: () {
+                              // Update the state i.e. toogle the state of passwordVisible variable
+                              setState(() {
+                                _passwordVisible2 = !_passwordVisible2;
+                              });
+                            }),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                               color: OwnerColors.colorPrimary, width: 1.5),
@@ -363,7 +399,7 @@ class _RegisterState extends State<Register> {
                             EdgeInsets.all(Dimens.textFieldPaddingApplication),
                       ),
                       keyboardType: TextInputType.visiblePassword,
-                      obscureText: true,
+                      obscureText: !_passwordVisible2,
                       enableSuggestions: false,
                       autocorrect: false,
                       style: TextStyle(
@@ -393,18 +429,25 @@ class _RegisterState extends State<Register> {
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                OwnerColors.colorPrimary),
-                          ),
+                          style: Styles().styleDefaultButton,
                           onPressed: () {
-                            if (!validator.validateGenericTextField(socialReasonController.text, "Razão social")) return;
-                            if (!validator.validateGenericTextField(fantasyNameController.text, "Nome fantasia")) return;
-                            if (!validator.validateCNPJ(cnpjController.text)) return;
-                            if (!validator.validateCellphone(cellphoneController.text)) return;
-                            if (!validator.validateEmail(emailController.text)) return;
-                            if (!validator.validatePassword(passwordController.text)) return;
-                            if (!validator.validateCoPassword(passwordController.text, coPasswordController.text)) return;
+                            if (!validator.validateGenericTextField(
+                                socialReasonController.text, "Razão social"))
+                              return;
+                            if (!validator.validateGenericTextField(
+                                fantasyNameController.text, "Nome fantasia"))
+                              return;
+                            if (!validator.validateCNPJ(cnpjController.text))
+                              return;
+                            if (!validator.validateCellphone(
+                                cellphoneController.text)) return;
+                            if (!validator.validateEmail(emailController.text))
+                              return;
+                            if (!validator.validatePassword(
+                                passwordController.text)) return;
+                            if (!validator.validateCoPassword(
+                                passwordController.text,
+                                coPasswordController.text)) return;
 
                             registerRequest(
                                 emailController.text,
@@ -416,15 +459,8 @@ class _RegisterState extends State<Register> {
                                 "432432432",
                                 "432423423");
                           },
-                          child: Text(
-                            "Criar conta",
-                            style: TextStyle(
-                                fontSize: Dimens.textSize8,
-                                color: Colors.white,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.normal,
-                                decoration: TextDecoration.none),
-                          )),
+                          child: Text("Criar conta",
+                              style: Styles().styleDefaultTextButton)),
                     ),
                     SizedBox(height: Dimens.marginApplication),
                     GestureDetector(

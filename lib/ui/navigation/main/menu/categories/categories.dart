@@ -64,6 +64,8 @@ class _Categories extends State<Categories> {
                     final response = Product.fromJson(snapshot.data![index]);
 
                     return Card(
+                      elevation: 0,
+                      color: OwnerColors.categoryLightGrey,
                       margin: EdgeInsets.all(Dimens.minMarginApplication),
                       shape: RoundedRectangleBorder(
                         borderRadius:
@@ -78,22 +80,27 @@ class _Categories extends State<Categories> {
                                     })
                               },
                           child: Container(
-                            padding: EdgeInsets.all(Dimens.paddingApplication),
+                            padding: EdgeInsets.all(Dimens.minPaddingApplication),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Container(
-                                //     margin: EdgeInsets.only(
-                                //         right: Dimens.minMarginApplication),
-                                //     child: ClipRRect(
-                                //         borderRadius: BorderRadius.circular(
-                                //             Dimens.minRadiusApplication),
-                                //         child: Image.network(
-                                //           ApplicationConstant.URL_PRODUCT_PHOTO + response.url_foto.toString(),
-                                //           height: 90,
-                                //           width: 90,
-                                //           errorBuilder: (context, exception, stackTrack) => Icon(Icons.error, size: 90),
-                                //         ))),
+                                Container(
+                                    margin: EdgeInsets.only(
+                                        right: Dimens.minMarginApplication),
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                            Dimens.minRadiusApplication),
+                                        child: Image.network(
+                                          ApplicationConstant.URL_CATEGORIES + response.url.toString(),
+                                          height: 20,
+                                          width: 20,
+                                          errorBuilder: (context, exception, stackTrack) => Image.asset(
+                                            'images/no_picture.png',
+                                            height: 20,
+                                          ),
+                                        ))),
+                                SizedBox(
+                                    width: Dimens.minMarginApplication),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,8 +112,7 @@ class _Categories extends State<Categories> {
                                         style: TextStyle(
                                           fontFamily: 'Inter',
                                           fontSize: Dimens.textSize6,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
+                                          color: Colors.black87,
                                         ),
                                       ),
                                       SizedBox(

@@ -12,6 +12,7 @@ import '../../../global/application_constant.dart';
 import '../../../model/user.dart';
 import '../../../res/dimens.dart';
 import '../../../res/owner_colors.dart';
+import '../../../res/styles.dart';
 import '../../../web_service/links.dart';
 import '../../../web_service/service_response.dart';
 import '../../components/custom_app_bar.dart';
@@ -27,10 +28,13 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
 
+  late bool _passwordVisible;
+
 
   @override
   void initState() {
     super.initState();
+    _passwordVisible = false;
   }
 
   late Validator validator;
@@ -112,6 +116,13 @@ class _LoginState extends State<Login> {
               margin: EdgeInsets.all(Dimens.marginApplication),
               child: Column(
                 children: [
+
+                  Image.asset(
+                    'images/main_logo_1.png',
+                    height: 70,
+                  ),
+                  SizedBox(height: 24),
+
                   Container(
                     width: double.infinity,
                     child: Text(
@@ -159,6 +170,20 @@ class _LoginState extends State<Login> {
                   TextField(
                     controller: passwordController,
                     decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          // Based on passwordVisible state choose the icon
+                          _passwordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: OwnerColors.colorPrimary,
+                        ),
+                        onPressed: () {
+                          // Update the state i.e. toogle the state of passwordVisible variable
+                          setState(() {
+                            _passwordVisible = !_passwordVisible;
+                          });
+                        }),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                             color: OwnerColors.colorPrimary, width: 1.5),
@@ -179,7 +204,7 @@ class _LoginState extends State<Login> {
                       EdgeInsets.all(Dimens.textFieldPaddingApplication),
                     ),
                     keyboardType: TextInputType.visiblePassword,
-                    obscureText: true,
+                    obscureText: !_passwordVisible,
                     enableSuggestions: false,
                     autocorrect: false,
                     style: TextStyle(
@@ -203,14 +228,14 @@ class _LoginState extends State<Login> {
                     ),
                   ),
 
+                  SizedBox(height: 48),
+
                   Container(
                     margin: EdgeInsets.only(top: Dimens.marginApplication),
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                        style: ButtonStyle (
-                          backgroundColor: MaterialStateProperty.all(OwnerColors.colorPrimary),
-                        ),
+                        style: Styles().styleDefaultButton,
                         onPressed: () async {
 
                           if (!validator.validateEmail(emailController.text)) return;
@@ -221,13 +246,7 @@ class _LoginState extends State<Login> {
                         },
                         child: Text(
                           "Entrar",
-                          style: TextStyle(
-                              fontSize: Dimens.textSize8,
-                              color: Colors.white,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.normal,
-                              decoration: TextDecoration.none),
-                        )),
+                          style: Styles().styleDefaultTextButton)),
                   ),
 
                   Expanded(

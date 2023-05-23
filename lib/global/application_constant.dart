@@ -7,6 +7,8 @@ class ApplicationConstant {
 
 
   static const String URL_PRODUCT_PHOTO = URL + "uploads/produtos/";
+  static const String URL_CATEGORIES = URL + "uploads/categorias/";
+  static const String URL_AVATAR = URL + "uploads/avatar/";
 
 
   static const String FCM_TYPE_ANDROID = "1";

@@ -10,18 +10,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   bool isVisibleFavoriteButton;
   bool isVisibleAddressButton;
   bool isVisibleSearchButton;
+  bool isVisibleNotificationsButton;
 
   CustomAppBar({this.title: "", this.isVisibleBackButton = false,
-    this.isVisibleFavoriteButton = false, this.isVisibleAddressButton = false, this.isVisibleSearchButton = false});
+    this.isVisibleFavoriteButton = false, this.isVisibleAddressButton = false, this.isVisibleSearchButton = false, this.isVisibleNotificationsButton = false});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      actions: _returnFavoriteIcon(this.isVisibleFavoriteButton, this.isVisibleAddressButton, this.isVisibleSearchButton, context),
+      actions: _returnIcons(this.isVisibleFavoriteButton, this.isVisibleAddressButton, this.isVisibleSearchButton, this.isVisibleNotificationsButton, context),
       automaticallyImplyLeading: this.isVisibleBackButton,
       leading: _returnBackIcon(this.isVisibleBackButton, context),
-      backgroundColor: Colors.white,
-      elevation: Dimens.elevationApplication,
+      backgroundColor: Colors.grey[50], //defalut screen color
+      elevation: 0,
       titleSpacing: 0,
       title: Row(
         children: [
@@ -66,7 +67,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return null;
   }
 
-  List<Widget> _returnFavoriteIcon(bool isVisibleFavoriteButton, bool isVisibleAddressButton, bool isVisibleSearchButton, BuildContext context) {
+  List<Widget> _returnIcons(bool isVisibleFavoriteButton, bool isVisibleAddressButton, bool isVisibleSearchButton, bool isVisibleNotificationsButton, BuildContext context) {
 
     List<Widget> _widgetList = <Widget>[];
 
@@ -103,6 +104,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       _widgetList.add(IconButton(
         icon: Icon(
           Icons.search,
+          color: Colors.black,
+        ),
+        onPressed: () {
+
+        },
+      ));
+    }
+
+    if (isVisibleSearchButton) {
+      _widgetList.add(IconButton(
+        icon: Icon(
+          Icons.notifications_none,
           color: Colors.black,
         ),
         onPressed: () {

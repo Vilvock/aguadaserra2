@@ -268,6 +268,7 @@ class _ContainerHomeState extends State<ContainerHome> {
         title: "Início",
         isVisibleBackButton: false,
         isVisibleSearchButton: true,
+        isVisibleNotificationsButton: true,
       ),
       body: RefreshIndicator(
           onRefresh: _pullRefresh,
