@@ -9,6 +9,7 @@ import 'package:app/ui/navigation/intro/splash.dart';
 import 'package:app/ui/navigation/main/checkout_flow/checkout.dart';
 import 'package:app/ui/navigation/main/checkout_flow/method_payment.dart';
 import 'package:app/ui/navigation/main/checkout_flow/sucess.dart';
+import 'package:app/ui/navigation/main/filter_products.dart';
 import 'package:app/ui/navigation/main/home.dart';
 import 'package:app/ui/navigation/main/menu/address/user_addresses.dart';
 import 'package:app/ui/navigation/main/menu/categories/categories.dart';
@@ -90,6 +91,7 @@ void main() async {
       '/ui/payments': (context) => Payment(),
       '/ui/success': (context) => Success(),
       '/ui/notifications': (context) => Notifications(),
+      '/ui/filter_products': (context) => FilterProducts(),
 
       //lista horizontal
       // Container(
