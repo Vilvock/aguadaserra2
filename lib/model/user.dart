@@ -14,8 +14,8 @@ class User extends GlobalWSModel{
   final String bairro;
   final String numero;
   final String complemento;
-  final String latitude;
-  final String longitude;
+  final dynamic latitude;
+  final dynamic longitude;
   final String endereco_completo;
   final String descricao;
   final String data;

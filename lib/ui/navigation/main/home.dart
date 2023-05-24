@@ -493,14 +493,14 @@ class _ContainerHomeState extends State<ContainerHome> {
                             ),
                           ),
                         ),
-                        Text(
-                          "Ver mais",
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: Dimens.textSize5,
-                            color: OwnerColors.colorPrimaryDark,
-                          ),
-                        ),
+                        // Text(
+                        //   "Ver mais",
+                        //   style: TextStyle(
+                        //     fontFamily: 'Inter',
+                        //     fontSize: Dimens.textSize5,
+                        //     color: OwnerColors.colorPrimaryDark,
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),

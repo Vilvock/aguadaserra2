@@ -1,8 +1,17 @@
+import 'dart:convert';
+
+import 'package:app/res/styles.dart';
 import 'package:flutter/material.dart';
 
+import '../../config/application_messages.dart';
 import '../../config/masks.dart';
+import '../../config/preferences.dart';
+import '../../global/application_constant.dart';
+import '../../model/user.dart';
 import '../../res/dimens.dart';
 import '../../res/owner_colors.dart';
+import '../../web_service/links.dart';
+import '../../web_service/service_response.dart';
 
 class AddressFormAlertDialog extends StatefulWidget {
   AddressFormAlertDialog({
@@ -16,6 +25,10 @@ class AddressFormAlertDialog extends StatefulWidget {
 }
 
 class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
+
+
+  final postRequest = PostRequest();
+
   @override
   void initState() {
     super.initState();
@@ -39,6 +52,53 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
     numberController.dispose();
     complementController.dispose();
     super.dispose();
+  }
+
+  Future<void> saveAddress(String nameAddress,
+      String cep,
+      String state,
+      String city,
+      String address,
+      String nbh,
+      String number,
+      String complement) async {
+    try {
+      final body = {
+        "id_user": await Preferences.getUserData()!.id,
+        "nome": nameAddress,
+        "cep": cep,
+        "estado": state,
+        "cidade": city,
+        "endereco": address,
+        "bairro": nbh,
+        "numero": number,
+        "complemento": complement,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.SAVE_ADDRESS, body);
+      // final parsedResponse = jsonDecode(json); // pegar um objeto so
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      final response = User.fromJson(_map[0]);
+
+      if (response.status == "1") {
+        setState(() {}
+
+        );
+
+        Navigator.of(context).pop();
+      } else {}
+      ApplicationMessages(context: context).showMessage(response.msg);
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
   }
 
   @override
@@ -84,7 +144,7 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                     SizedBox(height: Dimens.marginApplication),
                     TextField(
                       controller: cepController,
-                      inputFormatters: [Masks().cellphoneMask()],
+                      // inputFormatters: [Masks().cellphoneMask()],
                       decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -92,19 +152,19 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.grey, width: 1.0),
+                          BorderSide(color: Colors.grey, width: 1.0),
                         ),
                         hintText: 'CEP',
                         hintStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius:
-                              BorderRadius.circular(Dimens.radiusApplication),
+                          BorderRadius.circular(Dimens.radiusApplication),
                           borderSide: BorderSide.none,
                         ),
                         filled: true,
                         fillColor: Colors.white,
                         contentPadding:
-                            EdgeInsets.all(Dimens.textFieldPaddingApplication),
+                        EdgeInsets.all(Dimens.textFieldPaddingApplication),
                       ),
                       keyboardType: TextInputType.number,
                       style: TextStyle(
@@ -126,7 +186,7 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderSide:
-                                    BorderSide(color: Colors.grey, width: 1.0),
+                                BorderSide(color: Colors.grey, width: 1.0),
                               ),
                               hintText: 'Cidade',
                               hintStyle: TextStyle(color: Colors.grey),
@@ -159,7 +219,7 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderSide:
-                                    BorderSide(color: Colors.grey, width: 1.0),
+                                BorderSide(color: Colors.grey, width: 1.0),
                               ),
                               hintText: 'Estado',
                               hintStyle: TextStyle(color: Colors.grey),
@@ -192,19 +252,19 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.grey, width: 1.0),
+                          BorderSide(color: Colors.grey, width: 1.0),
                         ),
                         hintText: 'Bairro',
                         hintStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius:
-                              BorderRadius.circular(Dimens.radiusApplication),
+                          BorderRadius.circular(Dimens.radiusApplication),
                           borderSide: BorderSide.none,
                         ),
                         filled: true,
                         fillColor: Colors.white,
                         contentPadding:
-                            EdgeInsets.all(Dimens.textFieldPaddingApplication),
+                        EdgeInsets.all(Dimens.textFieldPaddingApplication),
                       ),
                       keyboardType: TextInputType.text,
                       style: TextStyle(
@@ -217,34 +277,35 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                       children: [
                         Expanded(
                             child: TextField(
-                          controller: addressController,
-                          decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: OwnerColors.colorPrimary, width: 1.5),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide:
+                              controller: addressController,
+                              decoration: InputDecoration(
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: OwnerColors.colorPrimary,
+                                      width: 1.5),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
                                   BorderSide(color: Colors.grey, width: 1.0),
-                            ),
-                            hintText: 'Endereço',
-                            hintStyle: TextStyle(color: Colors.grey),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                  Dimens.radiusApplication),
-                              borderSide: BorderSide.none,
-                            ),
-                            filled: true,
-                            fillColor: Colors.white,
-                            contentPadding: EdgeInsets.all(
-                                Dimens.textFieldPaddingApplication),
-                          ),
-                          keyboardType: TextInputType.text,
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: Dimens.textSize5,
-                          ),
-                        )),
+                                ),
+                                hintText: 'Endereço',
+                                hintStyle: TextStyle(color: Colors.grey),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      Dimens.radiusApplication),
+                                  borderSide: BorderSide.none,
+                                ),
+                                filled: true,
+                                fillColor: Colors.white,
+                                contentPadding: EdgeInsets.all(
+                                    Dimens.textFieldPaddingApplication),
+                              ),
+                              keyboardType: TextInputType.text,
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: Dimens.textSize5,
+                              ),
+                            )),
                         SizedBox(width: Dimens.marginApplication),
                         Expanded(
                           child: TextField(
@@ -257,7 +318,7 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderSide:
-                                    BorderSide(color: Colors.grey, width: 1.0),
+                                BorderSide(color: Colors.grey, width: 1.0),
                               ),
                               hintText: 'Número',
                               hintStyle: TextStyle(color: Colors.grey),
@@ -290,19 +351,19 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.grey, width: 1.0),
+                          BorderSide(color: Colors.grey, width: 1.0),
                         ),
                         hintText: 'Complemento(opcional)',
                         hintStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius:
-                              BorderRadius.circular(Dimens.radiusApplication),
+                          BorderRadius.circular(Dimens.radiusApplication),
                           borderSide: BorderSide.none,
                         ),
                         filled: true,
                         fillColor: Colors.white,
                         contentPadding:
-                            EdgeInsets.all(Dimens.textFieldPaddingApplication),
+                        EdgeInsets.all(Dimens.textFieldPaddingApplication),
                       ),
                       keyboardType: TextInputType.text,
                       style: TextStyle(
@@ -314,21 +375,22 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                     Container(
                       margin: EdgeInsets.only(top: Dimens.marginApplication),
                       width: double.infinity,
-                      height: 50,
                       child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                OwnerColors.colorPrimary),
-                          ),
-                          onPressed: () {},
+                          style: Styles().styleDefaultButton,
+                          onPressed: () {
+                            saveAddress(
+                                "Teste",
+                                cepController.text.toString(),
+                                stateController.text.toString(),
+                                cityController.text.toString(),
+                                addressController.text.toString(),
+                                nbhController.text.toString(),
+                                numberController.text.toString(),
+                                complementController.text.toString());
+                          },
                           child: Text(
                             "Adicionar",
-                            style: TextStyle(
-                                fontSize: Dimens.textSize8,
-                                color: Colors.white,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.normal,
-                                decoration: TextDecoration.none),
+                            style: Styles().styleDefaultTextButton,
                           )),
                     ),
                   ],
