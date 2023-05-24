@@ -86,9 +86,38 @@ class _Notifications extends State<Notifications> {
                         margin: EdgeInsets.all(Dimens.minMarginApplication),
                         child: Container(
                           padding: EdgeInsets.all(Dimens.paddingApplication),
-                          child: Row(
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [],
+                            children: [
+
+                              Text(
+                                response.titulo.toString(),
+                                style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontSize: Dimens.textSize6,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              SizedBox(height: Dimens.marginApplication),
+                              Text(
+                                response.descricao.toString(),
+                                style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontSize: Dimens.textSize5,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              SizedBox(height: Dimens.marginApplication),
+                              Text(
+                                response.data.toString(),
+                                style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontSize: Dimens.textSize4,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       );

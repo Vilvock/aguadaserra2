@@ -131,6 +131,61 @@ class _ContainerHomeState extends State<ContainerHome> {
     saveFcm();
   }
 
+  Future<void> removeFavorite(String idFavorite) async {
+    try {
+      final body = {
+        "id": idFavorite,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.DELETE_FAVORITE, body);
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      final response = Favorite.fromJson(_map[0]);
+
+      if (response.status == "01") {
+        // setState(() {});
+      } else {}
+      ApplicationMessages(context: context).showMessage(response.msg);
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
+  Future<void> addItemToFavorite(String idProduct) async {
+    try {
+      final body = {
+        "id_user": await Preferences.getUserData()!.id,
+        "id_produto": idProduct,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.ADD_FAVORITE, body);
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      final response = Cart.fromJson(_map[0]);
+
+      if (response.status == "01") {
+        // setState(() {});
+      } else {}
+      ApplicationMessages(context: context).showMessage(response.msg);
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
   Future<List<Map<String, dynamic>>> listCategories() async {
     try {
       final body = {"token": ApplicationConstant.TOKEN};
@@ -553,7 +608,6 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                             btnConfirm: Container(
                                                                 margin: EdgeInsets.only(top: Dimens.marginApplication),
                                                                 width: double.infinity,
-                                                                height: 50,
                                                                 child: ElevatedButton(
                                                                     style: Styles().styleDefaultButton,
                                                                     onPressed: () {
@@ -565,7 +619,9 @@ class _ContainerHomeState extends State<ContainerHome> {
                                         IconButton(
                                           icon: Icon(Icons.favorite,
                                               color: Colors.black38),
-                                          onPressed: () => {},
+                                          onPressed: () {
+                                            addItemToFavorite(response.id.toString());
+                                          },
                                         )
                                       ],
                                     ),

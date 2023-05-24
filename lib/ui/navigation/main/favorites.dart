@@ -9,6 +9,7 @@ import '../../../model/favorite.dart';
 import '../../../model/user.dart';
 import '../../../res/dimens.dart';
 import '../../../res/owner_colors.dart';
+import '../../../res/styles.dart';
 import '../../../web_service/links.dart';
 import '../../../web_service/service_response.dart';
 import '../../components/custom_app_bar.dart';
@@ -31,17 +32,14 @@ class _Favorites extends State<Favorites> {
 
   final postRequest = PostRequest();
 
-
-  Future<void> deleteFavorite() async {
+  Future<void> removeFavorite(String idFavorite) async {
     try {
-      final body = {
-        "id": "11",
-        "token": ApplicationConstant.TOKEN
-      };
+      final body = {"id": idFavorite, "token": ApplicationConstant.TOKEN};
 
       print('HTTP_BODY: $body');
 
-      final json = await postRequest.sendPostRequest(Links.DELETE_FAVORITE, body);
+      final json =
+          await postRequest.sendPostRequest(Links.DELETE_FAVORITE, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -51,10 +49,7 @@ class _Favorites extends State<Favorites> {
       final response = Favorite.fromJson(_map[0]);
 
       if (response.status == "01") {
-        setState(() {
-
-        });
-
+        setState(() {});
       } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
@@ -105,8 +100,6 @@ class _Favorites extends State<Favorites> {
                   return ListView.builder(
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
-
-
                       final response = Favorite.fromJson(snapshot.data![index]);
 
                       return Card(
@@ -127,10 +120,13 @@ class _Favorites extends State<Favorites> {
                                       borderRadius: BorderRadius.circular(
                                           Dimens.minRadiusApplication),
                                       child: Image.network(
-                                        ApplicationConstant.URL_PRODUCT_PHOTO + response.url_foto.toString(),
+                                        ApplicationConstant.URL_PRODUCT_PHOTO +
+                                            response.url_foto.toString(),
                                         height: 90,
                                         width: 90,
-                                        errorBuilder: (context, exception, stackTrack) => Icon(Icons.error, size: 90),
+                                        errorBuilder:
+                                            (context, exception, stackTrack) =>
+                                                Icon(Icons.error, size: 90),
                                       ))),
                               Expanded(
                                 child: Column(
@@ -177,54 +173,69 @@ class _Favorites extends State<Favorites> {
                                     ),
                                     SizedBox(
                                         height: Dimens.minMarginApplication),
-                                    IntrinsicHeight(
-                                        child: Row(
-                                      children: [
-                                        Icon(
-                                            size: 20,
-                                            Icons.shopping_cart_outlined),
-                                        Text(
-                                          "Adicionar ao carrinho",
-                                          style: TextStyle(
-                                            fontFamily: 'Inter',
-                                            fontSize: Dimens.textSize4,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                            width: Dimens.minMarginApplication),
-                                        VerticalDivider(
-                                          color: Colors.black12,
-                                          width: 2,
-                                          thickness: 1.5,
-                                        ),
-                                        SizedBox(
-                                            width: Dimens.minMarginApplication),
-                                        Icon(size: 20, Icons.delete_outline),
-                                        Text(
-                                          "Remover",
-                                          style: TextStyle(
-                                            fontFamily: 'Inter',
-                                            fontSize: Dimens.textSize4,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                      ],
-                                    ))
+                                    Container(
+                                        color: Colors.white,
+                                        child: IntrinsicHeight(
+                                            child: Row(
+                                          children: [
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                  right: Dimens
+                                                      .minMarginApplication),
+                                              child: Icon(
+                                                  size: 20,
+                                                  Icons.shopping_cart_outlined),
+                                            ),
+                                            Expanded(
+                                                child: Container(
+                                              child: Wrap(
+                                                children: [
+                                                  Text(
+                                                    "Adicionar ao carrinho",
+                                                    style: TextStyle(
+                                                      fontFamily: 'Inter',
+                                                      fontSize:
+                                                          Dimens.textSize4,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )),
+                                            Container(
+                                              child: Styles().div_vertical,
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                  right: Dimens
+                                                      .minMarginApplication),
+                                              child: Icon(
+                                                  size: 20,
+                                                  Icons.delete_outline),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () => {
+                                                removeFavorite(
+                                                    response.id.toString())
+                                              },
+                                              child: Expanded(
+                                                  child: Container(
+                                                      child: Wrap(children: [
+                                                Text(
+                                                  "Remover",
+                                                  style: TextStyle(
+                                                    fontFamily: 'Inter',
+                                                    fontSize: Dimens.textSize4,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ]))),
+                                            )
+                                          ],
+                                        )))
                                   ],
                                 ),
                               ),
-                              Align(
-                                  alignment: AlignmentDirectional.topEnd,
-                                  child: IconButton(
-                                    icon: Icon(
-                                      Icons.close,
-                                      color: Colors.black,
-                                    ),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  )),
                             ],
                           ),
                         ),
