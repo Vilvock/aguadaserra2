@@ -50,18 +50,27 @@ class _UserAddresses extends State<UserAddresses> {
     }
   }
 
-  Future<void> saveAddress() async {
+  Future<void> saveAddress(
+      String nameAddress,
+      String name,
+      String cep,
+      String state,
+      String city,
+      String address,
+      String nbh,
+      String number,
+      String complement) async {
     try {
       final body = {
-        "id_user": 12,
-        "nome": "Casa",
-        "cep": "12425210",
-        "estado": "RS",
-        "cidade": "Porto Alegre",
-        "endereco": "Av.Ipiranga",
-        "bairro": "Jardim Botânico",
-        "numero": "1111",
-        "complemento": "ap teste",
+        "id_user": await Preferences.getUserData()!.id,
+        "nome": nameAddress,
+        "cep": cep,
+        "estado": State,
+        "cidade": city,
+        "endereco": address,
+        "bairro": nbh,
+        "numero": number,
+        "complemento": complement,
         "token": ApplicationConstant.TOKEN
       };
 
@@ -88,18 +97,28 @@ class _UserAddresses extends State<UserAddresses> {
     }
   }
 
-  Future<void> updateAddress() async {
+  Future<void> updateAddress(
+      String idAddress,
+      String nameAddress,
+      String name,
+      String cep,
+      String state,
+      String city,
+      String address,
+      String nbh,
+      String number,
+      String complement) async {
     try {
       final body = {
-        "id_endereco": 29,
-        "nome": "Trabalho",
-        "cep": "90690-040",
-        "estado": "RS",
-        "cidade": "Porto Alegree",
-        "endereco": "Rua Antonio carlos tibiricça",
-        "bairro": "Petroópolis",
-        "numero": "7464",
-        "complemento": "sala 1032",
+        "id_endereco": idAddress,
+        "nome": nameAddress,
+        "cep": cep,
+        "estado": state,
+        "cidade": city,
+        "endereco": address,
+        "bairro": nbh,
+        "numero": number,
+        "complemento": complement,
         "token": ApplicationConstant.TOKEN
       };
 
@@ -127,9 +146,10 @@ class _UserAddresses extends State<UserAddresses> {
     }
   }
 
-  Future<void> deleteAddress() async {
+  Future<void> deleteAddress(
+      String idAddress) async {
     try {
-      final body = {"id_endereco": 32, "token": ApplicationConstant.TOKEN};
+      final body = {"id_endereco": idAddress, "token": ApplicationConstant.TOKEN};
 
       print('HTTP_BODY: $body');
 
@@ -149,9 +169,10 @@ class _UserAddresses extends State<UserAddresses> {
     }
   }
 
-  Future<List<Map<String, dynamic>>> findAddress() async {
+  Future<List<Map<String, dynamic>>> findAddress(
+      String idAddress) async {
     try {
-      final body = {"id_endereco": 29, "token": ApplicationConstant.TOKEN};
+      final body = {"id_endereco": idAddress, "token": ApplicationConstant.TOKEN};
 
       print('HTTP_BODY: $body');
 
@@ -188,7 +209,6 @@ class _UserAddresses extends State<UserAddresses> {
                 return ListView.builder(
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
-
                     final response = User.fromJson(snapshot.data![index]);
                     return Card(
                       shape: RoundedRectangleBorder(
@@ -223,7 +243,6 @@ class _UserAddresses extends State<UserAddresses> {
                                     ),
                                   ),
                                   SizedBox(height: Dimens.minMarginApplication),
-
                                   Styles().div_horizontal
                                 ],
                               ),

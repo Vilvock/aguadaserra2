@@ -131,6 +131,14 @@ class _ContainerHomeState extends State<ContainerHome> {
     saveFcm();
   }
 
+  final TextEditingController quantityController = TextEditingController();
+
+  @override
+  void dispose() {
+    quantityController.dispose();
+    super.dispose();
+  }
+
   Future<void> removeFavorite(String idFavorite) async {
     try {
       final body = {
@@ -605,13 +613,15 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                       builder: (BuildContext
                                                           context) {
                                                         return AddItemAlertDialog(
+                                                          quantityController: quantityController,
                                                             btnConfirm: Container(
                                                                 margin: EdgeInsets.only(top: Dimens.marginApplication),
                                                                 width: double.infinity,
                                                                 child: ElevatedButton(
                                                                     style: Styles().styleDefaultButton,
                                                                     onPressed: () {
-                                                                      openCart(response.id.toString(), response.valor, 1.toString());
+                                                                      openCart(response.id.toString(), response.valor, quantityController.text);
+                                                                      Navigator.of(context).pop();
                                                                     },
                                                                     child: Text("Adicionar ao carrinho", style: Styles().styleDefaultTextButton))));
                                                       })

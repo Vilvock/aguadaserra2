@@ -233,7 +233,6 @@ class _LoginState extends State<Login> {
                   Container(
                     margin: EdgeInsets.only(top: Dimens.marginApplication),
                     width: double.infinity,
-                    height: 50,
                     child: ElevatedButton(
                         style: Styles().styleDefaultButton,
                         onPressed: () async {

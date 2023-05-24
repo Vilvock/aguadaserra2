@@ -433,7 +433,6 @@ class _RegisterState extends State<Register> {
                     Container(
                       margin: EdgeInsets.only(top: Dimens.marginApplication),
                       width: double.infinity,
-                      height: 50,
                       child: ElevatedButton(
                           style: Styles().styleDefaultButton,
                           onPressed: () {

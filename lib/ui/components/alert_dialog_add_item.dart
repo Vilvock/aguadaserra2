@@ -5,10 +5,13 @@ import '../../res/owner_colors.dart';
 
 class AddItemAlertDialog extends StatefulWidget {
   Container? btnConfirm;
+  TextEditingController quantityController;
+
 
   AddItemAlertDialog({
     Key? key,
     this.btnConfirm,
+    required this.quantityController,
   });
 
   // DialogGeneric({Key? key}) : super(key: key);
@@ -83,6 +86,7 @@ class _AddItemAlertDialogState extends State<AddItemAlertDialog> {
 
                                         setState(() {
                                           _quantity--;
+                                          widget.quantityController.text = _quantity.toString();
                                         });
                                       },
                                     ),
@@ -107,6 +111,7 @@ class _AddItemAlertDialogState extends State<AddItemAlertDialog> {
                                       onPressed: () {
                                         setState(() {
                                           _quantity++;
+                                          widget.quantityController.text = _quantity.toString();
                                         });
                                       },
                                     ),
