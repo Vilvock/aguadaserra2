@@ -5,6 +5,7 @@ import '../../../config/application_messages.dart';
 import '../../../config/preferences.dart';
 import '../../../config/validator.dart';
 import '../../../global/application_constant.dart';
+import '../../../model/cart.dart';
 import '../../../model/favorite.dart';
 import '../../../model/user.dart';
 import '../../../res/dimens.dart';
@@ -75,6 +76,69 @@ class _Favorites extends State<Favorites> {
       print('HTTP_RESPONSE: $_map');
 
       return _map;
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
+  Future<void> openCart(
+      String idProduct, String unityItemValue, String quantity) async {
+    try {
+      final body = {
+        "id_user": await Preferences.getUserData()!.id,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.OPENED_CART, body);
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      final response = Cart.fromJson(_map[0]);
+
+      if (response.carrinho_aberto.toString().isNotEmpty) {
+        // setState(() {
+
+        addItemToCart(idProduct, unityItemValue, quantity,
+            response.carrinho_aberto.toString());
+
+        // });
+      }
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
+  Future<void> addItemToCart(String idProduct, String unityItemValue,
+      String quantity, String idCart) async {
+    try {
+      final body = {
+        "id_carrinho": idCart,
+        "id_produto": idProduct,
+        "valor_uni": unityItemValue,
+        "qtd": quantity,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.ADD_ITEM_CART, body);
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      final response = Cart.fromJson(_map[0]);
+
+      if (response.status == "01") {
+        // setState(() {});
+      } else {}
+      ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
     }
@@ -190,15 +254,24 @@ class _Favorites extends State<Favorites> {
                                                 child: Container(
                                               child: Wrap(
                                                 children: [
-                                                  Text(
-                                                    "Adicionar ao carrinho",
-                                                    style: TextStyle(
-                                                      fontFamily: 'Inter',
-                                                      fontSize:
-                                                          Dimens.textSize4,
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
+                                                  GestureDetector(
+                                                      onTap: () => {
+                                                            openCart(
+                                                                response
+                                                                    .id_produto
+                                                                    .toString(),
+                                                                response.valor,
+                                                                1.toString())
+                                                          },
+                                                      child: Text(
+                                                        "Adicionar ao carrinho",
+                                                        style: TextStyle(
+                                                          fontFamily: 'Inter',
+                                                          fontSize:
+                                                              Dimens.textSize4,
+                                                          color: Colors.black,
+                                                        ),
+                                                      )),
                                                 ],
                                               ),
                                             )),
@@ -213,23 +286,25 @@ class _Favorites extends State<Favorites> {
                                                   size: 20,
                                                   Icons.delete_outline),
                                             ),
-                                            GestureDetector(
-                                              onTap: () => {
-                                                removeFavorite(
-                                                    response.id.toString())
-                                              },
-                                              child: Expanded(
-                                                  child: Container(
-                                                      child: Wrap(children: [
-                                                Text(
-                                                  "Remover",
-                                                  style: TextStyle(
-                                                    fontFamily: 'Inter',
-                                                    fontSize: Dimens.textSize4,
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                              ]))),
+                                            Expanded(
+                                              child: Container(
+                                                  child: Wrap(children: [
+                                                GestureDetector(
+                                                    onTap: () => {
+                                                          removeFavorite(
+                                                              response.id
+                                                                  .toString())
+                                                        },
+                                                    child: Text(
+                                                      "Remover",
+                                                      style: TextStyle(
+                                                        fontFamily: 'Inter',
+                                                        fontSize:
+                                                            Dimens.textSize4,
+                                                        color: Colors.black,
+                                                      ),
+                                                    )),
+                                              ])),
                                             )
                                           ],
                                         )))

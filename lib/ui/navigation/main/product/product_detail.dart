@@ -181,7 +181,7 @@ class _ProductDetail extends State<ProductDetail> {
         appBar: CustomAppBar(
             title: "Detalhes da oferta",
             isVisibleBackButton: true,
-            isVisibleFavoriteButton: true),
+            /*isVisibleFavoriteButton: true*/),
         body: RefreshIndicator(
             onRefresh: _pullRefresh,
             child: FutureBuilder<List<Map<String, dynamic>>>(
@@ -393,19 +393,27 @@ class _ProductDetail extends State<ProductDetail> {
                                     child: Container(
                                   child: Wrap(
                                     children: [
-                                      Text(
-                                        "Adicionar aos favoritos",
-                                        style: TextStyle(
-                                          fontFamily: 'Inter',
-                                          fontSize: Dimens.textSize6,
-                                          color: Colors.black,
-                                        ),
-                                      ),
+                                      GestureDetector(
+                                          onTap: () => {
+                                                addFavorite()
+                                              },
+                                          child: Text(
+                                            "Adicionar aos favoritos",
+                                            style: TextStyle(
+                                              fontFamily: 'Inter',
+                                              fontSize: Dimens.textSize6,
+                                              color: Colors.black,
+                                            ),
+                                          )),
                                     ],
                                   ),
                                 )),
-                                Container(margin: EdgeInsets.only(top: Dimens.marginApplication, bottom: Dimens.marginApplication), child: Styles().div_vertical, ),
-
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      top: Dimens.marginApplication,
+                                      bottom: Dimens.marginApplication),
+                                  child: Styles().div_vertical,
+                                ),
                                 Container(
                                   padding:
                                       EdgeInsets.all(Dimens.paddingApplication),
@@ -417,13 +425,17 @@ class _ProductDetail extends State<ProductDetail> {
                                 Expanded(
                                     child: Container(
                                         child: Wrap(children: [
-                                  Text(
-                                    "Adicionar ao carrinho",
-                                    style: TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontSize: Dimens.textSize6,
-                                      color: OwnerColors.colorPrimary,
-                                    ),
+                                  GestureDetector(
+                                    onTap: () => {
+                                      openCart(
+                                          response.valor, _quantity.toString())
+                                    },
+                                    child: Text("Adicionar ao carrinho",
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontSize: Dimens.textSize6,
+                                          color: OwnerColors.colorPrimary,
+                                        )),
                                   ),
                                 ])))
                               ],
