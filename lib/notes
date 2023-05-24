@@ -1,7 +1,17 @@
 
 
-tela subir quando teclado aparecer
+bug: tela subir quando teclado aparecer
 
 - (ver se o id pedido é o id do carrinho) (TEM QUE FAZER O ADD PEDIDO)
 - fazer troca de enderecos dinamica no pagamento
 - list retirada e horarios
+/////////////////////////////////
+- trocar alguns icones para finos
+- efeito swipe no item
+- atualizar layout onde falta
+- terminar compra/checkout/visualizacao de itens e sucesso com todos dados dinamicos
+- add metodo de pagamento boleto
+- list pedidos com dados dinamicos
+- atualizar toast padrao e cor do loading nas telas de lista
+- colocar icone playstore/ appstore
+
