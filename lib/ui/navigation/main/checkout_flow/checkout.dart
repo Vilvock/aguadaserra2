@@ -187,7 +187,7 @@ class _Checkout extends State<Checkout> {
 
       if (response.status == "01") {
         Navigator.pushNamed(context,
-          "/ui/sucess",
+          "/ui/success",
           arguments: {
             "id_cart": _idCart,
           });

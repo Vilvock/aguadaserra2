@@ -77,17 +77,24 @@ class _RegisterState extends State<Register> {
       final response = User.fromJson(_map[0]);
 
       if (response.status == "01") {
-        SucessAlertDialog(
-            btnConfirm: Container(
-                margin: EdgeInsets.only(top: Dimens.marginApplication),
-                width: double.infinity,
-                child: ElevatedButton(
-                    style: Styles().styleDefaultButton,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child:
-                        Text("Ok", style: Styles().styleDefaultTextButton))));
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return SucessAlertDialog(
+              content: response.msg,
+                btnConfirm: Container(
+                    margin: EdgeInsets.only(top: Dimens.marginApplication),
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        style: Styles().styleDefaultButton,
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("Ok",
+                            style: Styles().styleDefaultTextButton))));
+          },
+        );
       } else {
         ApplicationMessages(context: context).showMessage(response.msg);
       }

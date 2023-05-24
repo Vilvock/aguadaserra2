@@ -4,10 +4,12 @@ import '../../res/dimens.dart';
 
 class SucessAlertDialog extends StatefulWidget {
   Container btnConfirm;
+  String? content;
 
   SucessAlertDialog({
     Key? key,
     required this.btnConfirm,
+    this.content,
   });
 
   // DialogGeneric({Key? key}) : super(key: key);
@@ -43,7 +45,7 @@ class _SucessAlertDialogState extends State<SucessAlertDialog> {
                         )),
                     SizedBox(height: Dimens.marginApplication),
                     Text(
-                      "Cadastro realizado com sucesso, aguarde confirmação para realizar login!",
+                      widget.content!,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: Dimens.textSize5,
