@@ -297,7 +297,7 @@ class _CartShopping extends State<CartShopping> {
                                   } else if (snapshot.hasError) {
                                     return Text('${snapshot.error}');
                                   }
-                                  return Container(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height, child: Center(child: CircularProgressIndicator()));
+                                  return Container(/*width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height, child: Center(child: CircularProgressIndicator())*/);
                                 },
                               ),
                               Column(
@@ -399,7 +399,7 @@ class _CartShopping extends State<CartShopping> {
                       ),
                     )));
           } else {
-            return Center(child: CircularProgressIndicator());
+            return Center(/*child: CircularProgressIndicator()*/);
           }
         });
   }

@@ -462,12 +462,13 @@ class _ContainerHomeState extends State<ContainerHome> {
                                           })
                                     },
                                 child: Card(
+                                  elevation: 0,
+                                  color: OwnerColors.categoryLightGrey,
+                                  margin: EdgeInsets.all(Dimens.minMarginApplication),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimens.minRadiusApplication),
+                                    borderRadius:
+                                    BorderRadius.circular(Dimens.minRadiusApplication),
                                   ),
-                                  margin: EdgeInsets.all(
-                                      Dimens.minMarginApplication),
                                   child: Container(
                                     padding: EdgeInsets.all(
                                         Dimens.minPaddingApplication),
@@ -575,7 +576,7 @@ class _ContainerHomeState extends State<ContainerHome> {
                       } else if (snapshot.hasError) {
                         return Text('${snapshot.error}');
                       }
-                      return Center(child: CircularProgressIndicator());
+                      return Center(/*child: CircularProgressIndicator()*/);
                     },
                   ),
                   Container(
@@ -627,7 +628,7 @@ class _ContainerHomeState extends State<ContainerHome> {
                         } else if (snapshot.hasError) {
                           return Text('${snapshot.error}');
                         }
-                        return Center(child: CircularProgressIndicator());
+                        return Center(/*child: CircularProgressIndicator()*/);
                       })
                 ],
               ),
@@ -691,10 +692,13 @@ class GridItemBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Dimens.minRadiusApplication),
-        ),
+        elevation: 0,
+        color: OwnerColors.categoryLightGrey,
         margin: EdgeInsets.all(Dimens.minMarginApplication),
+        shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.circular(Dimens.minRadiusApplication),
+        ),
         child: InkWell(
             onTap: () => {
                   Navigator.pushNamed(context, "/ui/product_detail",

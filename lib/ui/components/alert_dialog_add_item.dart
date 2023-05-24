@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../res/dimens.dart';
+import '../../res/owner_colors.dart';
 
 class AddItemAlertDialog extends StatefulWidget {
   Container? btnConfirm;
@@ -59,44 +60,59 @@ class _AddItemAlertDialogState extends State<AddItemAlertDialog> {
                         ),
                       )),
 
-                      FloatingActionButton(
-                        mini: true,
-                        child: Icon(Icons.chevron_left,
-                            color: Colors.black),
-                        backgroundColor: Colors.white,
-                        onPressed: () {
-                          if (_quantity == 1) return;
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Card(
+                              elevation: 0,
+                              color: OwnerColors.categoryLightGrey,
+                              margin: EdgeInsets.only(
+                                  top: Dimens.minMarginApplication),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    Dimens.minRadiusApplication),
+                              ),
+                              child: Container(
+                                  child: Row(children: [
+                                    IconButton(
+                                      icon: Icon(
+                                          Icons.remove,
+                                          color: Colors.black),
+                                      onPressed: () {
+                                        if (_quantity == 1) return;
 
-                          setState(() {
-                            _quantity--;
-                          });
-                        },
-                      ),
-                      SizedBox(
-                          width: Dimens.minMarginApplication),
-                      Text(
-                        _quantity.toString(),
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: Dimens.textSize5,
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(
-                          width: Dimens.minMarginApplication),
-                      FloatingActionButton(
-                        mini: true,
-                        child: Icon(Icons.chevron_right,
-                            color: Colors.black),
-                        backgroundColor: Colors.white,
-                        onPressed: () {
-
-                          setState(() {
-                            _quantity++;
-                          });
-
-                        },
-                      ),
+                                        setState(() {
+                                          _quantity--;
+                                        });
+                                      },
+                                    ),
+                                    SizedBox(
+                                        width: Dimens
+                                            .minMarginApplication),
+                                    Text(
+                                      _quantity.toString(),
+                                      style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        fontSize: Dimens.textSize5,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                        width: Dimens
+                                            .minMarginApplication),
+                                    IconButton(
+                                      icon: Icon(
+                                          Icons.add,
+                                          color: Colors.black),
+                                      onPressed: () {
+                                        setState(() {
+                                          _quantity++;
+                                        });
+                                      },
+                                    ),
+                                  ])))
+                        ],
+                      )
 
                     ],),
 
