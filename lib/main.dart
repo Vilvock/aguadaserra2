@@ -1,6 +1,7 @@
 // @dart=2.9
 import 'dart:io';
 
+import 'package:app/config/useful.dart';
 import 'package:app/res/owner_colors.dart';
 import 'package:app/ui/navigation/auth/login.dart';
 import 'package:app/ui/navigation/auth/register.dart';
@@ -69,6 +70,10 @@ void main() async {
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(MaterialApp(
+    theme: ThemeData(
+      primarySwatch: Useful().getMaterialColor(OwnerColors.colorPrimary),
+      colorScheme: ColorScheme.fromSwatch(primarySwatch: Useful().getMaterialColor(OwnerColors.colorPrimary)),
+    ),
     debugShowCheckedModeBanner: false,
     title: "Água da Serra",
     initialRoute: '/ui/splash',
