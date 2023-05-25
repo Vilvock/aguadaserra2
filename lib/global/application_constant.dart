@@ -5,6 +5,9 @@ class ApplicationConstant {
   static const String TOKEN = "J4HQi3e0";
 
 
+  static const String URL_VIA_CEP = "https://viacep.com.br/ws/";
+
+
 
   static const String URL_PRODUCT_PHOTO = URL + "uploads/produtos/";
   static const String URL_CATEGORIES = URL + "uploads/categorias/";

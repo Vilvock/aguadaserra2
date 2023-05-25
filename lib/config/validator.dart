@@ -77,6 +77,15 @@ class Validator {
     }
   }
 
+  bool validateCEP(String cep) {
+    if (cep.length > 8) {
+      return true;
+    } else {
+      ApplicationMessages(context: context).showMessage(Strings.cep_denied);
+      return false;
+    }
+  }
+
   bool validateGenericTextField(String text, String field) {
     if (text.isNotEmpty) {
       return true;

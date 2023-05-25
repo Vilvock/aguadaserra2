@@ -23,6 +23,7 @@ abstract class Strings {
   static const String cellphone_denied = "Celular Inválido!";
   static const String cpf_denied = "CPF Inválido!";
   static const String cnpj_denied = "CNPJ Inválido!";
+  static const String cep_denied = "CEP Inválido!";
 
 
 

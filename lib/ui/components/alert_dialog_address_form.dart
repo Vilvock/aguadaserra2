@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../config/application_messages.dart';
 import '../../config/masks.dart';
 import '../../config/preferences.dart';
+import '../../config/validator.dart';
 import '../../global/application_constant.dart';
 import '../../model/user.dart';
 import '../../res/dimens.dart';
@@ -27,6 +28,7 @@ class AddressFormAlertDialog extends StatefulWidget {
 class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
 
 
+  late Validator validator;
   final postRequest = PostRequest();
 
   @override
@@ -34,6 +36,7 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
     super.initState();
   }
 
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController cepController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController stateController = TextEditingController();
@@ -44,6 +47,7 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
 
   @override
   void dispose() {
+    nameController.dispose();
     cepController.dispose();
     cityController.dispose();
     stateController.dispose();
@@ -89,11 +93,9 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
       final response = User.fromJson(_map[0]);
 
       if (response.status == "1") {
-        setState(() {}
-
-        );
 
         Navigator.of(context).pop();
+
       } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
@@ -101,8 +103,45 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
     }
   }
 
+  Future<void> getCepInfo(String cep) async {
+    try {
+
+      final json = await postRequest.getCepRequest("$cep/json/");
+
+      final parsedResponse = jsonDecode(json);
+
+      print('HTTP_RESPONSE: $parsedResponse');
+
+      final response = User.fromJson(parsedResponse);
+
+      setState(() {
+
+        cityController.text = response.localidade;
+        stateController.text = response.uf;
+        nbhController.text = response.bairro;
+        addressController.text = response.logradouro;
+
+        // "cep": "91250-310",
+        // "logradouro": "Avenida Adelino Ferreira Jardim",
+        // "complemento": "",
+        // "bairro": "Rubem Berta",
+        // "localidade": "Porto Alegre",
+        // "uf": "RS",
+        // "ibge": "4314902",
+        // "gia": "",
+        // "ddd": "51",
+        // "siafi": "8801"
+      });
+
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    validator = Validator(context: context);
+
     return Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.end,
@@ -142,9 +181,53 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                       ),
                     ),
                     SizedBox(height: Dimens.marginApplication),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: nameController,
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: OwnerColors.colorPrimary,
+                                width: 1.5),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                            BorderSide(color: Colors.grey, width: 1.0),
+                          ),
+                          hintText: 'Nome do local',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                                Dimens.radiusApplication),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding: EdgeInsets.all(
+                              Dimens.textFieldPaddingApplication),
+                        ),
+                        keyboardType: TextInputType.text,
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: Dimens.textSize5,
+                        ),
+                      ),
+                    ),]),
+                    SizedBox(height: Dimens.marginApplication),
+                    Styles().div_horizontal,
+                    SizedBox(height: Dimens.marginApplication),
                     TextField(
+                      onChanged: (value){
+
+                        if (value.length > 8) {
+                          getCepInfo(value);
+                        }
+                      },
                       controller: cepController,
-                      // inputFormatters: [Masks().cellphoneMask()],
+                      inputFormatters: [Masks().cepMask()],
                       decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -378,8 +461,17 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                       child: ElevatedButton(
                           style: Styles().styleDefaultButton,
                           onPressed: () {
+
+                            if (!validator.validateGenericTextField(nameController.text, "Nome do local")) return;
+                            if (!validator.validateCEP(cepController.text)) return;
+                            if (!validator.validateGenericTextField(cityController.text, "Cidade")) return;
+                            if (!validator.validateGenericTextField(stateController.text, "Estado")) return;
+                            if (!validator.validateGenericTextField(nbhController.text, "Bairro")) return;
+                            if (!validator.validateGenericTextField(addressController.text, "Endereço")) return;
+                            if (!validator.validateGenericTextField(numberController.text, "Número")) return;
+
                             saveAddress(
-                                "Teste",
+                                nameController.text.toString(),
                                 cepController.text.toString(),
                                 stateController.text.toString(),
                                 cityController.text.toString(),
