@@ -134,7 +134,7 @@ class _RegisterState extends State<Register> {
     validator = Validator(context: context);
 
     return Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         // appBar: CustomAppBar(),
         body: Container(
           decoration: BoxDecoration(
@@ -150,6 +150,7 @@ class _RegisterState extends State<Register> {
                 margin: EdgeInsets.all(Dimens.marginApplication),
                 child: Column(
                   children: [
+                    SizedBox(height: 24),
                     Image.asset(
                       'images/main_logo_1.png',
                       height: 70,

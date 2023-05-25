@@ -160,11 +160,13 @@ class _Orders extends State<Orders> {
                         );
                       },
                     );
+                  } else {
+
                   }
                 } else if (snapshot.hasError) {
                   return Text('${snapshot.error}');
                 }
-                return const CircularProgressIndicator();
+                return Center(child: CircularProgressIndicator());
               },
             ),
           ),

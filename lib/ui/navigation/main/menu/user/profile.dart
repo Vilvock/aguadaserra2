@@ -163,7 +163,7 @@ class _ProfileState extends State<Profile> {
     validator = Validator(context: context);
 
     return Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         appBar: CustomAppBar(title: "Meu Perfil", isVisibleBackButton: true),
         body: Container(
             child: Container(

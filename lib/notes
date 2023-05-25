@@ -1,4 +1,8 @@
-bug: tela subir quando teclado aparecer
+bug:
+
+tela subir quando teclado aparecer
+notificacoes ios
+bgl do android 13
 
 - fazer troca de enderecos dinamica no pagamento
 /////////////////////////////////
@@ -9,7 +13,7 @@ bug: tela subir quando teclado aparecer
 - add metodo de pagamento boleto
 - list pedidos com dados dinamicos
 
-notificacoes ios
+
 
 falta 9 requests
 

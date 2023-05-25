@@ -162,7 +162,7 @@ class _MethodPayment extends State<MethodPayment>
     _idCart = data['id_cart'];
 
     return Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         appBar: CustomAppBar(
             title: "Escolha um Método de pagamento", isVisibleBackButton: true),
         body: Container(

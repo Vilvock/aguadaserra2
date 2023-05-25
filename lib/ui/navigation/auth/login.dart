@@ -101,7 +101,7 @@ class _LoginState extends State<Login> {
     validator = Validator(context: context);
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       // appBar: CustomAppBar(),
       body: Container(
         decoration: BoxDecoration(
@@ -117,6 +117,7 @@ class _LoginState extends State<Login> {
               child: Column(
                 children: [
 
+                  SizedBox(height: 24),
                   Image.asset(
                     'images/main_logo_1.png',
                     height: 70,

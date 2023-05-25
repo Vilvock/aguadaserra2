@@ -326,11 +326,13 @@ class _Favorites extends State<Favorites> {
                       ));
                     },
                   );
+                } else {
+
                 }
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               }
-              return const CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             },
           ),
         ),
