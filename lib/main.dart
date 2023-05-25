@@ -88,7 +88,7 @@ void main() async {
       '/ui/user_addresses': (context) => UserAddresses(),
       '/ui/method_payment': (context) => MethodPayment(),
       '/ui/checkout': (context) => Checkout(),
-      '/ui/payments': (context) => Payment(),
+      '/ui/payments': (context) => Payments(),
       '/ui/success': (context) => Success(),
       '/ui/notifications': (context) => Notifications(),
       '/ui/filter_products': (context) => FilterProducts(),

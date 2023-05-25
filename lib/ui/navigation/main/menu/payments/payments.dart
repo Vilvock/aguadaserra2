@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../../../config/application_messages.dart';
 import '../../../../../config/preferences.dart';
 import '../../../../../global/application_constant.dart';
+import '../../../../../model/payment.dart';
 import '../../../../../model/user.dart';
 import '../../../../../res/dimens.dart';
 import '../../../../../res/owner_colors.dart';
@@ -15,14 +16,14 @@ import '../../../../../web_service/service_response.dart';
 import '../../../../components/custom_app_bar.dart';
 import '../../../../components/progress_hud.dart';
 
-class Payment extends StatefulWidget {
-  const Payment({Key? key}) : super(key: key);
+class Payments extends StatefulWidget {
+  const Payments({Key? key}) : super(key: key);
 
   @override
-  State<Payment> createState() => _Payment();
+  State<Payments> createState() => _Payment();
 }
 
-class _Payment extends State<Payment> {
+class _Payment extends State<Payments> {
   bool _isLoading = false;
 
   final postRequest = PostRequest();
@@ -63,14 +64,14 @@ class _Payment extends State<Payment> {
           future: listPayments(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              final firstItem = User.fromJson(snapshot.data![0]);
+              final firstItem = Payment.fromJson(snapshot.data![0]);
 
               if (firstItem.rows != 0) {
                 return ListView.builder(
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
 
-                    final response = User.fromJson(snapshot.data![index]);
+                    final response = Payment.fromJson(snapshot.data![index]);
                     return Card(
                       shape: RoundedRectangleBorder(
                         borderRadius:
@@ -85,27 +86,7 @@ class _Payment extends State<Payment> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    "Endereço selecionado",
-                                    style: TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontSize: Dimens.textSize4,
-                                      fontWeight: FontWeight.bold,
-                                      color: OwnerColors.colorPrimaryDark,
-                                    ),
-                                  ),
-                                  SizedBox(height: Dimens.minMarginApplication),
-                                  Text(
-                                    response.endereco_completo,
-                                    style: TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontSize: Dimens.textSize5,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  SizedBox(height: Dimens.minMarginApplication),
 
-                                  Styles().div_horizontal
                                 ],
                               ),
                             )
