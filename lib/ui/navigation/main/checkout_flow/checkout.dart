@@ -29,6 +29,7 @@ class _Checkout extends State<Checkout> {
 
   late int _idCart;
   late String _totalValue;
+  late String _idOrder;
 
   final postRequest = PostRequest();
 
@@ -206,6 +207,7 @@ class _Checkout extends State<Checkout> {
 
     _idCart = data['id_cart'];
     _totalValue = data['total_value'];
+    _idOrder = data['id_order'];
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -405,7 +407,7 @@ class _Checkout extends State<Checkout> {
                       width: double.infinity,
                       child: ElevatedButton(
                           onPressed: () {
-                            payWithPIX(_idCart.toString(), _totalValue);
+                            payWithPIX(_idOrder.toString(), _totalValue);
                           },
                           style: Styles().styleDefaultButton,
                           child: Container(child:

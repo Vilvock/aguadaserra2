@@ -51,7 +51,7 @@ class _MethodPayment extends State<MethodPayment>
     super.dispose();
   }
 
-  Future<List<Map<String, dynamic>>> addOrder(
+  Future<void> addOrder(
       String idCart,
       String typeDelivery, // 1 tipo entrega no endereco e 2 retirada eu acho
       String? idAddress, // quando for tipo entrega 1
@@ -89,7 +89,16 @@ class _MethodPayment extends State<MethodPayment>
 
       final response = Cart.fromJson(_map[0]);
 
-      return _map;
+      if (response.status == "01") {
+
+        Navigator.pushNamed(context, "/ui/checkout", arguments: {
+          "id_cart": _idCart,
+          "total_value": _totalValue,
+          "id_order": response.id.toString(),
+        });
+
+      } else {}
+      ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
     }
@@ -358,23 +367,20 @@ class _MethodPayment extends State<MethodPayment>
                       _totalValue,
                       "");
                 } else {
-                  addOrder(
-                      _idCart.toString(),
-                      ApplicationConstant.TYPE_DELIVERY_2.toString(),
-                      null,
-                      "",
-                      "",
-                      ApplicationConstant.PIX.toString(),
-                      _itensValue,
-                      _freightValue,
-                      _totalValue,
-                      "");
+                  // addOrder(
+                  //     _idCart.toString(),
+                  //     ApplicationConstant.TYPE_DELIVERY_2.toString(),
+                  //     null,
+                  //     "",
+                  //     "",
+                  //     ApplicationConstant.PIX.toString(),
+                  //     _itensValue,
+                  //     _freightValue,
+                  //     _totalValue,
+                  //     "");
                 }
 
-                Navigator.pushNamed(context, "/ui/checkout", arguments: {
-                  "id_cart": _idCart,
-                  "total_value": _totalValue,
-                });
+
               },
               child: Card(
                   shape: RoundedRectangleBorder(
