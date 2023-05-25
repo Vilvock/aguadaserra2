@@ -199,7 +199,15 @@ class _CartShopping extends State<CartShopping> {
                                   _quantity = responseList.qtd;
 
                                   if (responseList.rows != 0) {
-                                    return Card(
+                                    return InkWell(
+                                        onTap: () => {
+                                          Navigator.pushNamed(
+                                              context, "/ui/product_detail",
+                                              arguments: {
+                                                "id_product": responseList.id_produto,
+                                              })
+                                        },
+                                        child: Card(
                                       elevation: 0,
                                       color: OwnerColors.categoryLightGrey,
                                       margin: EdgeInsets.all(Dimens.minMarginApplication),
@@ -411,7 +419,7 @@ class _CartShopping extends State<CartShopping> {
                                           ],
                                         ),
                                       ),
-                                    );
+                                    ));
                                   } else if (snapshot.hasError) {
                                     return Text('${snapshot.error}');
                                   }
@@ -435,28 +443,28 @@ class _CartShopping extends State<CartShopping> {
                                         padding: EdgeInsets.all(
                                             Dimens.paddingApplication),
                                         child: Column(children: [
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "Subtotal",
-                                                  style: TextStyle(
-                                                    fontFamily: 'Inter',
-                                                    fontSize: Dimens.textSize5,
-                                                    color: Colors.black45,
-                                                  ),
-                                                ),
-                                              ),
-                                              Text(
-                                                "-- , --",
-                                                style: TextStyle(
-                                                  fontFamily: 'Inter',
-                                                  fontSize: Dimens.textSize5,
-                                                  color: Colors.black45,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                          // Row(
+                                          //   children: [
+                                          //     Expanded(
+                                          //       child: Text(
+                                          //         "Subtotal",
+                                          //         style: TextStyle(
+                                          //           fontFamily: 'Inter',
+                                          //           fontSize: Dimens.textSize5,
+                                          //           color: Colors.black45,
+                                          //         ),
+                                          //       ),
+                                          //     ),
+                                          //     Text(
+                                          //       "-- , --",
+                                          //       style: TextStyle(
+                                          //         fontFamily: 'Inter',
+                                          //         fontSize: Dimens.textSize5,
+                                          //         color: Colors.black45,
+                                          //       ),
+                                          //     ),
+                                          //   ],
+                                          // ),
                                           Row(
                                             children: [
                                               Expanded(

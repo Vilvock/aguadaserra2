@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app/config/useful.dart';
 import 'package:flutter/material.dart';
 import '../../../config/application_messages.dart';
 import '../../../config/preferences.dart';
@@ -166,7 +167,15 @@ class _Favorites extends State<Favorites> {
                     itemBuilder: (context, index) {
                       final response = Favorite.fromJson(snapshot.data![index]);
 
-                      return Card(
+                      return InkWell(
+                          onTap: () => {
+                        Navigator.pushNamed(
+                            context, "/ui/product_detail",
+                            arguments: {
+                              "id_product": response.id_produto,
+                            })
+                      },
+                      child: Card(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(
                               Dimens.minRadiusApplication),
@@ -210,7 +219,7 @@ class _Favorites extends State<Favorites> {
                                     SizedBox(
                                         height: Dimens.minMarginApplication),
                                     Text(
-                                      response.descricao,
+                                      Useful().removeAllHtmlTags(response.descricao),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -314,7 +323,7 @@ class _Favorites extends State<Favorites> {
                             ],
                           ),
                         ),
-                      );
+                      ));
                     },
                   );
                 }

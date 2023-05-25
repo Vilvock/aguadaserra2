@@ -76,11 +76,13 @@ class _Products extends State<Products> {
                                   })
                             },
                         child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                Dimens.minRadiusApplication),
-                          ),
+                          elevation: 0,
+                          color: OwnerColors.categoryLightGrey,
                           margin: EdgeInsets.all(Dimens.minMarginApplication),
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius.circular(Dimens.minRadiusApplication),
+                          ),
                           child: Container(
                             padding:
                                 EdgeInsets.all(Dimens.minPaddingApplication),

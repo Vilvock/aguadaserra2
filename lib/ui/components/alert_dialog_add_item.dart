@@ -25,6 +25,9 @@ class _AddItemAlertDialogState extends State<AddItemAlertDialog> {
 
   @override
   Widget build(BuildContext context) {
+
+    widget.quantityController.text = _quantity.toString();
+
     return Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.end,
