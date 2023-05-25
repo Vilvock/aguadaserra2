@@ -23,4 +23,8 @@ class ApplicationConstant {
   static const int PIX = 3;
   static const int TICKET_IN_TERM = 4;
 
+
+  static const int TYPE_DELIVERY_1 = 1;
+  static const int TYPE_DELIVERY_2 = 2;
+
 }

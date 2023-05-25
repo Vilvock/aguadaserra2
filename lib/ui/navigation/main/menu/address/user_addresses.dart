@@ -160,10 +160,11 @@ class _UserAddresses extends State<UserAddresses> {
       print('HTTP_RESPONSE: $parsedResponse');
 
       final response = User.fromJson(parsedResponse);
-      //
-      // if (response.status == "01") {
-      setState(() {});
-      // } else {}
+      if (response.status == "01") {
+        setState(() {});
+
+      } else {}
+      ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
     }
@@ -246,7 +247,18 @@ class _UserAddresses extends State<UserAddresses> {
                                   Styles().div_horizontal
                                 ],
                               ),
-                            )
+                            ),
+                            Align(
+                                alignment: AlignmentDirectional.topEnd,
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.close,
+                                    color: Colors.black,
+                                  ),
+                                  onPressed: () {
+                                    deleteAddress(response.id.toString());
+                                  },
+                                )),
                           ],
                         ),
                       ),

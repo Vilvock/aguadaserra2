@@ -29,6 +29,8 @@ class _MethodPayment extends State<MethodPayment>
   int _idAddress = 29;
   late int _idCart;
   late String _totalValue;
+  late String _freightValue;
+  late String _itensValue;
 
   final postRequest = PostRequest();
   late TabController _tabController;
@@ -51,10 +53,10 @@ class _MethodPayment extends State<MethodPayment>
 
   Future<List<Map<String, dynamic>>> addOrder(
       String idCart,
-      String typeDelivery,
-      String idAddress,
-      String scheduleWithdrawalId,
-      String dateWithdrawal,
+      String typeDelivery, // 1 tipo entrega no endereco e 2 retirada eu acho
+      String? idAddress, // quando for tipo entrega 1
+      String? scheduleWithdrawalId, // quando for tipo retirada 2
+      String? dateWithdrawal, // quando for tipo retirada 2
       String typePayment,
       String cartValue,
       String freightValue,
@@ -111,6 +113,8 @@ class _MethodPayment extends State<MethodPayment>
 
       final response = Freight.fromJson(parsedResponse);
 
+      _itensValue = response.valor_itens;
+      _freightValue = response.valor_frete;
       _totalValue = response.valor_total;
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
@@ -341,6 +345,32 @@ class _MethodPayment extends State<MethodPayment>
           SizedBox(height: Dimens.minMarginApplication),
           InkWell(
               onTap: () {
+                if (_tabController.index == 0) {
+                  addOrder(
+                      _idCart.toString(),
+                      ApplicationConstant.TYPE_DELIVERY_1.toString(),
+                      _idAddress.toString(),
+                      null,
+                      null,
+                      ApplicationConstant.PIX.toString(),
+                      _itensValue,
+                      _freightValue,
+                      _totalValue,
+                      "");
+                } else {
+                  addOrder(
+                      _idCart.toString(),
+                      ApplicationConstant.TYPE_DELIVERY_2.toString(),
+                      null,
+                      "",
+                      "",
+                      ApplicationConstant.PIX.toString(),
+                      _itensValue,
+                      _freightValue,
+                      _totalValue,
+                      "");
+                }
+
                 Navigator.pushNamed(context, "/ui/checkout", arguments: {
                   "id_cart": _idCart,
                   "total_value": _totalValue,

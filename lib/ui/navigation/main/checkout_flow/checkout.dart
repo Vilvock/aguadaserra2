@@ -32,6 +32,17 @@ class _Checkout extends State<Checkout> {
 
   final postRequest = PostRequest();
 
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   Future<Cart> listCartItems(String idCart) async {
     try {
       final body = {"id_carrinho": idCart, "token": ApplicationConstant.TOKEN};
@@ -52,16 +63,6 @@ class _Checkout extends State<Checkout> {
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   Future<void> payWithCreditCard(String idOrder, String totalValue,
