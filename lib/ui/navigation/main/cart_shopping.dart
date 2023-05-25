@@ -27,12 +27,41 @@ class CartShopping extends StatefulWidget {
 class _CartShopping extends State<CartShopping> {
   bool _isLoading = false;
   late int? _idCart = null;
+  int _quantity = 1;
 
   final postRequest = PostRequest();
 
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<void> updateItem(String id, String op) async {
+    try {
+      final body = {
+        "id": id,
+        "op": op,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.UPDATE_ITEM_CART, body);
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      final response = Cart.fromJson(_map[0]);
+
+      if (response.status == "01") {
+        setState(() {});
+      } else {}
+      // ApplicationMessages(context: context).showMessage(response.msg);
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
   }
 
   Future<void> addItemToFavorite(String idProduct) async {
@@ -167,14 +196,17 @@ class _CartShopping extends State<CartShopping> {
                                   final responseList = Item.fromJson(
                                       snapshot.data!.itens[index]);
 
+                                  _quantity = responseList.qtd;
+
                                   if (responseList.rows != 0) {
                                     return Card(
+                                      elevation: 0,
+                                      color: OwnerColors.categoryLightGrey,
+                                      margin: EdgeInsets.all(Dimens.minMarginApplication),
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            Dimens.minRadiusApplication),
+                                        borderRadius:
+                                        BorderRadius.circular(Dimens.minRadiusApplication),
                                       ),
-                                      margin: EdgeInsets.all(
-                                          Dimens.minMarginApplication),
                                       child: Container(
                                         padding: EdgeInsets.all(
                                             Dimens.paddingApplication),
@@ -239,106 +271,140 @@ class _CartShopping extends State<CartShopping> {
                                                   SizedBox(
                                                       height: Dimens
                                                           .marginApplication),
-                                                  Text(
-                                                    responseList.valor_uni,
-                                                    style: TextStyle(
-                                                      fontFamily: 'Inter',
-                                                      fontSize:
-                                                          Dimens.textSize6,
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
+
+                                                  Row( children: [
+                                                    Expanded(child:
+                                                    Text(
+                                                      responseList.valor_uni,
+                                                      style: TextStyle(
+                                                        fontFamily: 'Inter',
+                                                        fontSize:
+                                                        Dimens.textSize6,
+                                                        color: Colors.black,
+                                                      ),
+                                                    )),
+                                                    Row(
+                                                      mainAxisSize: MainAxisSize.max,
+                                                      children: [
+                                                        Card(
+                                                            elevation: 0,
+                                                            color: OwnerColors.categoryLightGrey,
+                                                            margin: EdgeInsets.only(
+                                                                top: Dimens.minMarginApplication),
+                                                            shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius.circular(
+                                                                  Dimens.minRadiusApplication),
+                                                            ),
+                                                            child: Container(
+                                                                child: Row(children: [
+                                                                  IconButton(
+                                                                    icon: Icon(Icons.remove,
+                                                                        color: Colors.black),
+                                                                    onPressed: () {
+                                                                      if (_quantity == 1) return;
+                                                                      updateItem(responseList.id_item.toString(), ApplicationConstant.REMOVE.toString());
+                                                                    },
+                                                                  ),
+                                                                  SizedBox(
+                                                                      width: Dimens
+                                                                          .minMarginApplication),
+                                                                  Text(
+                                                                    _quantity.toString(),
+                                                                    style: TextStyle(
+                                                                      fontFamily: 'Inter',
+                                                                      fontSize: Dimens.textSize5,
+                                                                      color: Colors.black,
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                      width: Dimens
+                                                                          .minMarginApplication),
+                                                                  IconButton(
+                                                                    icon: Icon(Icons.add,
+                                                                        color: Colors.black),
+                                                                    onPressed: () {
+                                                                      updateItem(responseList.id_item.toString(), ApplicationConstant.ADD.toString());
+                                                                    },
+                                                                  ),
+                                                                ])))
+                                                      ],
+                                                    )
+                                                  ],),
+
                                                   SizedBox(
                                                       height: Dimens
                                                           .minMarginApplication),
-                                                  Divider(
-                                                    color: Colors.black12,
-                                                    height: 2,
-                                                    thickness: 1.5,
-                                                  ),
+                                                  Styles().div_horizontal,
                                                   SizedBox(
                                                       height: Dimens
                                                           .minMarginApplication),
                                                   Container(
-                                                      color: Colors.white,
                                                       child: IntrinsicHeight(
                                                           child: Row(
-                                                        children: [
-                                                          Container(
-                                                            margin: EdgeInsets.only(
-                                                                right: Dimens
-                                                                    .minMarginApplication),
-                                                            child: Icon(
-                                                                size: 20,
-                                                                Icons
-                                                                    .favorite_border),
-                                                          ),
-                                                          GestureDetector(
-                                                              onTap: () => {
-                                                                      addItemToFavorite(responseList.id_produto.toString())
-                                                                  },
-                                                              child: Expanded(
-                                                                  child:
-                                                                      Container(
-                                                                child: Wrap(
-                                                                  children: [
-                                                                    Text(
-                                                                      "Mover para os favoritos",
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontFamily:
-                                                                            'Inter',
-                                                                        fontSize:
-                                                                            Dimens.textSize4,
-                                                                        color: Colors
-                                                                            .black,
-                                                                      ),
+                                                            children: [
+                                                              Container(
+                                                                margin: EdgeInsets.only(
+                                                                    right: Dimens
+                                                                        .minMarginApplication),
+                                                                child: Icon(
+                                                                    size: 20,
+                                                                    Icons.favorite_border),
+                                                              ),
+                                                              Expanded(
+                                                                  child: Container(
+                                                                    child: Wrap(
+                                                                      children: [
+                                                                        GestureDetector(
+                                                                            onTap: () => {
+
+                                                                              addItemToFavorite(responseList.id_produto.toString())
+                                                                            },
+                                                                            child: Text(
+                                                                              "Mover para os favoritos",
+                                                                              style: TextStyle(
+                                                                                fontFamily: 'Inter',
+                                                                                fontSize:
+                                                                                Dimens.textSize4,
+                                                                                color: Colors.black,
+                                                                              ),
+                                                                            )),
+                                                                      ],
                                                                     ),
-                                                                  ],
-                                                                ),
-                                                              ))),
-                                                          Container(
-                                                            child: Styles()
-                                                                .div_vertical,
-                                                          ),
-                                                          Container(
-                                                            margin: EdgeInsets.only(
-                                                                right: Dimens
-                                                                    .minMarginApplication),
-                                                            child: Icon(
-                                                                size: 20,
-                                                                Icons
-                                                                    .delete_outline),
-                                                          ),
-                                                          GestureDetector(
-                                                            onTap: () => {
-                                                              deleteItemCart(
-                                                                  responseList
-                                                                      .id_item
-                                                                      .toString())
-                                                            },
-                                                            child: Expanded(
-                                                                child:
-                                                                    Container(
-                                                                        child: Wrap(
-                                                                            children: [
-                                                                  Text(
-                                                                    "Remover",
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontFamily:
-                                                                          'Inter',
-                                                                      fontSize:
-                                                                          Dimens
-                                                                              .textSize4,
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                                  ),
-                                                                ]))),
-                                                          )
-                                                        ],
-                                                      )))
+                                                                  )),
+                                                              Container(
+                                                                child: Styles().div_vertical,
+                                                              ),
+                                                              Container(
+                                                                margin: EdgeInsets.only(
+                                                                    right: Dimens
+                                                                        .minMarginApplication),
+                                                                child: Icon(
+                                                                    size: 20,
+                                                                    Icons.delete_outline),
+                                                              ),
+                                                              Expanded(
+                                                                child: Container(
+                                                                    child: Wrap(children: [
+                                                                      GestureDetector(
+                                                                          onTap: () => {
+                                                                            deleteItemCart(
+                                                                                responseList
+                                                                                    .id_item
+                                                                                    .toString())
+                                                                          },
+                                                                          child: Text(
+                                                                            "Remover",
+                                                                            style: TextStyle(
+                                                                              fontFamily: 'Inter',
+                                                                              fontSize:
+                                                                              Dimens.textSize4,
+                                                                              color: Colors.black,
+                                                                            ),
+                                                                          )),
+                                                                    ])),
+                                                              )
+                                                            ],
+                                                          )))
                                                 ],
                                               ),
                                             )

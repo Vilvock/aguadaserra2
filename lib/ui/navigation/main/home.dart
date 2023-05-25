@@ -557,8 +557,11 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                   errorBuilder: (context,
                                                           exception,
                                                           stackTrack) =>
-                                                      Icon(Icons.error,
-                                                          size: 90),
+                                                      Image.asset(
+                                                        'images/no_picture.png',
+                                                        height: 90,
+                                                        width: 90,
+                                                      ),
                                                 ))),
                                         Expanded(
                                           child: Column(
@@ -790,7 +793,11 @@ class GridItemBuilder extends StatelessWidget {
                           fit: BoxFit.fitWidth,
                           height: 140,
                           errorBuilder: (context, exception, stackTrack) =>
-                              Icon(Icons.error, size: 140),
+                              Image.asset(
+                                'images/no_picture.png',
+                                height: 140,
+                                width: 140,
+                              ),
                         ))),
                 SizedBox(height: Dimens.minMarginApplication),
                 Container(

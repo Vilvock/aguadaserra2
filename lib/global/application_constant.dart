@@ -27,4 +27,8 @@ class ApplicationConstant {
   static const int TYPE_DELIVERY_1 = 1;
   static const int TYPE_DELIVERY_2 = 2;
 
+
+  static const int ADD = 1;
+  static const int REMOVE = 2;
+
 }
