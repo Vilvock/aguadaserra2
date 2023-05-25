@@ -7,7 +7,7 @@
 
 
     <application
-        android:label="app"
+        android:label="Água da Serra"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

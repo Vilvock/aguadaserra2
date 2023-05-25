@@ -12,6 +12,15 @@ class Payment extends GlobalWSModel{
   final String valor_total;
   final String status_pagamento;
   final String nome_status_pedido;
+  final int id_usuario;
+  final String nome_usuario;
+  final String email_usuario;
+  final String documento_usuario;
+  final int tipo_pagamento;
+  final String url_pagamento;
+  final String qrcode_pagamento;
+  final String valor_pagamento;
+  final String data_pagamento;
 
   Payment({
     required this.nome,
@@ -22,7 +31,16 @@ class Payment extends GlobalWSModel{
     required this.valor_frete,
     required this.valor_total,
     required this.status_pagamento,
-    required this.nome_status_pedido, required super.status, required super.msg, required super.id, required super.rows,
+    required this.nome_status_pedido,
+    required this.id_usuario,
+    required this.nome_usuario,
+    required this.email_usuario,
+    required this.documento_usuario,
+    required this.tipo_pagamento,
+    required this.url_pagamento,
+    required this.qrcode_pagamento,
+    required this.valor_pagamento,
+    required this.data_pagamento, required super.status, required super.msg, required super.id, required super.rows,
   });
 
   factory Payment.fromJson(Map<String, dynamic> json) {
@@ -36,6 +54,15 @@ class Payment extends GlobalWSModel{
       valor_total: json['valor_total'],
       status_pagamento: json['status_pagamento'],
       nome_status_pedido: json['nome_status_pedido'],
+      id_usuario: json['id_usuario'],
+      nome_usuario: json['nome_usuario'],
+      email_usuario: json['email_usuario'],
+      documento_usuario: json['documento_usuario'],
+      tipo_pagamento: json['tipo_pagamento'],
+      url_pagamento: json['url_pagamento'],
+      qrcode_pagamento: json['qrcode_pagamento'],
+      valor_pagamento: json['valor_pagamento'],
+      data_pagamento: json['data_pagamento'],
       status: json['status'],
       msg: json['msg'],
       id: json['id'],

@@ -76,7 +76,16 @@ class _MainMenu extends State<MainMenu> {
       final response = User.fromJson(_map[0]);
 
       if (response.status == "01") {
-        setState(() {});
+
+        await Preferences.init();
+        Preferences.clearUserData();
+
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Login()),
+            ModalRoute.withName("/ui/login"));
+
       } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
@@ -329,6 +338,68 @@ class _MainMenu extends State<MainMenu> {
 
             Styles().div_horizontal,
 
+
+            GestureDetector(
+                child: Container(
+                  padding: EdgeInsets.all(Dimens.maxPaddingApplication),
+                  child: Row(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.all(Dimens.minMarginApplication),
+                        child: Icon(Icons.disabled_by_default_outlined, color: Colors.black),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Desativar",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: Dimens.textSize5,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            SizedBox(height: Dimens.minMarginApplication),
+                            Text(
+                              "Desativará permanentemente sua conta",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: Dimens.textSize4,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return GenericAlertDialog(
+                          title: Strings.attention,
+                          content: Strings.disable_account,
+                          btnBack: TextButton(
+                              child: Text(Strings.no),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              }),
+                          btnConfirm: TextButton(
+                              child: Text(Strings.yes),
+                              onPressed: () {
+
+                                disableAccount();
+                              }));
+                    },
+                  );
+                }),
+
+            Styles().div_horizontal,
+
             GestureDetector(
                 child: Container(
                   padding: EdgeInsets.all(Dimens.maxPaddingApplication),
@@ -394,7 +465,8 @@ class _MainMenu extends State<MainMenu> {
                   );
                 }),
 
-            Styles().div_horizontal
+            Styles().div_horizontal,
+
           ],
         ),
       ),

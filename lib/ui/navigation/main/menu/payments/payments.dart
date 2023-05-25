@@ -37,8 +37,7 @@ class _Payment extends State<Payments> {
 
       print('HTTP_BODY: $body');
 
-      final json =
-          await postRequest.sendPostRequest(Links.LIST_PAYMENTS, body);
+      final json = await postRequest.sendPostRequest(Links.LIST_PAYMENTS, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -55,9 +54,7 @@ class _Payment extends State<Payments> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(
-          title: "Meus Pagamentos",
-          isVisibleBackButton: true),
+      appBar: CustomAppBar(title: "Meus Pagamentos", isVisibleBackButton: true),
       body: RefreshIndicator(
         onRefresh: _pullRefresh,
         child: FutureBuilder<List<Map<String, dynamic>>>(
@@ -70,8 +67,23 @@ class _Payment extends State<Payments> {
                 return ListView.builder(
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
-
                     final response = Payment.fromJson(snapshot.data![index]);
+
+                    var methodPayment = "";
+
+                    if (response.tipo_pagamento ==
+                        ApplicationConstant.CREDIT_CARD) {
+                      methodPayment = "Cartão de Crédito";
+                    } else if (response.tipo_pagamento ==
+                        ApplicationConstant.TICKET) {
+                      methodPayment = "Boleto Bancário";
+                    } else if (response.tipo_pagamento ==
+                        ApplicationConstant.PIX) {
+                      methodPayment = "PIX";
+                    } else {
+                      methodPayment = "Boleto Bancário(Prazo)";
+                    }
+
                     return Card(
                       shape: RoundedRectangleBorder(
                         borderRadius:
@@ -80,18 +92,68 @@ class _Payment extends State<Payments> {
                       margin: EdgeInsets.all(Dimens.minMarginApplication),
                       child: Container(
                         padding: EdgeInsets.all(Dimens.paddingApplication),
-                        child: Row(
+                        child: IntrinsicHeight(
+                            child: Row(
                           children: [
+                            VerticalDivider(
+                              color: OwnerColors.colorPrimary,
+                              width: 2,
+                              thickness: 1.5,
+                            ),
+                            SizedBox(width: Dimens.marginApplication),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  // {
+                                  //   "id": 55,
+                                  //   "id_usuario": 24,
+                                  //   "nome_usuario": "nome teste",
+                                  //   "email_usuario": "shini@shini.com",
+                                  //   "documento_usuario": "53.877.599/0001-02",
+                                  //   "tipo_pagamento": 3,
+                                  //   "data_pagamento": "25/05/2023",
+                                  //   "url_pagamento": "",
+                                  //   "qrcode_pagamento": "00020126580014br.gov.bcb.pix0136b76aa9c2-2ec4-4110-954e-ebfe34f05b61520400005303986540555.005802BR592083466954365557ptFXof6009Sao Paulo62230519mpqrinter13130953086304FC26",
+                                  //   "valor_pagamento": " R$ 55,00",
+                                  //   "status_pagamento": "Pendente"
+                                  // }
 
+                                  Text(
+                                    "Transação #" + response.id.toString(),
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: Dimens.textSize6,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  SizedBox(height: Dimens.minMarginApplication),
+
+                                  Styles().div_horizontal,
+
+                                  SizedBox(height: Dimens.minMarginApplication),
+
+                                  Text(
+                                    "Valor: " +
+                                        response.valor_pagamento +
+                                        "\n\nStatus do pagamento: " +
+                                        response.status_pagamento +
+                                        "\nMétodo de pagamento: " +
+                                        methodPayment +
+                                        "\n\nData: " +
+                                        response.data_pagamento,
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: Dimens.textSize5,
+                                      color: Colors.black,
+                                    ),
+                                  ),
                                 ],
                               ),
                             )
                           ],
-                        ),
+                        )),
                       ),
                     );
                   },

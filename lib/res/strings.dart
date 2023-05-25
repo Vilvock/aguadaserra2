@@ -13,6 +13,7 @@ abstract class Strings {
   static const String enable = "Ativar";
   static const String exit = "Sair";
   static const String logout = "Você tem certeza que deseja realizar seu logout?";
+  static const String disable_account = "Você tem certeza que deseja desativar sua conta permanentemente?";
   static const String yes = "Sim";
   static const String no = "Não";
   static const String attention = "Atenção";
