@@ -31,6 +31,12 @@ class _RegisterState extends State<Register> {
   late bool _passwordVisible;
   late bool _passwordVisible2;
 
+  bool hasPasswordCoPassword = false;
+  bool hasUppercase = false;
+  bool hasMinLength = false;
+  bool visibileOne = false;
+  bool visibileTwo = false;
+
   @override
   void initState() {
     super.initState();
@@ -81,7 +87,7 @@ class _RegisterState extends State<Register> {
           context: context,
           builder: (BuildContext context) {
             return SucessAlertDialog(
-              content: response.msg,
+                content: response.msg,
                 btnConfirm: Container(
                     margin: EdgeInsets.only(top: Dimens.marginApplication),
                     width: double.infinity,
@@ -322,6 +328,17 @@ class _RegisterState extends State<Register> {
                     ),
                     SizedBox(height: Dimens.marginApplication),
                     TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          visibileOne = true;
+                          hasMinLength = passwordController.text.length >= 8;
+                          hasUppercase = passwordController.text
+                              .contains(RegExp(r'[A-Z]'));
+                          if (hasMinLength && hasUppercase) {
+                            visibileOne = false;
+                          }
+                        });
+                      },
                       controller: passwordController,
                       decoration: InputDecoration(
                         suffixIcon: IconButton(
@@ -367,8 +384,53 @@ class _RegisterState extends State<Register> {
                         fontSize: Dimens.textSize5,
                       ),
                     ),
+                    SizedBox(height: 4),
+                    Visibility(
+                      visible: passwordController.text.isNotEmpty,
+                      child: Row(
+                        children: [
+                          Icon(
+                            hasMinLength
+                                ? Icons.check_circle
+                                : Icons.check_circle,
+                            color: hasMinLength ? Colors.green : Colors.grey,
+                          ),
+                          Text(
+                            'Deve ter no mínimo 8 carácteres',
+                            style: TextStyle(color: Color(0xffF1F3F7)),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Visibility(
+                      visible: passwordController.text.isNotEmpty,
+                      child: Row(
+                        children: [
+                          Icon(
+                            hasUppercase
+                                ? Icons.check_circle
+                                : Icons.check_circle,
+                            color: hasUppercase ? Colors.green : Colors.grey,
+                          ),
+                          Text(
+                            'Deve ter uma letra maiúscula',
+                            style: TextStyle(color: Color(0xffF1F3F7)),
+                          ),
+                        ],
+                      ),
+                    ),
                     SizedBox(height: Dimens.marginApplication),
                     TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          visibileTwo = true;
+                          hasPasswordCoPassword = coPasswordController.text == passwordController.text;
+
+                          if (hasPasswordCoPassword) {
+                            visibileTwo = false;
+                          }
+                        });
+                      },
                       controller: coPasswordController,
                       decoration: InputDecoration(
                         suffixIcon: IconButton(
@@ -412,6 +474,26 @@ class _RegisterState extends State<Register> {
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: Dimens.textSize5,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Visibility(
+                      visible: coPasswordController.text.isNotEmpty,
+                      child: Row(
+                        children: [
+                          Icon(
+                            hasPasswordCoPassword
+                                ? Icons.check_circle
+                                : Icons.check_circle,
+                            color: hasPasswordCoPassword
+                                ? Colors.green
+                                : Colors.grey,
+                          ),
+                          Text(
+                            'As senhas fornecidas são idênticas',
+                            style: TextStyle(color: Color(0xffF1F3F7)),
+                          ),
+                        ],
                       ),
                     ),
                     GestureDetector(

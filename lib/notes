@@ -3,17 +3,20 @@ bug:
 tela subir quando teclado aparecer
 notificacoes ios
 bgl do android 13
+pick lat long
 
-- fazer troca de enderecos dinamica no pagamento
-/////////////////////////////////
 
 - trocar alguns icones para finos
+- efeitos lista 0 e senha
 - efeito swipe no item
+
+
+- fazer troca de enderecos dinamica no pagamento
 - terminar compra/checkout/visualizacao de itens e sucesso com todos dados dinamicos (list retirada e horarios)
 - add metodo de pagamento boleto
 - list pedidos com dados dinamicos
 
 
-
+https://aguadaserra.com/termos_agua.pdf
 falta 9 requests
 

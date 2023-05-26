@@ -123,11 +123,13 @@ class _Notifications extends State<Notifications> {
                       );
                     },
                   );
+                } else {
+
                 }
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               }
-              return const CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             },
           ),
         ),

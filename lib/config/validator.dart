@@ -23,7 +23,7 @@ class Validator {
 
   bool validatePassword(String password) {
     RegExp regex =
-        RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+        RegExp(r'^(?=.*?[A-Z]).{8,}$');
     if (password.isEmpty) {
       ApplicationMessages(context: context)
           .showMessage(Strings.password_denied);
