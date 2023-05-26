@@ -397,11 +397,11 @@ class _RegisterState extends State<Register> {
                             hasMinLength
                                 ? Icons.check_circle
                                 : Icons.check_circle,
-                            color: hasMinLength ? Colors.green : Colors.grey,
+                            color: hasMinLength ? Colors.green : OwnerColors.lightGrey,
                           ),
                           Text(
                             'Deve ter no mínimo 8 carácteres',
-                            style: TextStyle(color: Color(0xffF1F3F7)),
+                            style: TextStyle(color: Colors.white),
                           ),
                         ],
                       ),
@@ -414,11 +414,11 @@ class _RegisterState extends State<Register> {
                             hasUppercase
                                 ? Icons.check_circle
                                 : Icons.check_circle,
-                            color: hasUppercase ? Colors.green : Colors.grey,
+                            color: hasUppercase ? Colors.green : OwnerColors.lightGrey,
                           ),
                           Text(
                             'Deve ter uma letra maiúscula',
-                            style: TextStyle(color: Color(0xffF1F3F7)),
+                            style: TextStyle(color: Colors.white),
                           ),
                         ],
                       ),
@@ -491,11 +491,11 @@ class _RegisterState extends State<Register> {
                                 : Icons.check_circle,
                             color: hasPasswordCoPassword
                                 ? Colors.green
-                                : Colors.grey,
+                                : OwnerColors.lightGrey,
                           ),
                           Text(
                             'As senhas fornecidas são idênticas',
-                            style: TextStyle(color: Color(0xffF1F3F7)),
+                            style: TextStyle(color: Colors.white),
                           ),
                         ],
                       ),
