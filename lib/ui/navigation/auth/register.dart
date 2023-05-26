@@ -330,10 +330,14 @@ class _RegisterState extends State<Register> {
                     TextField(
                       onChanged: (value) {
                         setState(() {
+                          hasPasswordCoPassword = false;
                           visibileOne = true;
                           hasMinLength = passwordController.text.length >= 8;
-                          hasUppercase = passwordController.text
-                              .contains(RegExp(r'[A-Z]'));
+                          hasUppercase = passwordController.text.contains(RegExp(r'[A-Z]'));
+
+
+                          hasPasswordCoPassword = coPasswordController.text == passwordController.text;
+
                           if (hasMinLength && hasUppercase) {
                             visibileOne = false;
                           }
