@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import '../../../config/application_messages.dart';
 import '../../../config/preferences.dart';
 import '../../../config/validator.dart';
@@ -9,6 +10,7 @@ import '../../../model/favorite.dart';
 import '../../../model/user.dart';
 import '../../../res/dimens.dart';
 import '../../../res/owner_colors.dart';
+import '../../../res/strings.dart';
 import '../../../web_service/links.dart';
 import '../../../web_service/service_response.dart';
 import '../../components/custom_app_bar.dart';
@@ -124,7 +126,32 @@ class _Notifications extends State<Notifications> {
                     },
                   );
                 } else {
-
+                  return Container(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context)
+                              .size
+                              .height /
+                              20),
+                      child: Column(
+                          mainAxisAlignment:
+                          MainAxisAlignment.center,
+                          children: [
+                            Center(
+                                child: Lottie.network(
+                                    height: 160,
+                                    'https://assets10.lottiefiles.com/packages/lf20_KZ1htY.json')),
+                            SizedBox(
+                                height: Dimens
+                                    .marginApplication),
+                            Text(
+                              Strings.empty_list,
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: Dimens.textSize5,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ]));
                 }
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');

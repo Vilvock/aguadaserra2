@@ -44,6 +44,7 @@ dependencies:
   cpf_cnpj_validator: 2.0.0-nullsafety
   firebase_core: ^2.11.0
   firebase_messaging: ^14.5.0
+  lottie: ^2.3.2
 
 
 dev_dependencies:

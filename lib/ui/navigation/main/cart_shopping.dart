@@ -4,6 +4,7 @@ import 'package:app/model/favorite.dart';
 import 'package:app/model/item.dart';
 import 'package:flutter/material.dart';
 import 'package:app/model/cart.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../config/application_messages.dart';
 import '../../../config/preferences.dart';
@@ -471,8 +472,32 @@ class _CartShopping extends State<CartShopping> {
                                             ),
                                           ));
                                     } else {
-
-
+                                      return Container(
+                                          padding: EdgeInsets.only(
+                                              top: MediaQuery.of(context)
+                                                      .size
+                                                      .height /
+                                                  5),
+                                          child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Center(
+                                                    child: Lottie.network(
+                                                        height: 160,
+                                                        'https://assets3.lottiefiles.com/packages/lf20_fzoupjne.json')),
+                                                SizedBox(
+                                                    height: Dimens
+                                                        .marginApplication),
+                                                Text(
+                                                  Strings.empty_list,
+                                                  style: TextStyle(
+                                                    fontFamily: 'Inter',
+                                                    fontSize: Dimens.textSize5,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ]));
                                     }
                                   } else if (snapshot.hasError) {
                                     return Text('${snapshot.error}');
