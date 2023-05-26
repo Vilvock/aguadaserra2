@@ -342,7 +342,7 @@ class _Favorites extends State<Favorites> {
                             Center(
                                 child: Lottie.network(
                                     height: 160,
-                                    'https://assets3.lottiefiles.com/packages/lf20_cwzd46cu.json')),
+                                    'https://assets3.lottiefiles.com/private_files/lf30_cgfdhxgx.json')),
                             SizedBox(
                                 height: Dimens
                                     .marginApplication),

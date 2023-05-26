@@ -384,7 +384,10 @@ class _MainMenu extends State<MainMenu> {
                           title: Strings.attention,
                           content: Strings.disable_account,
                           btnBack: TextButton(
-                              child: Text(Strings.no),
+                              child: Text(Strings.no, style: TextStyle(
+                                fontFamily: 'Inter',
+                                color: Colors.black54,
+                              )),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               }),
@@ -445,7 +448,10 @@ class _MainMenu extends State<MainMenu> {
                           title: Strings.attention,
                           content: Strings.logout,
                           btnBack: TextButton(
-                              child: Text(Strings.no),
+                              child: Text(Strings.no, style: TextStyle(
+                                fontFamily: 'Inter',
+                                color: Colors.black54,
+                              ),),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               }),
