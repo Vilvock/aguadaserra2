@@ -112,7 +112,7 @@ class _MainMenu extends State<MainMenu> {
                       elevation: Dimens.elevationApplication,
                       child: Container(
                         padding: EdgeInsets.all(Dimens.paddingApplication),
-                        color: Colors.black12,
+                        color: OwnerColors.lightGrey,
                         child: Row(
                           children: [
                             Container(
@@ -122,7 +122,7 @@ class _MainMenu extends State<MainMenu> {
                                 child: SizedBox.fromSize(
                                   size: Size.fromRadius(32), // Image radius
                                   child: Image.network(ApplicationConstant.URL_AVATAR +
-                                      response.avatar.toString(), /*fit: BoxFit.cover*/),
+                                      response.avatar.toString(), fit: BoxFit.cover, /*fit: BoxFit.cover*/),
                                 ),
                               ),
                             ),

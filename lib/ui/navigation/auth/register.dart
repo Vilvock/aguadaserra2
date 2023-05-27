@@ -156,7 +156,7 @@ class _RegisterState extends State<Register> {
                 margin: EdgeInsets.all(Dimens.marginApplication),
                 child: Column(
                   children: [
-                    SizedBox(height: 24),
+                    SizedBox(height: 36),
                     Image.asset(
                       'images/main_logo_1.png',
                       height: 70,

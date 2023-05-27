@@ -82,7 +82,8 @@ class _Categories extends State<Categories> {
                           child: Container(
                             padding: EdgeInsets.all(Dimens.minPaddingApplication),
                             child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(
                                     margin: EdgeInsets.only(
@@ -92,11 +93,11 @@ class _Categories extends State<Categories> {
                                             Dimens.minRadiusApplication),
                                         child: Image.network(
                                           ApplicationConstant.URL_CATEGORIES + response.url.toString(),
-                                          height: 20,
-                                          width: 20,
+                                          height: 24,
+                                          width: 24,
                                           errorBuilder: (context, exception, stackTrack) => Image.asset(
                                             'images/no_picture.png',
-                                            height: 20,
+                                            height: 24,
                                           ),
                                         ))),
                                 SizedBox(
@@ -105,6 +106,8 @@ class _Categories extends State<Categories> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
+                                      SizedBox(
+                                          height: Dimens.minMarginApplication),
                                       Text(
                                         response.nome,
                                         maxLines: 1,

@@ -69,8 +69,10 @@ void main() async {
   }
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   runApp(MaterialApp(
     theme: ThemeData(
+      scaffoldBackgroundColor: Colors.white,
       primarySwatch: Useful().getMaterialColor(OwnerColors.colorPrimary),
       colorScheme: ColorScheme.fromSwatch(primarySwatch: Useful().getMaterialColor(OwnerColors.colorPrimary)),
     ),

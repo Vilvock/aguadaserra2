@@ -548,7 +548,7 @@ class _CartShopping extends State<CartShopping> {
                                             children: [
                                               Expanded(
                                                 child: Text(
-                                                  "Total",
+                                                  "Valor total em produtos",
                                                   style: TextStyle(
                                                     fontFamily: 'Inter',
                                                     fontSize: Dimens.textSize6,

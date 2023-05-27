@@ -191,7 +191,7 @@ class _ProfileState extends State<Profile> {
                                       child: SizedBox.fromSize(
                                         size: Size.fromRadius(72), // Image radius
                                         child: Image.network(ApplicationConstant.URL_AVATAR +
-                                            response.avatar.toString(), /*fit: BoxFit.cover*/),
+                                            response.avatar.toString(), fit: BoxFit.cover),
                                       ),
                                     ),
                                 Align(

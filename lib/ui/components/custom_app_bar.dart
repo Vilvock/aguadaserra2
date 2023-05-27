@@ -75,7 +75,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       _widgetList.add(IconButton(
         icon: Icon(
           Icons.favorite_border_outlined,
-          color: Colors.black,
+          color: Colors.black54,
         ),
         onPressed: () {
           // do something
@@ -87,7 +87,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       _widgetList.add(IconButton(
         icon: Icon(
           Icons.add_location_alt_outlined,
-          color: Colors.black,
+          color: Colors.black54,
         ),
         onPressed: () {
           showDialog(
@@ -104,7 +104,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       _widgetList.add(IconButton(
         icon: Icon(
           Icons.search,
-          color: Colors.black,
+          color: Colors.black54,
         ),
         onPressed: () {
           Navigator.pushNamed(context, "/ui/filter_products");
@@ -116,7 +116,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       _widgetList.add(IconButton(
         icon: Icon(
           Icons.notifications_none,
-          color: Colors.black,
+          color: Colors.black54,
         ),
         onPressed: () {
           Navigator.pushNamed(context, "/ui/notifications");

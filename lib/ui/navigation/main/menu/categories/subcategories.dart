@@ -85,29 +85,33 @@ class _SubCategories extends State<SubCategories> {
                           child: Container(
                             padding: EdgeInsets.all(Dimens.minPaddingApplication),
                             child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(
-                                    margin: EdgeInsets.only(
-                                        right: Dimens.minMarginApplication),
-                                    child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(
-                                            Dimens.minRadiusApplication),
-                                        child: Image.network(
-                                          ApplicationConstant.URL_CATEGORIES + response.url.toString(),
-                                          height: 20,
-                                          width: 20,
-                                          errorBuilder: (context, exception, stackTrack) => Image.asset(
-                                            'images/no_picture.png',
-                                            height: 20,
-                                          ),
-                                        ))),
+                                // Container(
+                                //     margin: EdgeInsets.only(
+                                //         right: Dimens.minMarginApplication),
+                                //     child: ClipRRect(
+                                //         borderRadius: BorderRadius.circular(
+                                //             Dimens.minRadiusApplication),
+                                //         child: Image.network(
+                                //           ApplicationConstant.URL_CATEGORIES + response.url.toString(),
+                                //           height: 20,
+                                //           width: 20,
+                                //           errorBuilder: (context, exception, stackTrack) => Image.asset(
+                                //             'images/no_picture.png',
+                                //             height: 20,
+                                //           ),
+                                //         ))),
                                 SizedBox(
                                     width: Dimens.minMarginApplication),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
+
+                                      SizedBox(
+                                          height: Dimens.minMarginApplication),
                                       Text(
                                         response.nome,
                                         maxLines: 1,

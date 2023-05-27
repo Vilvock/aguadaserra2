@@ -20,3 +20,28 @@ pick lat long
 https://aguadaserra.com/termos_agua.pdf
 falta 9 requests
 
+
+///////////////
+
+- padronizacao (validacoes campo em branco , preencha campo senha)
+- slide home (maior na altura, bolinhas dentro do banner)
+- centralizar imagem (card produto)
+- bottom navigation (verde e icones brancos)
+- no produto (tirar descricao e colocar categoria no lugar, campo valor verde escuro, ciones favorito e carrinho um abaixo do outro)
+- mudar escala imagem do grid home (valor verde e colcocar categoria), colocar botoes de favorito e carrinho tbm
+- icones header(cor mais clara)
+- colocar pra refresh dps q add endereco
+- tudo quer for excluir sempre colicar msg de confirmacao
+- alinhas item carrinho(add categoria e valor em verde)
+- validacao sem item carrinho(tirar fora view avancar), validacao quantidade minima e valor minimo antes de avancar
+- colocar valor do frete(no method payment ao trocar endereço, colcoar click " alterar endereco")
+- favoritos (mesmo tratamento que produto na home)
+- barra produto detail (fundo verde, text branco e trocar texto para caber em uma linha favoritar, adicionar)
+- produto (codigo produto, sub categoria e categoria)
+- carrinho mudar total pra, valor total em produtos
+- tirar imagem sub categoria
+- aumentar view categoria (list)
+- abaixar logo auth
+- fundo de todo app um pouco mais claro
+
+

@@ -84,8 +84,9 @@ class BottomNavBar extends StatelessWidget {
       elevation: Dimens.elevationApplication,
       currentIndex: currentIndex,
       onTap: onTap,
-      backgroundColor: Colors.white,
-      selectedItemColor: OwnerColors.colorPrimary,
+      type: BottomNavigationBarType.fixed,
+      backgroundColor: OwnerColors.colorPrimaryDark,
+      selectedItemColor: Colors.white,
       unselectedItemColor: Colors.grey,
       showSelectedLabels: false,
       showUnselectedLabels: false,
@@ -141,14 +142,12 @@ class _ContainerHomeState extends State<ContainerHome> {
 
   Future<void> removeFavorite(String idFavorite) async {
     try {
-      final body = {
-        "id": idFavorite,
-        "token": ApplicationConstant.TOKEN
-      };
+      final body = {"id": idFavorite, "token": ApplicationConstant.TOKEN};
 
       print('HTTP_BODY: $body');
 
-      final json = await postRequest.sendPostRequest(Links.DELETE_FAVORITE, body);
+      final json =
+          await postRequest.sendPostRequest(Links.DELETE_FAVORITE, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -364,29 +363,38 @@ class _ContainerHomeState extends State<ContainerHome> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  CarouselSlider(
-                    items: carouselItems,
-                    options: CarouselOptions(
-                      height: 160,
-                      autoPlay: false,
-                      onPageChanged: (index, reason) {
-                        setState(() {
-                          _pageIndex = index;
-                        });
-                      },
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Stack(
+                    alignment: Alignment.center,
                     children: [
-                      ...List.generate(
-                          carouselItems.length,
-                          (index) => Padding(
-                                padding: const EdgeInsets.only(right: 4),
-                                child: DotIndicator(
-                                    isActive: index == _pageIndex,
-                                    color: OwnerColors.colorPrimaryDark),
-                              )),
+                      CarouselSlider(
+                        items: carouselItems,
+                        options: CarouselOptions(
+                          height: 190,
+                          autoPlay: true,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              _pageIndex = index;
+                            });
+                          },
+                        ),
+                      ),
+                      Positioned(
+                          bottom: 0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ...List.generate(
+                                  carouselItems.length,
+                                  (index) => Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 4),
+                                        child: DotIndicator(
+                                            isActive: index == _pageIndex,
+                                            color:
+                                                OwnerColors.colorPrimary),
+                                      )),
+                            ],
+                          )),
                     ],
                   ),
                   FutureBuilder<List<Map<String, dynamic>>>(
@@ -440,7 +448,7 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                             Image.asset(
                                                           'images/no_picture.png',
                                                           height: 42,
-                                                              width: 42,
+                                                          width: 42,
                                                         ),
                                                       )),
                                                   // Align(
@@ -527,10 +535,11 @@ class _ContainerHomeState extends State<ContainerHome> {
                                 child: Card(
                                   elevation: 0,
                                   color: OwnerColors.categoryLightGrey,
-                                  margin: EdgeInsets.all(Dimens.minMarginApplication),
+                                  margin: EdgeInsets.all(
+                                      Dimens.minMarginApplication),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(Dimens.minRadiusApplication),
+                                    borderRadius: BorderRadius.circular(
+                                        Dimens.minRadiusApplication),
                                   ),
                                   child: Container(
                                     padding: EdgeInsets.all(
@@ -558,10 +567,10 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                           exception,
                                                           stackTrack) =>
                                                       Image.asset(
-                                                        'images/no_picture.png',
-                                                        height: 90,
-                                                        width: 90,
-                                                      ),
+                                                    'images/no_picture.png',
+                                                    height: 90,
+                                                    width: 90,
+                                                  ),
                                                 ))),
                                         Expanded(
                                           child: Column(
@@ -616,15 +625,25 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                       builder: (BuildContext
                                                           context) {
                                                         return AddItemAlertDialog(
-                                                          quantityController: quantityController,
+                                                            quantityController:
+                                                                quantityController,
                                                             btnConfirm: Container(
                                                                 margin: EdgeInsets.only(top: Dimens.marginApplication),
                                                                 width: double.infinity,
                                                                 child: ElevatedButton(
                                                                     style: Styles().styleDefaultButton,
                                                                     onPressed: () {
-                                                                      openCart(response.id.toString(), response.valor, quantityController.text);
-                                                                      Navigator.of(context).pop();
+                                                                      openCart(
+                                                                          response
+                                                                              .id
+                                                                              .toString(),
+                                                                          response
+                                                                              .valor,
+                                                                          quantityController
+                                                                              .text);
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
                                                                     },
                                                                     child: Text("Adicionar ao carrinho", style: Styles().styleDefaultTextButton))));
                                                       })
@@ -633,7 +652,8 @@ class _ContainerHomeState extends State<ContainerHome> {
                                           icon: Icon(Icons.favorite,
                                               color: Colors.black38),
                                           onPressed: () {
-                                            addItemToFavorite(response.id.toString());
+                                            addItemToFavorite(
+                                                response.id.toString());
                                           },
                                         )
                                       ],
@@ -737,6 +757,8 @@ class CarouselItemBuilder extends StatelessWidget {
           /*width: MediaQuery.of(context).size.width * 0.90,*/
           child: Image.asset(
             image,
+            height: 190,
+            fit: BoxFit.fitHeight,
           ),
         ),
       ),
@@ -765,8 +787,7 @@ class GridItemBuilder extends StatelessWidget {
         color: OwnerColors.categoryLightGrey,
         margin: EdgeInsets.all(Dimens.minMarginApplication),
         shape: RoundedRectangleBorder(
-          borderRadius:
-          BorderRadius.circular(Dimens.minRadiusApplication),
+          borderRadius: BorderRadius.circular(Dimens.minRadiusApplication),
         ),
         child: InkWell(
             onTap: () => {
@@ -794,10 +815,10 @@ class GridItemBuilder extends StatelessWidget {
                           height: 140,
                           errorBuilder: (context, exception, stackTrack) =>
                               Image.asset(
-                                'images/no_picture.png',
-                                height: 140,
-                                width: 140,
-                              ),
+                            'images/no_picture.png',
+                            height: 140,
+                            width: 140,
+                          ),
                         ))),
                 SizedBox(height: Dimens.minMarginApplication),
                 Container(

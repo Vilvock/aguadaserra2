@@ -1,3 +1,4 @@
+import 'package:app/res/owner_colors.dart';
 import 'package:flutter/material.dart';
 
 
@@ -18,7 +19,7 @@ class DotIndicator extends StatelessWidget {
           height: isActive ? 8 : 8,
           width: 8,
           decoration: BoxDecoration(
-              color: isActive ? color : Colors.grey,
+              color: isActive ? color : OwnerColors.lightGrey,
               borderRadius: BorderRadius.all(Radius.circular(10)))),
     );
   }
