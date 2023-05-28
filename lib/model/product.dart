@@ -10,6 +10,7 @@ class Product extends GlobalWSModel{
   final String valor;
   final String url;
   List<dynamic> galeria_fotos;
+  final String nome_categoria;
 
   Product({
     required this.nome,
@@ -18,7 +19,8 @@ class Product extends GlobalWSModel{
     required this.descricao,
     required this.valor,
     required this.galeria_fotos,
-    required this.url, required super.status, required super.msg, required super.id, required super.rows,
+    required this.url,
+    required this.nome_categoria, required super.status, required super.msg, required super.id, required super.rows,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -30,6 +32,7 @@ class Product extends GlobalWSModel{
       valor: json['valor'],
       galeria_fotos: json['galeria_fotos'],
       url: json['url'],
+      nome_categoria: json['nome_categoria'],
       status: json['status'],
       msg: json['msg'],
       id: json['id'],

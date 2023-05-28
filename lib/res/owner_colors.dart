@@ -8,6 +8,8 @@ abstract class OwnerColors {
   static const Color colorAccent = Color(0xFFFFFFFF);
 
 
+  static const Color darkGrey = Color(0xFF969696);
+  static const Color darkGreen = Color(0xFF1C6700);
   static const Color lightGrey = Color(0xFFDADADA);
   static const Color categoryLightGrey = Color(0xFFF5F5F5);
 

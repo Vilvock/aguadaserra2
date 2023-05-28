@@ -546,7 +546,7 @@ class _ContainerHomeState extends State<ContainerHome> {
                                         Dimens.minPaddingApplication),
                                     child: Row(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Container(
                                             margin: EdgeInsets.only(
@@ -592,8 +592,7 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                   height: Dimens
                                                       .minMarginApplication),
                                               Text(
-                                                Useful().removeAllHtmlTags(
-                                                    response.descricao),
+                                                response.nome_categoria,
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(
@@ -610,52 +609,55 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                 style: TextStyle(
                                                   fontFamily: 'Inter',
                                                   fontSize: Dimens.textSize6,
-                                                  color: Colors.black,
+                                                  color: OwnerColors.darkGreen,
                                                 ),
                                               ),
                                             ],
                                           ),
                                         ),
-                                        IconButton(
-                                            icon: Icon(Icons.shopping_cart,
-                                                color: Colors.black38),
-                                            onPressed: () => {
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return AddItemAlertDialog(
-                                                            quantityController:
-                                                                quantityController,
-                                                            btnConfirm: Container(
-                                                                margin: EdgeInsets.only(top: Dimens.marginApplication),
-                                                                width: double.infinity,
-                                                                child: ElevatedButton(
-                                                                    style: Styles().styleDefaultButton,
-                                                                    onPressed: () {
-                                                                      openCart(
-                                                                          response
-                                                                              .id
-                                                                              .toString(),
-                                                                          response
-                                                                              .valor,
-                                                                          quantityController
-                                                                              .text);
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop();
-                                                                    },
-                                                                    child: Text("Adicionar ao carrinho", style: Styles().styleDefaultTextButton))));
-                                                      })
-                                                }),
-                                        IconButton(
-                                          icon: Icon(Icons.favorite,
-                                              color: Colors.black38),
-                                          onPressed: () {
-                                            addItemToFavorite(
-                                                response.id.toString());
-                                          },
-                                        )
+                                        Column(children: [
+                                          IconButton(
+                                            icon: Icon(Icons.favorite,
+                                                color: OwnerColors.darkGrey),
+                                            onPressed: () {
+                                              addItemToFavorite(
+                                                  response.id.toString());
+                                            },
+                                          ),
+                                          IconButton(
+                                              icon: Icon(Icons.shopping_cart,
+                                                  color: OwnerColors.darkGrey),
+                                              onPressed: () => {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (BuildContext
+                                                    context) {
+                                                      return AddItemAlertDialog(
+                                                          quantityController:
+                                                          quantityController,
+                                                          btnConfirm: Container(
+                                                              margin: EdgeInsets.only(top: Dimens.marginApplication),
+                                                              width: double.infinity,
+                                                              child: ElevatedButton(
+                                                                  style: Styles().styleDefaultButton,
+                                                                  onPressed: () {
+                                                                    openCart(
+                                                                        response
+                                                                            .id
+                                                                            .toString(),
+                                                                        response
+                                                                            .valor,
+                                                                        quantityController
+                                                                            .text);
+                                                                    Navigator.of(
+                                                                        context)
+                                                                        .pop();
+                                                                  },
+                                                                  child: Text("Adicionar ao carrinho", style: Styles().styleDefaultTextButton))));
+                                                    })
+                                              }),
+                                        ],)
+
                                       ],
                                     ),
                                   ),
@@ -699,6 +701,7 @@ class _ContainerHomeState extends State<ContainerHome> {
                             final response =
                                 Product.fromJson(snapshot.data![i]);
                             gridItems.add(GridItemBuilder(
+                                category: response.nome_categoria,
                                 image: response.url_foto,
                                 name: response.nome,
                                 value: response.valor,
@@ -771,13 +774,111 @@ class GridItemBuilder extends StatelessWidget {
   final String image;
   final String name;
   final String value;
+  final String category;
 
-  const GridItemBuilder(
+  GridItemBuilder(
       {Key? key,
+      required this.category,
       required this.image,
       required this.name,
       required this.value,
       required this.id});
+
+  final TextEditingController quantityController = TextEditingController();
+
+
+  final postRequest = PostRequest();
+
+  Future<void> addItemToFavorite(String idProduct, BuildContext context) async {
+    try {
+      final body = {
+        "id_user": await Preferences.getUserData()!.id,
+        "id_produto": idProduct,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.ADD_FAVORITE, body);
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      final response = Cart.fromJson(_map[0]);
+
+      if (response.status == "01") {
+        // setState(() {});
+      } else {}
+      ApplicationMessages(context: context).showMessage(response.msg);
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
+  Future<void> openCart(
+      String idProduct, String unityItemValue, String quantity, BuildContext context) async {
+    try {
+      final body = {
+        "id_user": await Preferences.getUserData()!.id,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.OPENED_CART, body);
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      final response = Cart.fromJson(_map[0]);
+
+      if (response.carrinho_aberto.toString().isNotEmpty) {
+        // setState(() {
+
+        addItemToCart(idProduct, unityItemValue, quantity,
+            response.carrinho_aberto.toString(), context);
+
+        // });
+      }
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
+  Future<void> addItemToCart(String idProduct, String unityItemValue,
+      String quantity, String idCart, BuildContext context) async {
+    try {
+      final body = {
+        "id_carrinho": idCart,
+        "id_produto": idProduct,
+        "valor_uni": unityItemValue,
+        "qtd": quantity,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.ADD_ITEM_CART, body);
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      final response = Cart.fromJson(_map[0]);
+
+      if (response.status == "01") {
+        // setState(() {});
+      } else {}
+      ApplicationMessages(context: context).showMessage(response.msg);
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -800,26 +901,70 @@ class GridItemBuilder extends StatelessWidget {
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                    width: double.infinity,
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                            topLeft:
-                                Radius.circular(Dimens.minRadiusApplication),
-                            topRight:
-                                Radius.circular(Dimens.minRadiusApplication)),
-                        child: Image.network(
-                          ApplicationConstant.URL_PRODUCT_PHOTO +
-                              image.toString(),
-                          fit: BoxFit.fitWidth,
-                          height: 140,
-                          errorBuilder: (context, exception, stackTrack) =>
-                              Image.asset(
-                            'images/no_picture.png',
+                Stack(alignment: AlignmentDirectional.centerEnd, children: [
+
+                  Container(
+                      width: double.infinity,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                              topLeft:
+                              Radius.circular(Dimens.minRadiusApplication),
+                              topRight:
+                              Radius.circular(Dimens.minRadiusApplication)),
+                          child: Image.network(
+                            ApplicationConstant.URL_PRODUCT_PHOTO +
+                                image.toString(),
+                            fit: BoxFit.fitWidth,
                             height: 140,
-                            width: 140,
-                          ),
-                        ))),
+                            errorBuilder: (context, exception, stackTrack) =>
+                                Image.asset(
+                                  'images/no_picture.png',
+                                  height: 140,
+                                  width: 140,
+                                ),
+                          ))),
+
+                  Column(children: [
+                    IconButton(
+                      icon: Icon(Icons.favorite,
+                          color: OwnerColors.darkGrey),
+                      onPressed: () {
+                        addItemToFavorite(
+                            id.toString(), context);
+                      },
+                    ),
+                    IconButton(
+                        icon: Icon(Icons.shopping_cart,
+                            color: OwnerColors.darkGrey),
+                        onPressed: () => {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext
+                              context) {
+                                return AddItemAlertDialog(
+                                    quantityController:
+                                    quantityController,
+                                    btnConfirm: Container(
+                                        margin: EdgeInsets.only(top: Dimens.marginApplication),
+                                        width: double.infinity,
+                                        child: ElevatedButton(
+                                            style: Styles().styleDefaultButton,
+                                            onPressed: () {
+                                              openCart(
+                                                  id.toString(),
+                                                  value,
+                                                  quantityController
+                                                      .text, context);
+                                              Navigator.of(
+                                                  context)
+                                                  .pop();
+                                            },
+                                            child: Text("Adicionar ao carrinho", style: Styles().styleDefaultTextButton))));
+                              })
+                        }),
+                  ],)
+                ],),
+
                 SizedBox(height: Dimens.minMarginApplication),
                 Container(
                   padding: EdgeInsets.all(Dimens.minPaddingApplication),
@@ -839,8 +984,17 @@ class GridItemBuilder extends StatelessWidget {
                       // SizedBox(height: Dimens.minMarginApplication),
                       Text(
                         name,
-                        maxLines: 2,
+                        maxLines: 1,
                         overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: Dimens.textSize6,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Text(
+                        category,
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontSize: Dimens.textSize5,
@@ -853,7 +1007,7 @@ class GridItemBuilder extends StatelessWidget {
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontSize: Dimens.textSize6,
-                          color: Colors.black,
+                          color: OwnerColors.darkGreen,
                         ),
                       ),
                     ],
