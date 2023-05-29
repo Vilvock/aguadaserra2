@@ -61,7 +61,7 @@ class _Success extends State<Success> {
         resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(
           title: "Compra finalizada!",
-          isVisibleBackButton: true,
+          // isVisibleBackButton: true,
         ),
         body: /*FutureBuilder<List<Map<String, dynamic>>>(
               future: loadProduct(),

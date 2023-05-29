@@ -30,6 +30,7 @@ class _ProfileState extends State<Profile> {
     super.initState();
   }
 
+  bool _isLoading = false;
   late Validator validator;
   final postRequest = PostRequest();
   User? _profileResponse;
@@ -342,28 +343,44 @@ class _ProfileState extends State<Profile> {
                           bottom: Dimens.marginApplication),
                       width: double.infinity,
                       child: ElevatedButton(
-                          style: Styles().styleDefaultButton,
-                          onPressed: () {
-                            if (!validator.validateGenericTextField(
-                                fantasyNameController.text, "Nome fantasia"))
-                              return;
-                            if (!validator.validateEmail(emailController.text))
-                              return;
-                            if (!validator.validateCNPJ(cnpjController.text))
-                              return;
-                            if (!validator.validateCellphone(
-                                cellphoneController.text)) return;
+                        style: Styles().styleDefaultButton,
+                        onPressed: () async {
 
-                            updateUserDataRequest(
-                                fantasyNameController.text,
-                                cnpjController.text,
-                                cellphoneController.text,
-                                emailController.text);
-                          },
-                          child: Text(
-                            "Atualizar dados",
-                            style: Styles().styleDefaultTextButton,
-                          )),
+                          if (!validator.validateGenericTextField(
+                              fantasyNameController.text, "Nome fantasia"))
+                            return;
+                          if (!validator.validateEmail(emailController.text))
+                            return;
+                          if (!validator.validateCNPJ(cnpjController.text))
+                            return;
+                          if (!validator.validateCellphone(
+                              cellphoneController.text)) return;
+
+                          setState(() {
+                            _isLoading = true;
+                          });
+
+                          await updateUserDataRequest(
+                              fantasyNameController.text,
+                              cnpjController.text,
+                              cellphoneController.text,
+                              emailController.text);
+
+                          setState(() {
+                            _isLoading = false;
+                          });
+                        },
+                        child: (_isLoading)
+                            ? const SizedBox(
+                            width: Dimens.buttonIndicatorWidth,
+                            height: Dimens.buttonIndicatorHeight,
+                            child: CircularProgressIndicator(
+                              color: OwnerColors.colorAccent,
+                              strokeWidth: Dimens.buttonIndicatorStrokes,
+                            ))
+                            : Text("Atualizar dados",
+                            style: Styles().styleDefaultTextButton),
+                      ),
                     ),
                     SizedBox(height: Dimens.marginApplication),
                     Container(
@@ -449,20 +466,37 @@ class _ProfileState extends State<Profile> {
                       margin: EdgeInsets.only(top: Dimens.marginApplication),
                       width: double.infinity,
                       child: ElevatedButton(
-                          style: Styles().styleDefaultButton,
-                          onPressed: () {
-                            if (!validator.validatePassword(
-                                passwordController.text)) return;
-                            if (!validator.validateCoPassword(
-                                passwordController.text,
-                                coPasswordController.text)) return;
+                        style: Styles().styleDefaultButton,
+                        onPressed: () async {
 
-                            updatePasswordRequest(passwordController.text);
-                          },
-                          child: Text(
-                            "Atualizar senha",
-                            style: Styles().styleDefaultTextButton,
-                          )),
+                          if (!validator.validatePassword(
+                              passwordController.text)) return;
+                          if (!validator.validateCoPassword(
+                              passwordController.text,
+                              coPasswordController.text)) return;
+
+
+                          setState(() {
+                            _isLoading = true;
+                          });
+
+                          await updatePasswordRequest(passwordController.text);
+
+                          setState(() {
+                            _isLoading = false;
+                          });
+                        },
+                        child: (_isLoading)
+                            ? const SizedBox(
+                            width: Dimens.buttonIndicatorWidth,
+                            height: Dimens.buttonIndicatorHeight,
+                            child: CircularProgressIndicator(
+                              color: OwnerColors.colorAccent,
+                              strokeWidth: Dimens.buttonIndicatorStrokes,
+                            ))
+                            : Text("Atualizar senha",
+                            style: Styles().styleDefaultTextButton),
+                      ),
                     ),
                   ],
                 ),

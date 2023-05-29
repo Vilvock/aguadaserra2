@@ -12,6 +12,7 @@ import '../../../../global/application_constant.dart';
 import '../../../../model/item.dart';
 import '../../../../model/user.dart';
 import '../../../../res/dimens.dart';
+import '../../../../res/owner_colors.dart';
 import '../../../../res/strings.dart';
 import '../../../../web_service/links.dart';
 import '../../../../web_service/service_response.dart';
@@ -406,18 +407,30 @@ class _Checkout extends State<Checkout> {
                       margin: EdgeInsets.all(Dimens.minMarginApplication),
                       width: double.infinity,
                       child: ElevatedButton(
-                          onPressed: () {
-                            payWithPIX(_idOrder.toString(), _totalValue);
-                          },
-                          style: Styles().styleDefaultButton,
-                          child: Container(child:
-                          Text(
-                              "Fazer pedido",
-                              textAlign: TextAlign.center,
-                              style: Styles().styleDefaultTextButton
-                          ))
+                        style: Styles().styleDefaultButton,
+                        onPressed: () async {
 
-                      ))
+                          setState(() {
+                            _isLoading = true;
+                          });
+
+                          await payWithPIX(_idOrder.toString(), _totalValue);
+
+                          setState(() {
+                            _isLoading = false;
+                          });
+                        },
+                        child: (_isLoading)
+                            ? const SizedBox(
+                            width: Dimens.buttonIndicatorWidth,
+                            height: Dimens.buttonIndicatorHeight,
+                            child: CircularProgressIndicator(
+                              color: OwnerColors.colorAccent,
+                              strokeWidth: Dimens.buttonIndicatorStrokes,
+                            ))
+                            : Text("Fazer Pedido",
+                            style: Styles().styleDefaultTextButton),
+                      ),)
                 ],
               )
             ])));
