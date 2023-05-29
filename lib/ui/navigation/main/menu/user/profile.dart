@@ -27,8 +27,20 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     loadProfileRequest();
+
+    _passwordVisible = false;
+    _passwordVisible2 = false;
     super.initState();
   }
+
+  late bool _passwordVisible;
+  late bool _passwordVisible2;
+
+  bool hasPasswordCoPassword = false;
+  bool hasUppercase = false;
+  bool hasMinLength = false;
+  bool visibileOne = false;
+  bool visibileTwo = false;
 
   bool _isLoading = false;
   late Validator validator;
@@ -52,14 +64,14 @@ class _ProfileState extends State<Profile> {
       final response = User.fromJson(parsedResponse);
       //
       // if (response.status == "01") {
-      setState(() {
+      // setState(() {
         _profileResponse = response;
 
         fantasyNameController.text = _profileResponse!.nome.toString();
         emailController.text = _profileResponse!.email.toString();
         cnpjController.text = _profileResponse!.documento.toString();
         cellphoneController.text = _profileResponse!.celular.toString();
-      });
+      // });
       // } else {}
 
       return parsedResponse;
@@ -94,7 +106,9 @@ class _ProfileState extends State<Profile> {
       final response = User.fromJson(_map[0]);
 
       if (response.status == "01") {
-        loadProfileRequest();
+        setState(() {
+
+        });
       } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
@@ -131,7 +145,7 @@ class _ProfileState extends State<Profile> {
           coPasswordController.text = "";
         });
 
-        loadProfileRequest();
+        // loadProfileRequest();
       } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
@@ -397,30 +411,60 @@ class _ProfileState extends State<Profile> {
                       ),
                     ),
                     TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          hasPasswordCoPassword = false;
+                          visibileOne = true;
+                          hasMinLength = passwordController.text.length >= 8;
+                          hasUppercase = passwordController.text
+                              .contains(RegExp(r'[A-Z]'));
+
+                          hasPasswordCoPassword = coPasswordController.text ==
+                              passwordController.text;
+
+                          if (hasMinLength && hasUppercase) {
+                            visibileOne = false;
+                          }
+                        });
+                      },
                       controller: passwordController,
                       decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                            icon: Icon(
+                              // Based on passwordVisible state choose the icon
+                              _passwordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: OwnerColors.colorPrimary,
+                            ),
+                            onPressed: () {
+                              // Update the state i.e. toogle the state of passwordVisible variable
+                              setState(() {
+                                _passwordVisible = !_passwordVisible;
+                              });
+                            }),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                               color: OwnerColors.colorPrimary, width: 1.5),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.grey, width: 1.0),
+                          BorderSide(color: Colors.grey, width: 1.0),
                         ),
-                        hintText: 'Nova Senha',
+                        hintText: 'Senha',
                         hintStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius:
-                              BorderRadius.circular(Dimens.radiusApplication),
+                          BorderRadius.circular(Dimens.radiusApplication),
                           borderSide: BorderSide.none,
                         ),
                         filled: true,
                         fillColor: Colors.white,
                         contentPadding:
-                            EdgeInsets.all(Dimens.textFieldPaddingApplication),
+                        EdgeInsets.all(Dimens.textFieldPaddingApplication),
                       ),
                       keyboardType: TextInputType.visiblePassword,
-                      obscureText: true,
+                      obscureText: !_passwordVisible,
                       enableSuggestions: false,
                       autocorrect: false,
                       style: TextStyle(
@@ -428,37 +472,118 @@ class _ProfileState extends State<Profile> {
                         fontSize: Dimens.textSize5,
                       ),
                     ),
+                    SizedBox(height: 4),
+                    Visibility(
+                      visible: passwordController.text.isNotEmpty,
+                      child: Row(
+                        children: [
+                          Icon(
+                            hasMinLength
+                                ? Icons.check_circle
+                                : Icons.check_circle,
+                            color: hasMinLength
+                                ? Colors.green
+                                : OwnerColors.lightGrey,
+                          ),
+                          Text(
+                            'Deve ter no mínimo 8 carácteres',
+                          ),
+                        ],
+                      ),
+                    ),
+                    Visibility(
+                      visible: passwordController.text.isNotEmpty,
+                      child: Row(
+                        children: [
+                          Icon(
+                            hasUppercase
+                                ? Icons.check_circle
+                                : Icons.check_circle,
+                            color: hasUppercase
+                                ? Colors.green
+                                : OwnerColors.lightGrey,
+                          ),
+                          Text(
+                            'Deve ter uma letra maiúscula',
+                          ),
+                        ],
+                      ),
+                    ),
                     SizedBox(height: Dimens.marginApplication),
                     TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          visibileTwo = true;
+                          hasPasswordCoPassword = coPasswordController.text ==
+                              passwordController.text;
+
+                          if (hasPasswordCoPassword) {
+                            visibileTwo = false;
+                          }
+                        });
+                      },
                       controller: coPasswordController,
                       decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                            icon: Icon(
+                              // Based on passwordVisible state choose the icon
+                              _passwordVisible2
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: OwnerColors.colorPrimary,
+                            ),
+                            onPressed: () {
+                              // Update the state i.e. toogle the state of passwordVisible variable
+                              setState(() {
+                                _passwordVisible2 = !_passwordVisible2;
+                              });
+                            }),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                               color: OwnerColors.colorPrimary, width: 1.5),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.grey, width: 1.0),
+                          BorderSide(color: Colors.grey, width: 1.0),
                         ),
                         hintText: 'Confirmar Senha',
                         hintStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius:
-                              BorderRadius.circular(Dimens.radiusApplication),
+                          BorderRadius.circular(Dimens.radiusApplication),
                           borderSide: BorderSide.none,
                         ),
                         filled: true,
                         fillColor: Colors.white,
                         contentPadding:
-                            EdgeInsets.all(Dimens.textFieldPaddingApplication),
+                        EdgeInsets.all(Dimens.textFieldPaddingApplication),
                       ),
                       keyboardType: TextInputType.visiblePassword,
-                      obscureText: true,
+                      obscureText: !_passwordVisible2,
                       enableSuggestions: false,
                       autocorrect: false,
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: Dimens.textSize5,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Visibility(
+                      visible: coPasswordController.text.isNotEmpty,
+                      child: Row(
+                        children: [
+                          Icon(
+                            hasPasswordCoPassword
+                                ? Icons.check_circle
+                                : Icons.check_circle,
+                            color: hasPasswordCoPassword
+                                ? Colors.green
+                                : OwnerColors.lightGrey,
+                          ),
+                          Text(
+                            'As senhas fornecidas são idênticas',
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(height: Dimens.marginApplication),
