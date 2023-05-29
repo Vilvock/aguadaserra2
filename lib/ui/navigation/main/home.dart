@@ -340,7 +340,7 @@ class _ContainerHomeState extends State<ContainerHome> {
       final response = Cart.fromJson(_map[0]);
 
       if (response.status == "01") {
-        // setState(() {});
+        setState(() {});
       } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
