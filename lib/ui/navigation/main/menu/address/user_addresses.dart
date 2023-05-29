@@ -230,13 +230,24 @@ class _UserAddresses extends State<UserAddresses> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
+                                  Visibility(visible: index == 0, child: Text(
                                     "Endereço selecionado",
                                     style: TextStyle(
                                       fontFamily: 'Inter',
                                       fontSize: Dimens.textSize4,
                                       fontWeight: FontWeight.bold,
                                       color: OwnerColors.colorPrimaryDark,
+                                    ),
+                                  ),),
+
+                                  SizedBox(height: Dimens.minMarginApplication),
+                                  Text(
+                                    response.nome,
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: Dimens.textSize5,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold
                                     ),
                                   ),
                                   SizedBox(height: Dimens.minMarginApplication),
