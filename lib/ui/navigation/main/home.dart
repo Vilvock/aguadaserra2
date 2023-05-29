@@ -13,6 +13,7 @@ import '../../../config/validator.dart';
 import '../../../global/application_constant.dart';
 import '../../../model/cart.dart';
 import '../../../model/favorite.dart';
+import '../../../model/item.dart';
 import '../../../model/product.dart';
 import '../../../model/user.dart';
 import '../../../res/dimens.dart';
@@ -443,6 +444,9 @@ class _ContainerHomeState extends State<ContainerHome> {
                             listCartItems(response.carrinho_aberto.toString()),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
+
+                            final responseCartList = snapshot.data!.itens;
+
                             return FutureBuilder<List<Map<String, dynamic>>>(
                               future: listFavorites(),
                               builder: (context, snapshot) {
@@ -648,11 +652,24 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                     if (favorite.id_produto ==
                                                         response.id) {
                                                       _isFavorite = true;
-                                                      print("dsadas" +
-                                                          favorite.id_produto
-                                                              .toString() +
-                                                          response.id
-                                                              .toString());
+                                                    }
+                                                  }
+
+                                                  var _isCart = false;
+
+                                                  for (var i = 0;
+                                                  i <
+                                                      responseCartList
+                                                          .length;
+                                                  i++) {
+                                                    final item =
+                                                    Item.fromJson(
+                                                        responseCartList[
+                                                        i]);
+
+                                                    if (item.id_produto ==
+                                                        response.id) {
+                                                      _isCart = true;
                                                     }
                                                   }
 
@@ -804,10 +821,16 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                                   ),
                                                                   IconButton(
                                                                       icon: Icon(
-                                                                          Icons
-                                                                              .shopping_cart,
-                                                                          color: OwnerColors
-                                                                              .darkGrey),
+                                                                        _isCart
+                                                                            ? Icons
+                                                                            .shopping_cart
+                                                                            : Icons
+                                                                            .shopping_cart,
+                                                                        color: _isCart
+                                                                            ? OwnerColors.colorPrimary
+                                                                            : OwnerColors
+                                                                            .darkGrey,
+                                                                      ),
                                                                       onPressed:
                                                                           () =>
                                                                               {
