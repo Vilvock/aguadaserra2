@@ -31,7 +31,7 @@ class _PdfViewer extends State<PdfViewer> {
     //     });
     //   });
     // }else{
-      PostRequest.loadPDF("https:\/\/www.igam.com.br\/upload\/intranet\/processo\/2\/301308_dv2qSE2bRuD3FzNOCVpQ0Z2S2srwfqTc4WLVISum.pdf").then((value) {
+      PostRequest.loadPDF("https://aguadaserra.com/termos_agua.pdf").then((value) {
         setState(() {
           _localPath = value;
         });
