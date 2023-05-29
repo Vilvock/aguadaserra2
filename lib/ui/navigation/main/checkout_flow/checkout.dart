@@ -193,6 +193,8 @@ class _Checkout extends State<Checkout> {
           "/ui/success",
           arguments: {
             "id_cart": _idCart,
+            "base64": response.qrcode_64,
+            "qrCodeClipboard": response.qrcode,
           });
       } else {}
       ApplicationMessages(context: context).showMessage(response.msg);

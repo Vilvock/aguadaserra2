@@ -24,6 +24,8 @@ class Success extends StatefulWidget {
 class _Success extends State<Success> {
   bool _isLoading = false;
   late int _idCart;
+  late String _base64;
+  late String _qrCodeClipboard;
 
   final postRequest = PostRequest();
 
@@ -55,6 +57,8 @@ class _Success extends State<Success> {
     data = ModalRoute.of(context)!.settings.arguments as Map;
 
     _idCart = data['id_cart'];
+    _base64 = data['base64'];
+    _qrCodeClipboard = data['qrCodeClipboard'];
 
 
     return Scaffold(
@@ -227,6 +231,8 @@ class _Success extends State<Success> {
                     color: Colors.black,
                   ),
                 ),
+
+              Image.memory(Base64Decoder().convert(_base64.toString()))
               ],
             ),
           )),
