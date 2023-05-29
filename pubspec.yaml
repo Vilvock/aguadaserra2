@@ -45,6 +45,8 @@ dependencies:
   firebase_core: ^2.11.0
   firebase_messaging: ^14.5.0
   lottie: ^2.3.2
+  path_provider: ^2.0.15
+
 
 
 dev_dependencies:

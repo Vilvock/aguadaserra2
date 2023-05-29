@@ -28,6 +28,7 @@ class AddressFormAlertDialog extends StatefulWidget {
 class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
   late Validator validator;
   final postRequest = PostRequest();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -136,12 +137,12 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
   Widget build(BuildContext context) {
     validator = Validator(context: context);
 
-    return Column(
+    return SingleChildScrollView(child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Padding(
-            padding: const EdgeInsets.all(Dimens.paddingApplication),
+            padding: EdgeInsets.fromLTRB(Dimens.paddingApplication, Dimens.paddingApplication, Dimens.paddingApplication, MediaQuery.of(context).viewInsets.bottom + Dimens.paddingApplication),
             child: Column(
               children: [
                 Align(
@@ -436,40 +437,56 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                   margin: EdgeInsets.only(top: Dimens.marginApplication),
                   width: double.infinity,
                   child: ElevatedButton(
-                      style: Styles().styleDefaultButton,
-                      onPressed: () {
-                        if (!validator.validateGenericTextField(
-                            nameController.text, "Nome do local")) return;
-                        if (!validator.validateCEP(cepController.text)) return;
-                        if (!validator.validateGenericTextField(
-                            cityController.text, "Cidade")) return;
-                        if (!validator.validateGenericTextField(
-                            stateController.text, "Estado")) return;
-                        if (!validator.validateGenericTextField(
-                            nbhController.text, "Bairro")) return;
-                        if (!validator.validateGenericTextField(
-                            addressController.text, "Endereço")) return;
-                        if (!validator.validateGenericTextField(
-                            numberController.text, "Número")) return;
+                    style: Styles().styleDefaultButton,
+                    onPressed: () async {
 
-                        saveAddress(
-                            nameController.text.toString(),
-                            cepController.text.toString(),
-                            stateController.text.toString(),
-                            cityController.text.toString(),
-                            addressController.text.toString(),
-                            nbhController.text.toString(),
-                            numberController.text.toString(),
-                            complementController.text.toString());
-                      },
-                      child: Text(
-                        "Adicionar",
-                        style: Styles().styleDefaultTextButton,
-                      )),
+                      if (!validator.validateGenericTextField(
+                          nameController.text, "Nome do local")) return;
+                      if (!validator.validateCEP(cepController.text)) return;
+                      if (!validator.validateGenericTextField(
+                          cityController.text, "Cidade")) return;
+                      if (!validator.validateGenericTextField(
+                          stateController.text, "Estado")) return;
+                      if (!validator.validateGenericTextField(
+                          nbhController.text, "Bairro")) return;
+                      if (!validator.validateGenericTextField(
+                          addressController.text, "Endereço")) return;
+                      if (!validator.validateGenericTextField(
+                          numberController.text, "Número")) return;
+
+                      setState(() {
+                        _isLoading = true;
+                      });
+
+                      await saveAddress(
+                          nameController.text.toString(),
+                          cepController.text.toString(),
+                          stateController.text.toString(),
+                          cityController.text.toString(),
+                          addressController.text.toString(),
+                          nbhController.text.toString(),
+                          numberController.text.toString(),
+                          complementController.text.toString());
+
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    },
+                    child: (_isLoading)
+                        ? const SizedBox(
+                        width: Dimens.buttonIndicatorWidth,
+                        height: Dimens.buttonIndicatorHeight,
+                        child: CircularProgressIndicator(
+                          color: OwnerColors.colorAccent,
+                          strokeWidth: Dimens.buttonIndicatorStrokes,
+                        ))
+                        : Text("Adicionar",
+                        style: Styles().styleDefaultTextButton),
+                  ),
                 ),
               ],
             ),
           ),
-        ]);
+        ]));
   }
 }

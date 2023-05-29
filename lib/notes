@@ -1,11 +1,9 @@
 bug:
 
-tela subir quando teclado aparecer (dialogs)
 notificacoes ios
 bgl do android 13
 pick lat long
 
-- botao com loading xv
 - trocar alguns icones para finos
 - https://aguadaserra.com/termos_agua.pdf
 
@@ -20,6 +18,7 @@ falta 9 requests
 
 ///////////////
 
+- mudar cor botao favorito e carrinho
 - colocar pra refresh dps q add endereco
 - alinhar item carrinho(add campo text categoria (pedir pra colcoar na request) e valor em verde ok)
 - validacao sem item carrinho(tirar fora view avancar ok ), validacao quantidade minima e valor minimo antes de avancar
