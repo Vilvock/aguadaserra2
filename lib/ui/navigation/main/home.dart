@@ -140,6 +140,29 @@ class _ContainerHomeState extends State<ContainerHome> {
     super.dispose();
   }
 
+  Future<List<Map<String, dynamic>>> listFavorites() async {
+    try {
+      final body = {
+        "id_user": await Preferences.getUserData()!.id,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json =
+          await postRequest.sendPostRequest(Links.LIST_FAVORITES, body);
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      return _map;
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
   Future<void> removeFavorite(String idFavorite) async {
     try {
       final body = {"id": idFavorite, "token": ApplicationConstant.TOKEN};
@@ -185,7 +208,7 @@ class _ContainerHomeState extends State<ContainerHome> {
       final response = Cart.fromJson(_map[0]);
 
       if (response.status == "01") {
-        // setState(() {});
+        setState(() {});
       } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
@@ -350,385 +373,429 @@ class _ContainerHomeState extends State<ContainerHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(
-        title: "Início",
-        isVisibleBackButton: false,
-        isVisibleSearchButton: true,
-        isVisibleNotificationsButton: true,
-      ),
-      body: RefreshIndicator(
-          onRefresh: _pullRefresh,
-          child: Container(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      CarouselSlider(
-                        items: carouselItems,
-                        options: CarouselOptions(
-                          height: 190,
-                          autoPlay: true,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _pageIndex = index;
-                            });
-                          },
-                        ),
-                      ),
-                      Positioned(
-                          bottom: 0,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ...List.generate(
-                                  carouselItems.length,
-                                  (index) => Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 4),
-                                        child: DotIndicator(
-                                            isActive: index == _pageIndex,
-                                            color:
-                                                OwnerColors.colorPrimary),
-                                      )),
-                            ],
-                          )),
-                    ],
-                  ),
-                  FutureBuilder<List<Map<String, dynamic>>>(
-                      future: listCategories(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          final responseItem =
-                              Product.fromJson(snapshot.data![0]);
+        resizeToAvoidBottomInset: false,
+        appBar: CustomAppBar(
+          title: "Início",
+          isVisibleBackButton: false,
+          isVisibleSearchButton: true,
+          isVisibleNotificationsButton: true,
+        ),
+        body: RefreshIndicator(
+            onRefresh: _pullRefresh,
+            child: Container(
+                child: FutureBuilder<List<Map<String, dynamic>>>(
+              future: listFavorites(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final responseFavoriteList = snapshot.data!;
 
-                          if (responseItem.rows != 0) {
-                            return Container(
-                              height: 140,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: snapshot.data!.length,
-                                itemBuilder: (context, index) {
-                                  final response =
-                                      Product.fromJson(snapshot.data![index]);
-                                  return InkWell(
-                                      onTap: () => {
-                                            Navigator.pushNamed(
-                                                context, "/ui/subcategories",
-                                                arguments: {
-                                                  "id_category": response.id,
-                                                })
-                                          },
-                                      child: Column(children: [
-                                        Container(
-                                            width: 84,
-                                            height: 84,
-                                            margin: EdgeInsets.all(
-                                                Dimens.minMarginApplication),
-                                            child: Stack(
-                                                alignment: Alignment.center,
-                                                children: [
-                                                  CircleAvatar(
-                                                      radius: 42,
-                                                      backgroundColor:
-                                                          OwnerColors
-                                                              .categoryLightGrey,
-                                                      child: Image.network(
-                                                        ApplicationConstant
-                                                                .URL_CATEGORIES +
-                                                            response.url
-                                                                .toString(),
-                                                        height: 42,
-                                                        width: 42,
-                                                        errorBuilder: (context,
-                                                                exception,
-                                                                stackTrack) =>
-                                                            Image.asset(
-                                                          'images/no_picture.png',
-                                                          height: 42,
-                                                          width: 42,
-                                                        ),
-                                                      )),
-                                                  // Align(
-                                                  //   alignment: Alignment.bottomRight,
-                                                  //   child: FloatingActionButton(
-                                                  //     mini: true,
-                                                  //     child:
-                                                  //     Icon(Icons.camera_alt, color: Colors.black),
-                                                  //     backgroundColor: Colors.white,
-                                                  //     onPressed: () {
-                                                  //       // Add your onPressed code here!
-                                                  //     },
-                                                  //   ),
-                                                  // )
-                                                ])),
-                                        Text(
-                                          response.nome,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontFamily: 'Inter',
-                                            fontSize: Dimens.textSize5,
-                                          ),
-                                        ),
-                                      ]));
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            CarouselSlider(
+                              items: carouselItems,
+                              options: CarouselOptions(
+                                height: 190,
+                                autoPlay: false,
+                                onPageChanged: (index, reason) {
+                                  setState(() {
+                                    _pageIndex = index;
+                                  });
                                 },
                               ),
-                            );
-                          }
-                        } else if (snapshot.hasError) {
-                          return Text('${snapshot.error}');
-                        }
-                        return const CircularProgressIndicator();
-                      }),
-                  SizedBox(height: Dimens.marginApplication),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: Dimens.marginApplication,
-                        right: Dimens.marginApplication),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            "Destaques",
-                            style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: Dimens.textSize6,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
                             ),
-                          ),
+                            Positioned(
+                                bottom: 0,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    ...List.generate(
+                                        carouselItems.length,
+                                        (index) => Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 4),
+                                              child: DotIndicator(
+                                                  isActive: index == _pageIndex,
+                                                  color:
+                                                      OwnerColors.colorPrimary),
+                                            )),
+                                  ],
+                                )),
+                          ],
                         ),
-                        // Text(
-                        //   "Ver mais",
-                        //   style: TextStyle(
-                        //     fontFamily: 'Inter',
-                        //     fontSize: Dimens.textSize5,
-                        //     color: OwnerColors.colorPrimaryDark,
-                        //   ),
-                        // ),
-                      ],
-                    ),
-                  ),
-                  FutureBuilder<List<Map<String, dynamic>>>(
-                    future: listHighlightsRequest(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return ListView.builder(
-                          primary: false,
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            final response =
-                                Product.fromJson(snapshot.data![index]);
+                        FutureBuilder<List<Map<String, dynamic>>>(
+                            future: listCategories(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                final responseItem =
+                                    Product.fromJson(snapshot.data![0]);
 
-                            return InkWell(
-                                onTap: () => {
-                                      Navigator.pushNamed(
-                                          context, "/ui/product_detail",
-                                          arguments: {
-                                            "id_product": response.id,
-                                          })
-                                    },
-                                child: Card(
-                                  elevation: 0,
-                                  color: OwnerColors.categoryLightGrey,
-                                  margin: EdgeInsets.all(
-                                      Dimens.minMarginApplication),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimens.minRadiusApplication),
-                                  ),
-                                  child: Container(
-                                    padding: EdgeInsets.all(
-                                        Dimens.minPaddingApplication),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                            margin: EdgeInsets.only(
-                                                right: Dimens
-                                                    .minMarginApplication),
-                                            child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(Dimens
-                                                        .minRadiusApplication),
-                                                child: Image.network(
-                                                  ApplicationConstant
-                                                          .URL_PRODUCT_PHOTO +
-                                                      response.url_foto
-                                                          .toString(),
-                                                  height: 90,
-                                                  width: 90,
-                                                  errorBuilder: (context,
-                                                          exception,
-                                                          stackTrack) =>
-                                                      Image.asset(
-                                                    'images/default.png',
-                                                    height: 90,
-                                                    width: 90,
-                                                  ),
-                                                ))),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
+                                if (responseItem.rows != 0) {
+                                  return Container(
+                                    height: 140,
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: snapshot.data!.length,
+                                      itemBuilder: (context, index) {
+                                        final response = Product.fromJson(
+                                            snapshot.data![index]);
+                                        return InkWell(
+                                            onTap: () => {
+                                                  Navigator.pushNamed(context,
+                                                      "/ui/subcategories",
+                                                      arguments: {
+                                                        "id_category":
+                                                            response.id,
+                                                      })
+                                                },
+                                            child: Column(children: [
+                                              Container(
+                                                  width: 84,
+                                                  height: 84,
+                                                  margin: EdgeInsets.all(Dimens
+                                                      .minMarginApplication),
+                                                  child: Stack(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      children: [
+                                                        CircleAvatar(
+                                                            radius: 42,
+                                                            backgroundColor:
+                                                                OwnerColors
+                                                                    .categoryLightGrey,
+                                                            child:
+                                                                Image.network(
+                                                              ApplicationConstant
+                                                                      .URL_CATEGORIES +
+                                                                  response.url
+                                                                      .toString(),
+                                                              height: 42,
+                                                              width: 42,
+                                                              errorBuilder: (context,
+                                                                      exception,
+                                                                      stackTrack) =>
+                                                                  Image.asset(
+                                                                'images/no_picture.png',
+                                                                height: 42,
+                                                                width: 42,
+                                                              ),
+                                                            )),
+                                                        // Align(
+                                                        //   alignment: Alignment.bottomRight,
+                                                        //   child: FloatingActionButton(
+                                                        //     mini: true,
+                                                        //     child:
+                                                        //     Icon(Icons.camera_alt, color: Colors.black),
+                                                        //     backgroundColor: Colors.white,
+                                                        //     onPressed: () {
+                                                        //       // Add your onPressed code here!
+                                                        //     },
+                                                        //   ),
+                                                        // )
+                                                      ])),
                                               Text(
                                                 response.nome,
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(
                                                   fontFamily: 'Inter',
-                                                  fontSize: Dimens.textSize6,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                  height: Dimens
-                                                      .minMarginApplication),
-                                              Text(
-                                                response.nome_categoria,
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  fontFamily: 'Inter',
                                                   fontSize: Dimens.textSize5,
-                                                  color: Colors.black,
                                                 ),
                                               ),
-                                              SizedBox(
-                                                  height:
-                                                      Dimens.marginApplication),
-                                              Text(
-                                                response.valor,
-                                                style: TextStyle(
-                                                  fontFamily: 'Inter',
-                                                  fontSize: Dimens.textSize6,
-                                                  color: OwnerColors.darkGreen,
+                                            ]));
+                                      },
+                                    ),
+                                  );
+                                }
+                              } else if (snapshot.hasError) {
+                                return Text('${snapshot.error}');
+                              }
+                              return const CircularProgressIndicator();
+                            }),
+                        SizedBox(height: Dimens.marginApplication),
+                        Container(
+                          margin: EdgeInsets.only(
+                              left: Dimens.marginApplication,
+                              right: Dimens.marginApplication),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "Destaques",
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: Dimens.textSize6,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              // Text(
+                              //   "Ver mais",
+                              //   style: TextStyle(
+                              //     fontFamily: 'Inter',
+                              //     fontSize: Dimens.textSize5,
+                              //     color: OwnerColors.colorPrimaryDark,
+                              //   ),
+                              // ),
+                            ],
+                          ),
+                        ),
+                        FutureBuilder<List<Map<String, dynamic>>>(
+                          future: listHighlightsRequest(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return ListView.builder(
+                                primary: false,
+                                shrinkWrap: true,
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (context, index) {
+                                  final response =
+                                      Product.fromJson(snapshot.data![index]);
+
+                                  var _isFavorite = false;
+
+                                  for (var i = 0; i < responseFavoriteList.length; i++) {
+
+                                    final favorite = Favorite.fromJson(responseFavoriteList[i]);
+
+                                    if (favorite.id_produto == response.id) {
+                                      _isFavorite = true;
+                                      print("dsadas" + favorite.id_produto.toString() + response.id.toString());
+                                    }
+                                  }
+
+                                  return InkWell(
+                                      onTap: () => {
+                                            Navigator.pushNamed(
+                                                context, "/ui/product_detail",
+                                                arguments: {
+                                                  "id_product": response.id,
+                                                })
+                                          },
+                                      child: Card(
+                                        elevation: 0,
+                                        color: OwnerColors.categoryLightGrey,
+                                        margin: EdgeInsets.all(
+                                            Dimens.minMarginApplication),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              Dimens.minRadiusApplication),
+                                        ),
+                                        child: Container(
+                                          padding: EdgeInsets.all(
+                                              Dimens.minPaddingApplication),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                  margin: EdgeInsets.only(
+                                                      right: Dimens
+                                                          .minMarginApplication),
+                                                  child: ClipRRect(
+                                                      borderRadius: BorderRadius
+                                                          .circular(Dimens
+                                                              .minRadiusApplication),
+                                                      child: Image.network(
+                                                        ApplicationConstant
+                                                                .URL_PRODUCT_PHOTO +
+                                                            response.url_foto
+                                                                .toString(),
+                                                        height: 90,
+                                                        width: 90,
+                                                        errorBuilder: (context,
+                                                                exception,
+                                                                stackTrack) =>
+                                                            Image.asset(
+                                                          'images/default.png',
+                                                          height: 90,
+                                                          width: 90,
+                                                        ),
+                                                      ))),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      response.nome,
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontFamily: 'Inter',
+                                                        fontSize:
+                                                            Dimens.textSize6,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                        height: Dimens
+                                                            .minMarginApplication),
+                                                    Text(
+                                                      response.nome_categoria,
+                                                      maxLines: 2,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontFamily: 'Inter',
+                                                        fontSize:
+                                                            Dimens.textSize5,
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                        height: Dimens
+                                                            .marginApplication),
+                                                    Text(
+                                                      response.valor,
+                                                      style: TextStyle(
+                                                        fontFamily: 'Inter',
+                                                        fontSize:
+                                                            Dimens.textSize6,
+                                                        color: OwnerColors
+                                                            .darkGreen,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
+                                              Column(
+                                                children: [
+                                                  IconButton(
+                                                    icon: Icon(
+                                                        _isFavorite
+                                                            ? Icons.favorite
+                                                            : Icons.favorite,
+                                                        color: _isFavorite
+                                                            ? Colors.red
+                                                            : OwnerColors
+                                                            .darkGrey,),
+                                                    onPressed: () {
+                                                      addItemToFavorite(response
+                                                          .id
+                                                          .toString());
+                                                    },
+                                                  ),
+                                                  IconButton(
+                                                      icon: Icon(
+                                                          Icons.shopping_cart,
+                                                          color: OwnerColors
+                                                              .darkGrey),
+                                                      onPressed: () => {
+                                                            showModalBottomSheet<
+                                                                    dynamic>(
+                                                                isScrollControlled:
+                                                                    true,
+                                                                context:
+                                                                    context,
+                                                                shape: Styles()
+                                                                    .styleShapeBottomSheet,
+                                                                clipBehavior: Clip
+                                                                    .antiAliasWithSaveLayer,
+                                                                builder:
+                                                                    (BuildContext
+                                                                        context) {
+                                                                  return AddItemAlertDialog(
+                                                                      quantityController:
+                                                                          quantityController,
+                                                                      btnConfirm: Container(
+                                                                          margin: EdgeInsets.only(top: Dimens.marginApplication),
+                                                                          width: double.infinity,
+                                                                          child: ElevatedButton(
+                                                                              style: Styles().styleDefaultButton,
+                                                                              onPressed: () {
+                                                                                openCart(response.id.toString(), response.valor, quantityController.text);
+                                                                                Navigator.of(context).pop();
+                                                                              },
+                                                                              child: Text("Adicionar ao carrinho", style: Styles().styleDefaultTextButton))));
+                                                                })
+                                                          }),
+                                                ],
+                                              )
                                             ],
                                           ),
                                         ),
-                                        Column(children: [
-                                          IconButton(
-                                            icon: Icon(Icons.favorite,
-                                                color: OwnerColors.darkGrey),
-                                            onPressed: () {
-                                              addItemToFavorite(
-                                                  response.id.toString());
-                                            },
-                                          ),
-                                          IconButton(
-                                              icon: Icon(Icons.shopping_cart,
-                                                  color: OwnerColors.darkGrey),
-                                              onPressed: () => {
-                                                showModalBottomSheet<dynamic>(
-                                                    isScrollControlled: true,
-                                                    context: context,
-                                                    shape: Styles().styleShapeBottomSheet,
-                                                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                                                    builder: (BuildContext context) {
-                                                      return AddItemAlertDialog(
-                                                          quantityController:
-                                                          quantityController,
-                                                          btnConfirm: Container(
-                                                              margin: EdgeInsets.only(top: Dimens.marginApplication),
-                                                              width: double.infinity,
-                                                              child: ElevatedButton(
-                                                                  style: Styles().styleDefaultButton,
-                                                                  onPressed: () {
-                                                                    openCart(
-                                                                        response
-                                                                            .id
-                                                                            .toString(),
-                                                                        response
-                                                                            .valor,
-                                                                        quantityController
-                                                                            .text);
-                                                                    Navigator.of(
-                                                                        context)
-                                                                        .pop();
-                                                                  },
-                                                                  child: Text("Adicionar ao carrinho", style: Styles().styleDefaultTextButton))));
-                                                    })
-                                              }),
-                                        ],)
-
-                                      ],
-                                    ),
-                                  ),
-                                ));
+                                      ));
+                                },
+                              );
+                            } else if (snapshot.hasError) {
+                              return Text('${snapshot.error}');
+                            }
+                            return Center(
+                                /*child: CircularProgressIndicator()*/);
                           },
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text('${snapshot.error}');
-                      }
-                      return Center(/*child: CircularProgressIndicator()*/);
-                    },
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: Dimens.marginApplication,
-                        left: Dimens.marginApplication,
-                        right: Dimens.marginApplication),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            "Outras ofertas",
-                            style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: Dimens.textSize6,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: Dimens.marginApplication,
+                              left: Dimens.marginApplication,
+                              right: Dimens.marginApplication),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "Outras ofertas",
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: Dimens.textSize6,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
+                        FutureBuilder<List<Map<String, dynamic>>>(
+                            future: listHighlightsRequest(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                var gridItems = <Widget>[];
+
+                                for (var i = 0;
+                                    i < snapshot.data!.length;
+                                    i++) {
+                                  final response =
+                                      Product.fromJson(snapshot.data![i]);
+                                  gridItems.add(GridItemBuilder(
+                                      category: response.nome_categoria,
+                                      image: response.url_foto,
+                                      name: response.nome,
+                                      value: response.valor,
+                                      id: response.id));
+                                }
+
+                                return Container(
+                                  child: GridView.count(
+                                    childAspectRatio: 0.75,
+                                    primary: false,
+                                    shrinkWrap: true,
+                                    crossAxisCount: 2,
+                                    children: gridItems,
+                                  ),
+                                );
+                              } else if (snapshot.hasError) {
+                                return Text('${snapshot.error}');
+                              }
+                              return Center(
+                                  /*child: CircularProgressIndicator()*/);
+                            })
                       ],
                     ),
-                  ),
-                  FutureBuilder<List<Map<String, dynamic>>>(
-                      future: listHighlightsRequest(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          var gridItems = <Widget>[];
-
-                          for (var i = 0; i < snapshot.data!.length; i++) {
-                            final response =
-                                Product.fromJson(snapshot.data![i]);
-                            gridItems.add(GridItemBuilder(
-                                category: response.nome_categoria,
-                                image: response.url_foto,
-                                name: response.nome,
-                                value: response.valor,
-                                id: response.id));
-                          }
-
-                          return Container(
-                            child: GridView.count(
-                              childAspectRatio: 0.75,
-                              primary: false,
-                              shrinkWrap: true,
-                              crossAxisCount: 2,
-                              children: gridItems,
-                            ),
-                          );
-                        } else if (snapshot.hasError) {
-                          return Text('${snapshot.error}');
-                        }
-                        return Center(/*child: CircularProgressIndicator()*/);
-                      })
-                ],
-              ),
-            ),
-          )),
-    );
+                  );
+                } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+                return Center(/*child: CircularProgressIndicator()*/);
+              },
+            ))));
   }
 
   Future<void> _pullRefresh() async {
@@ -788,7 +855,6 @@ class GridItemBuilder extends StatelessWidget {
 
   final TextEditingController quantityController = TextEditingController();
 
-
   final postRequest = PostRequest();
 
   Future<void> addItemToFavorite(String idProduct, BuildContext context) async {
@@ -819,8 +885,8 @@ class GridItemBuilder extends StatelessWidget {
     }
   }
 
-  Future<void> openCart(
-      String idProduct, String unityItemValue, String quantity, BuildContext context) async {
+  Future<void> openCart(String idProduct, String unityItemValue,
+      String quantity, BuildContext context) async {
     try {
       final body = {
         "id_user": await Preferences.getUserData()!.id,
@@ -903,72 +969,79 @@ class GridItemBuilder extends StatelessWidget {
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Stack(alignment: AlignmentDirectional.centerEnd, children: [
-
-                  Container(
-                      width: double.infinity,
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.only(
-                              topLeft:
-                              Radius.circular(Dimens.minRadiusApplication),
-                              topRight:
-                              Radius.circular(Dimens.minRadiusApplication)),
-                          child: Image.network(
-                            ApplicationConstant.URL_PRODUCT_PHOTO +
-                                image.toString(),
-                            fit: BoxFit.fitWidth,
-                            height: 140,
-                            errorBuilder: (context, exception, stackTrack) =>
-                                Image.asset(
-                                  'images/default.png',
-                                  height: 140,
-                                  width: 140,
-                                ),
-                          ))),
-
-                  Column(children: [
-                    IconButton(
-                      icon: Icon(Icons.favorite,
-                          color: OwnerColors.darkGrey),
-                      onPressed: () {
-                        addItemToFavorite(
-                            id.toString(), context);
-                      },
-                    ),
-                    IconButton(
-                        icon: Icon(Icons.shopping_cart,
-                            color: OwnerColors.darkGrey),
-                        onPressed: () => {
-                          showModalBottomSheet<dynamic>(
-                              isScrollControlled: true,
-                              context: context,
-                              shape: Styles().styleShapeBottomSheet,
-                              clipBehavior: Clip.antiAliasWithSaveLayer,
-                              builder: (BuildContext context) {
-                                return AddItemAlertDialog(
-                                    quantityController:
-                                    quantityController,
-                                    btnConfirm: Container(
-                                        margin: EdgeInsets.only(top: Dimens.marginApplication),
-                                        width: double.infinity,
-                                        child: ElevatedButton(
-                                            style: Styles().styleDefaultButton,
-                                            onPressed: () {
-                                              openCart(
-                                                  id.toString(),
-                                                  value,
-                                                  quantityController
-                                                      .text, context);
-                                              Navigator.of(
-                                                  context)
-                                                  .pop();
-                                            },
-                                            child: Text("Adicionar ao carrinho", style: Styles().styleDefaultTextButton))));
-                              })
-                        }),
-                  ],)
-                ],),
-
+                Stack(
+                  alignment: AlignmentDirectional.centerEnd,
+                  children: [
+                    Container(
+                        width: double.infinity,
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(
+                                    Dimens.minRadiusApplication),
+                                topRight: Radius.circular(
+                                    Dimens.minRadiusApplication)),
+                            child: Image.network(
+                              ApplicationConstant.URL_PRODUCT_PHOTO +
+                                  image.toString(),
+                              fit: BoxFit.fitWidth,
+                              height: 140,
+                              errorBuilder: (context, exception, stackTrack) =>
+                                  Image.asset(
+                                'images/default.png',
+                                height: 140,
+                                width: 140,
+                              ),
+                            ))),
+                    Column(
+                      children: [
+                        IconButton(
+                          icon:
+                              Icon(Icons.favorite, color: OwnerColors.darkGrey),
+                          onPressed: () {
+                            addItemToFavorite(id.toString(), context);
+                          },
+                        ),
+                        IconButton(
+                            icon: Icon(Icons.shopping_cart,
+                                color: OwnerColors.darkGrey),
+                            onPressed: () => {
+                                  showModalBottomSheet<dynamic>(
+                                      isScrollControlled: true,
+                                      context: context,
+                                      shape: Styles().styleShapeBottomSheet,
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                      builder: (BuildContext context) {
+                                        return AddItemAlertDialog(
+                                            quantityController:
+                                                quantityController,
+                                            btnConfirm: Container(
+                                                margin: EdgeInsets.only(
+                                                    top: Dimens
+                                                        .marginApplication),
+                                                width: double.infinity,
+                                                child: ElevatedButton(
+                                                    style: Styles()
+                                                        .styleDefaultButton,
+                                                    onPressed: () {
+                                                      openCart(
+                                                          id.toString(),
+                                                          value,
+                                                          quantityController
+                                                              .text,
+                                                          context);
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: Text(
+                                                        "Adicionar ao carrinho",
+                                                        style: Styles()
+                                                            .styleDefaultTextButton))));
+                                      })
+                                }),
+                      ],
+                    )
+                  ],
+                ),
                 SizedBox(height: Dimens.minMarginApplication),
                 Container(
                   padding: EdgeInsets.all(Dimens.minPaddingApplication),
@@ -997,9 +1070,7 @@ class GridItemBuilder extends StatelessWidget {
                           color: Colors.black,
                         ),
                       ),
-                      SizedBox(
-                          height: Dimens
-                              .minMarginApplication),
+                      SizedBox(height: Dimens.minMarginApplication),
                       Text(
                         category,
                         style: TextStyle(

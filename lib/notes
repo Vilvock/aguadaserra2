@@ -6,10 +6,9 @@ pick lat long
 
 ///////////////
 
-
+- ver pq n da pra digitar no profile
 - list pedidos com dados dinamicos
-- mudar cor botao favorito e carrinho (HOME)
-- validacao sem item carrinho(tirar fora view avancar ok ), validacao quantidade minima e valor minimo antes de avancar xv
+- mudar cor botao favorito e carrinho (HOME) xv
 
 - colocar valor do frete(no method payment ao trocar endereço, colocar click " alterar endereco")
 
@@ -20,12 +19,11 @@ pick lat long
 - update avatar
 - PDF https://aguadaserra.com/termos_agua.pdf
 
-
-
 - trocar alguns icones para finos
 - add metodo de pagamento boleto
 
 
+- validacao sem item carrinho(tirar fora view avancar ok ), validacao quantidade minima e valor minimo antes de avancar OK
 - alinhar item carrinho(add campo text categoria (pedir pra colcoar na request) e valor em verde ok) OK
 - produto detalhe (codigo produto é o id?, sub categoria e categoria) OK
 - favoritos (mesmo tratamento que produto na home) OK
