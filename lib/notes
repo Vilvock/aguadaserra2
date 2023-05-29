@@ -6,6 +6,19 @@ pick lat long
 
 ///////////////
 
+
+- categorias = trocar pra imagem default e diminuir um pouco a fonte
+- juntar icone mais proximo com texto e centralizar texto
+- trocar texto favoritar X remover centralizado
+- depois que escolher retirada local, mostrar endereco completo e a data e o intervalo (em um card)
+- calors staus vim em portugues n em ingles
+- colocar quadrado status direita
+- list categoria (trocar imagem)
+- trazer nome endereco
+
+
+
+- depois que escolher retirada local, mostrar endereco completo e a data e o intervalo (em um card)
 - list pedidos com dados dinamicos
 - mudar cor botao favorito e carrinho (HOME) OK falta os do grid
 

@@ -505,7 +505,7 @@ class _ContainerHomeState extends State<ContainerHome> {
 
                                                 if (responseItem.rows != 0) {
                                                   return Container(
-                                                    height: 140,
+                                                    height: 120,
                                                     child: ListView.builder(
                                                       scrollDirection:
                                                           Axis.horizontal,
@@ -528,43 +528,24 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                                 },
                                                             child: Column(
                                                                 children: [
-                                                                  Container(
-                                                                      width: 84,
-                                                                      height:
-                                                                          84,
-                                                                      margin: EdgeInsets.all(
-                                                                          Dimens
-                                                                              .minMarginApplication),
-                                                                      child: Stack(
-                                                                          alignment:
-                                                                              Alignment.center,
-                                                                          children: [
-                                                                            CircleAvatar(
-                                                                                radius: 42,
-                                                                                backgroundColor: OwnerColors.categoryLightGrey,
-                                                                                child: Image.network(
-                                                                                  ApplicationConstant.URL_CATEGORIES + response.url.toString(),
-                                                                                  height: 42,
-                                                                                  width: 42,
-                                                                                  errorBuilder: (context, exception, stackTrack) => Image.asset(
-                                                                                    'images/no_picture.png',
-                                                                                    height: 42,
-                                                                                    width: 42,
-                                                                                  ),
-                                                                                )),
-                                                                            // Align(
-                                                                            //   alignment: Alignment.bottomRight,
-                                                                            //   child: FloatingActionButton(
-                                                                            //     mini: true,
-                                                                            //     child:
-                                                                            //     Icon(Icons.camera_alt, color: Colors.black),
-                                                                            //     backgroundColor: Colors.white,
-                                                                            //     onPressed: () {
-                                                                            //       // Add your onPressed code here!
-                                                                            //     },
-                                                                            //   ),
-                                                                            // )
-                                                                          ])),
+                                                            Container(
+                                                            margin:  EdgeInsets.all(
+                                                                Dimens
+                                                                    .minMarginApplication),
+                                                          child: ClipOval(
+                                                            child: SizedBox.fromSize(
+                                                              size: Size.fromRadius(38), // Image radius
+                                                              child: Image.network(
+
+                                                                ApplicationConstant.URL_CATEGORIES + response.url.toString(),
+                                                                fit: BoxFit.cover,
+                                                                  errorBuilder: (context, exception, stackTrack) => Image.asset(
+                                                                    'images/default.png',
+                                                                  )/*fit: BoxFit.cover*/
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
                                                                   Text(
                                                                     response
                                                                         .nome,
@@ -578,7 +559,7 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                                           'Inter',
                                                                       fontSize:
                                                                           Dimens
-                                                                              .textSize5,
+                                                                              .textSize4,
                                                                     ),
                                                                   ),
                                                                 ]));

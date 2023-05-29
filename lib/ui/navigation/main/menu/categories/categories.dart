@@ -96,7 +96,7 @@ class _Categories extends State<Categories> {
                                           height: 24,
                                           width: 24,
                                           errorBuilder: (context, exception, stackTrack) => Image.asset(
-                                            'images/no_picture.png',
+                                            'images/default.png',
                                             height: 24,
                                           ),
                                         ))),
