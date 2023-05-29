@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../res/dimens.dart';
+import '../../res/styles.dart';
 import 'alert_dialog_address_form.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -92,9 +93,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         onPressed: () async {
 
-          final result = await showDialog<bool>(
+          final result = await showModalBottomSheet<dynamic>(
+            isScrollControlled: true,
             context: context,
-            builder: (context) => AddressFormAlertDialog(),
+            shape: Styles().styleShapeBottomSheet,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            builder: (BuildContext context) {
+              return AddressFormAlertDialog();}
           );
           if(result == true){
             ApplicationMessages(context: context).showMessage("dasdsads");

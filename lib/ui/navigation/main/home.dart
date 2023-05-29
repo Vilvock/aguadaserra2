@@ -628,10 +628,12 @@ class _ContainerHomeState extends State<ContainerHome> {
                                               icon: Icon(Icons.shopping_cart,
                                                   color: OwnerColors.darkGrey),
                                               onPressed: () => {
-                                                showDialog(
+                                                showModalBottomSheet<dynamic>(
+                                                    isScrollControlled: true,
                                                     context: context,
-                                                    builder: (BuildContext
-                                                    context) {
+                                                    shape: Styles().styleShapeBottomSheet,
+                                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                                    builder: (BuildContext context) {
                                                       return AddItemAlertDialog(
                                                           quantityController:
                                                           quantityController,
@@ -937,10 +939,12 @@ class GridItemBuilder extends StatelessWidget {
                         icon: Icon(Icons.shopping_cart,
                             color: OwnerColors.darkGrey),
                         onPressed: () => {
-                          showDialog(
+                          showModalBottomSheet<dynamic>(
+                              isScrollControlled: true,
                               context: context,
-                              builder: (BuildContext
-                              context) {
+                              shape: Styles().styleShapeBottomSheet,
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              builder: (BuildContext context) {
                                 return AddItemAlertDialog(
                                     quantityController:
                                     quantityController,

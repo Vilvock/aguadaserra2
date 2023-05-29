@@ -22,42 +22,33 @@ class _SucessAlertDialogState extends State<SucessAlertDialog> {
   @override
   Widget build(BuildContext context) {
     return Column(
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Container(
-            child: Card(
-              color: Colors.white,
-              margin: EdgeInsets.all(Dimens.marginApplication),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(Dimens.radiusApplication),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(Dimens.paddingApplication),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Align(
-                        child: Image.asset(
-                          fit: BoxFit.fitWidth,
-                          'images/success.png',
-                          height: 100,
-                        )),
-                    SizedBox(height: Dimens.marginApplication),
-                    Text(
-                      widget.content!,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: Dimens.textSize5,
-                          fontFamily: 'Inter',
-                          color: Colors.black),
-                    ),
-                    widget.btnConfirm,
-                  ],
+          Padding(
+            padding: const EdgeInsets.all(Dimens.paddingApplication),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Align(
+                    child: Image.asset(
+                  fit: BoxFit.fitWidth,
+                  'images/success.png',
+                  height: 100,
+                )),
+                SizedBox(height: Dimens.marginApplication),
+                Text(
+                  widget.content!,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: Dimens.textSize5,
+                      fontFamily: 'Inter',
+                      color: Colors.black),
                 ),
-              ),
+                widget.btnConfirm,
+              ],
             ),
-          )
+          ),
         ]);
   }
 }

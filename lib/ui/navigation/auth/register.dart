@@ -83,8 +83,11 @@ class _RegisterState extends State<Register> {
       final response = User.fromJson(_map[0]);
 
       if (response.status == "01") {
-        showDialog(
+        showModalBottomSheet<dynamic>(
+          isScrollControlled: true,
           context: context,
+          shape: Styles().styleShapeBottomSheet,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
           builder: (BuildContext context) {
             return SucessAlertDialog(
                 content: response.msg,
@@ -333,10 +336,11 @@ class _RegisterState extends State<Register> {
                           hasPasswordCoPassword = false;
                           visibileOne = true;
                           hasMinLength = passwordController.text.length >= 8;
-                          hasUppercase = passwordController.text.contains(RegExp(r'[A-Z]'));
+                          hasUppercase = passwordController.text
+                              .contains(RegExp(r'[A-Z]'));
 
-
-                          hasPasswordCoPassword = coPasswordController.text == passwordController.text;
+                          hasPasswordCoPassword = coPasswordController.text ==
+                              passwordController.text;
 
                           if (hasMinLength && hasUppercase) {
                             visibileOne = false;
@@ -397,7 +401,9 @@ class _RegisterState extends State<Register> {
                             hasMinLength
                                 ? Icons.check_circle
                                 : Icons.check_circle,
-                            color: hasMinLength ? Colors.green : OwnerColors.lightGrey,
+                            color: hasMinLength
+                                ? Colors.green
+                                : OwnerColors.lightGrey,
                           ),
                           Text(
                             'Deve ter no mínimo 8 carácteres',
@@ -414,7 +420,9 @@ class _RegisterState extends State<Register> {
                             hasUppercase
                                 ? Icons.check_circle
                                 : Icons.check_circle,
-                            color: hasUppercase ? Colors.green : OwnerColors.lightGrey,
+                            color: hasUppercase
+                                ? Colors.green
+                                : OwnerColors.lightGrey,
                           ),
                           Text(
                             'Deve ter uma letra maiúscula',
@@ -428,7 +436,8 @@ class _RegisterState extends State<Register> {
                       onChanged: (value) {
                         setState(() {
                           visibileTwo = true;
-                          hasPasswordCoPassword = coPasswordController.text == passwordController.text;
+                          hasPasswordCoPassword = coPasswordController.text ==
+                              passwordController.text;
 
                           if (hasPasswordCoPassword) {
                             visibileTwo = false;

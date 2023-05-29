@@ -324,10 +324,12 @@ class _Favorites extends State<Favorites> {
                                                                 GestureDetector(
                                                                     onTap: () =>
                                                                     {
-                                                                      showDialog(
+                                                                      showModalBottomSheet<dynamic>(
+                                                                        isScrollControlled: true,
                                                                         context: context,
-                                                                        builder: (
-                                                                            BuildContext context) {
+                                                                        shape: Styles().styleShapeBottomSheet,
+                                                                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                                                                        builder: (BuildContext context) {
                                                                           return GenericAlertDialog(
                                                                               title: Strings
                                                                                   .attention,

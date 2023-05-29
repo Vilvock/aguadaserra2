@@ -258,8 +258,11 @@ class _UserAddresses extends State<UserAddresses> {
                                     color: Colors.black,
                                   ),
                                   onPressed: () {
-                                    showDialog(
+                                    showModalBottomSheet<dynamic>(
+                                      isScrollControlled: true,
                                       context: context,
+                                      shape: Styles().styleShapeBottomSheet,
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
                                       builder: (BuildContext context) {
                                         return GenericAlertDialog(
                                             title: Strings.attention,

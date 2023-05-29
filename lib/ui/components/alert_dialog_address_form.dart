@@ -26,8 +26,6 @@ class AddressFormAlertDialog extends StatefulWidget {
 }
 
 class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
-
-
   late Validator validator;
   final postRequest = PostRequest();
 
@@ -58,7 +56,8 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
     super.dispose();
   }
 
-  Future<void> saveAddress(String nameAddress,
+  Future<void> saveAddress(
+      String nameAddress,
       String cep,
       String state,
       String city,
@@ -93,9 +92,7 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
       final response = User.fromJson(_map[0]);
 
       if (response.status == "1") {
-
         Navigator.of(context).pop(true);
-
       } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
@@ -105,7 +102,6 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
 
   Future<void> getCepInfo(String cep) async {
     try {
-
       final json = await postRequest.getCepRequest("$cep/json/");
 
       final parsedResponse = jsonDecode(json);
@@ -115,7 +111,6 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
       final response = User.fromJson(parsedResponse);
 
       setState(() {
-
         cityController.text = response.localidade;
         stateController.text = response.uf;
         nbhController.text = response.bairro;
@@ -132,7 +127,6 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
         // "ddd": "51",
         // "siafi": "8801"
       });
-
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
     }
@@ -143,65 +137,127 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
     validator = Validator(context: context);
 
     return Column(
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Container(
-            child: Card(
-              color: Colors.white,
-              margin: EdgeInsets.all(Dimens.marginApplication),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(Dimens.radiusApplication),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(Dimens.paddingApplication),
-                child: Column(
-                  children: [
-                    Align(
-                        alignment: AlignmentDirectional.topEnd,
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.close,
-                            color: Colors.black,
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        )),
-                    Container(
-                      width: double.infinity,
-                      child: Text(
-                        "Adicione um novo endereço",
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: Dimens.textSize6,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+          Padding(
+            padding: const EdgeInsets.all(Dimens.paddingApplication),
+            child: Column(
+              children: [
+                Align(
+                    alignment: AlignmentDirectional.topEnd,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.close,
+                        color: Colors.black,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    )),
+                Container(
+                  width: double.infinity,
+                  child: Text(
+                    "Adicione um novo endereço",
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: Dimens.textSize6,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                SizedBox(height: Dimens.marginApplication),
+                Row(children: [
+                  Expanded(
+                    child: TextField(
+                      controller: nameController,
+                      decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: OwnerColors.colorPrimary, width: 1.5),
                         ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 1.0),
+                        ),
+                        hintText: 'Nome do local',
+                        hintStyle: TextStyle(color: Colors.grey),
+                        border: OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.circular(Dimens.radiusApplication),
+                          borderSide: BorderSide.none,
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                        contentPadding:
+                            EdgeInsets.all(Dimens.textFieldPaddingApplication),
+                      ),
+                      keyboardType: TextInputType.text,
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: Dimens.textSize5,
                       ),
                     ),
-                    SizedBox(height: Dimens.marginApplication),
-
+                  ),
+                ]),
+                SizedBox(height: Dimens.marginApplication),
+                Styles().div_horizontal,
+                SizedBox(height: Dimens.marginApplication),
+                TextField(
+                  onChanged: (value) {
+                    if (value.length > 8) {
+                      getCepInfo(value);
+                    }
+                  },
+                  controller: cepController,
+                  inputFormatters: [Masks().cepMask()],
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: OwnerColors.colorPrimary, width: 1.5),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                    ),
+                    hintText: 'CEP',
+                    hintStyle: TextStyle(color: Colors.grey),
+                    border: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(Dimens.radiusApplication),
+                      borderSide: BorderSide.none,
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding:
+                        EdgeInsets.all(Dimens.textFieldPaddingApplication),
+                  ),
+                  keyboardType: TextInputType.number,
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: Dimens.textSize5,
+                  ),
+                ),
+                SizedBox(height: Dimens.marginApplication),
                 Row(
                   children: [
                     Expanded(
                       child: TextField(
-                        controller: nameController,
+                        controller: cityController,
                         decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                                color: OwnerColors.colorPrimary,
-                                width: 1.5),
+                                color: OwnerColors.colorPrimary, width: 1.5),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderSide:
-                            BorderSide(color: Colors.grey, width: 1.0),
+                                BorderSide(color: Colors.grey, width: 1.0),
                           ),
-                          hintText: 'Nome do local',
+                          hintText: 'Cidade',
                           hintStyle: TextStyle(color: Colors.grey),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                Dimens.radiusApplication),
+                            borderRadius:
+                                BorderRadius.circular(Dimens.radiusApplication),
                             borderSide: BorderSide.none,
                           ),
                           filled: true,
@@ -215,281 +271,205 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                           fontSize: Dimens.textSize5,
                         ),
                       ),
-                    ),]),
-                    SizedBox(height: Dimens.marginApplication),
-                    Styles().div_horizontal,
-                    SizedBox(height: Dimens.marginApplication),
-                    TextField(
-                      onChanged: (value){
-
-                        if (value.length > 8) {
-                          getCepInfo(value);
-                        }
-                      },
-                      controller: cepController,
-                      inputFormatters: [Masks().cepMask()],
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: OwnerColors.colorPrimary, width: 1.5),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                          BorderSide(color: Colors.grey, width: 1.0),
-                        ),
-                        hintText: 'CEP',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.circular(Dimens.radiusApplication),
-                          borderSide: BorderSide.none,
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding:
-                        EdgeInsets.all(Dimens.textFieldPaddingApplication),
-                      ),
-                      keyboardType: TextInputType.number,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: Dimens.textSize5,
-                      ),
                     ),
-                    SizedBox(height: Dimens.marginApplication),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: cityController,
-                            decoration: InputDecoration(
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: OwnerColors.colorPrimary,
-                                    width: 1.5),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.grey, width: 1.0),
-                              ),
-                              hintText: 'Cidade',
-                              hintStyle: TextStyle(color: Colors.grey),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                    Dimens.radiusApplication),
-                                borderSide: BorderSide.none,
-                              ),
-                              filled: true,
-                              fillColor: Colors.white,
-                              contentPadding: EdgeInsets.all(
-                                  Dimens.textFieldPaddingApplication),
-                            ),
-                            keyboardType: TextInputType.text,
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: Dimens.textSize5,
-                            ),
+                    SizedBox(width: Dimens.marginApplication),
+                    Expanded(
+                      child: TextField(
+                        controller: stateController,
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: OwnerColors.colorPrimary, width: 1.5),
                           ),
-                        ),
-                        SizedBox(width: Dimens.marginApplication),
-                        Expanded(
-                          child: TextField(
-                            controller: stateController,
-                            decoration: InputDecoration(
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: OwnerColors.colorPrimary,
-                                    width: 1.5),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
                                 BorderSide(color: Colors.grey, width: 1.0),
-                              ),
-                              hintText: 'Estado',
-                              hintStyle: TextStyle(color: Colors.grey),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                    Dimens.radiusApplication),
-                                borderSide: BorderSide.none,
-                              ),
-                              filled: true,
-                              fillColor: Colors.white,
-                              contentPadding: EdgeInsets.all(
-                                  Dimens.textFieldPaddingApplication),
-                            ),
-                            keyboardType: TextInputType.text,
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: Dimens.textSize5,
-                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: Dimens.marginApplication),
-                    TextField(
-                      controller: nbhController,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: OwnerColors.colorPrimary, width: 1.5),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                          BorderSide(color: Colors.grey, width: 1.0),
-                        ),
-                        hintText: 'Bairro',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.circular(Dimens.radiusApplication),
-                          borderSide: BorderSide.none,
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding:
-                        EdgeInsets.all(Dimens.textFieldPaddingApplication),
-                      ),
-                      keyboardType: TextInputType.text,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: Dimens.textSize5,
-                      ),
-                    ),
-                    SizedBox(height: Dimens.marginApplication),
-                    Row(
-                      children: [
-                        Expanded(
-                            child: TextField(
-                              controller: addressController,
-                              decoration: InputDecoration(
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: OwnerColors.colorPrimary,
-                                      width: 1.5),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Colors.grey, width: 1.0),
-                                ),
-                                hintText: 'Endereço',
-                                hintStyle: TextStyle(color: Colors.grey),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      Dimens.radiusApplication),
-                                  borderSide: BorderSide.none,
-                                ),
-                                filled: true,
-                                fillColor: Colors.white,
-                                contentPadding: EdgeInsets.all(
-                                    Dimens.textFieldPaddingApplication),
-                              ),
-                              keyboardType: TextInputType.text,
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: Dimens.textSize5,
-                              ),
-                            )),
-                        SizedBox(width: Dimens.marginApplication),
-                        Expanded(
-                          child: TextField(
-                            controller: numberController,
-                            decoration: InputDecoration(
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: OwnerColors.colorPrimary,
-                                    width: 1.5),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.grey, width: 1.0),
-                              ),
-                              hintText: 'Número',
-                              hintStyle: TextStyle(color: Colors.grey),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                    Dimens.radiusApplication),
-                                borderSide: BorderSide.none,
-                              ),
-                              filled: true,
-                              fillColor: Colors.white,
-                              contentPadding: EdgeInsets.all(
-                                  Dimens.textFieldPaddingApplication),
-                            ),
-                            keyboardType: TextInputType.number,
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: Dimens.textSize5,
-                            ),
+                          hintText: 'Estado',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.circular(Dimens.radiusApplication),
+                            borderSide: BorderSide.none,
                           ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding: EdgeInsets.all(
+                              Dimens.textFieldPaddingApplication),
                         ),
-                      ],
-                    ),
-                    SizedBox(height: Dimens.marginApplication),
-                    TextField(
-                      controller: complementController,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: OwnerColors.colorPrimary, width: 1.5),
+                        keyboardType: TextInputType.text,
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: Dimens.textSize5,
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                          BorderSide(color: Colors.grey, width: 1.0),
-                        ),
-                        hintText: 'Complemento(opcional)',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.circular(Dimens.radiusApplication),
-                          borderSide: BorderSide.none,
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding:
-                        EdgeInsets.all(Dimens.textFieldPaddingApplication),
                       ),
-                      keyboardType: TextInputType.text,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: Dimens.textSize5,
-                      ),
-                    ),
-                    SizedBox(height: Dimens.marginApplication),
-                    Container(
-                      margin: EdgeInsets.only(top: Dimens.marginApplication),
-                      width: double.infinity,
-                      child: ElevatedButton(
-                          style: Styles().styleDefaultButton,
-                          onPressed: () {
-
-                            if (!validator.validateGenericTextField(nameController.text, "Nome do local")) return;
-                            if (!validator.validateCEP(cepController.text)) return;
-                            if (!validator.validateGenericTextField(cityController.text, "Cidade")) return;
-                            if (!validator.validateGenericTextField(stateController.text, "Estado")) return;
-                            if (!validator.validateGenericTextField(nbhController.text, "Bairro")) return;
-                            if (!validator.validateGenericTextField(addressController.text, "Endereço")) return;
-                            if (!validator.validateGenericTextField(numberController.text, "Número")) return;
-
-                            saveAddress(
-                                nameController.text.toString(),
-                                cepController.text.toString(),
-                                stateController.text.toString(),
-                                cityController.text.toString(),
-                                addressController.text.toString(),
-                                nbhController.text.toString(),
-                                numberController.text.toString(),
-                                complementController.text.toString());
-                          },
-                          child: Text(
-                            "Adicionar",
-                            style: Styles().styleDefaultTextButton,
-                          )),
                     ),
                   ],
                 ),
-              ),
+                SizedBox(height: Dimens.marginApplication),
+                TextField(
+                  controller: nbhController,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: OwnerColors.colorPrimary, width: 1.5),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                    ),
+                    hintText: 'Bairro',
+                    hintStyle: TextStyle(color: Colors.grey),
+                    border: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(Dimens.radiusApplication),
+                      borderSide: BorderSide.none,
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding:
+                        EdgeInsets.all(Dimens.textFieldPaddingApplication),
+                  ),
+                  keyboardType: TextInputType.text,
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: Dimens.textSize5,
+                  ),
+                ),
+                SizedBox(height: Dimens.marginApplication),
+                Row(
+                  children: [
+                    Expanded(
+                        child: TextField(
+                      controller: addressController,
+                      decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: OwnerColors.colorPrimary, width: 1.5),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 1.0),
+                        ),
+                        hintText: 'Endereço',
+                        hintStyle: TextStyle(color: Colors.grey),
+                        border: OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.circular(Dimens.radiusApplication),
+                          borderSide: BorderSide.none,
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                        contentPadding:
+                            EdgeInsets.all(Dimens.textFieldPaddingApplication),
+                      ),
+                      keyboardType: TextInputType.text,
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: Dimens.textSize5,
+                      ),
+                    )),
+                    SizedBox(width: Dimens.marginApplication),
+                    Expanded(
+                      child: TextField(
+                        controller: numberController,
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: OwnerColors.colorPrimary, width: 1.5),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 1.0),
+                          ),
+                          hintText: 'Número',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.circular(Dimens.radiusApplication),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding: EdgeInsets.all(
+                              Dimens.textFieldPaddingApplication),
+                        ),
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: Dimens.textSize5,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: Dimens.marginApplication),
+                TextField(
+                  controller: complementController,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: OwnerColors.colorPrimary, width: 1.5),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                    ),
+                    hintText: 'Complemento(opcional)',
+                    hintStyle: TextStyle(color: Colors.grey),
+                    border: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(Dimens.radiusApplication),
+                      borderSide: BorderSide.none,
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding:
+                        EdgeInsets.all(Dimens.textFieldPaddingApplication),
+                  ),
+                  keyboardType: TextInputType.text,
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: Dimens.textSize5,
+                  ),
+                ),
+                SizedBox(height: Dimens.marginApplication),
+                Container(
+                  margin: EdgeInsets.only(top: Dimens.marginApplication),
+                  width: double.infinity,
+                  child: ElevatedButton(
+                      style: Styles().styleDefaultButton,
+                      onPressed: () {
+                        if (!validator.validateGenericTextField(
+                            nameController.text, "Nome do local")) return;
+                        if (!validator.validateCEP(cepController.text)) return;
+                        if (!validator.validateGenericTextField(
+                            cityController.text, "Cidade")) return;
+                        if (!validator.validateGenericTextField(
+                            stateController.text, "Estado")) return;
+                        if (!validator.validateGenericTextField(
+                            nbhController.text, "Bairro")) return;
+                        if (!validator.validateGenericTextField(
+                            addressController.text, "Endereço")) return;
+                        if (!validator.validateGenericTextField(
+                            numberController.text, "Número")) return;
+
+                        saveAddress(
+                            nameController.text.toString(),
+                            cepController.text.toString(),
+                            stateController.text.toString(),
+                            cityController.text.toString(),
+                            addressController.text.toString(),
+                            nbhController.text.toString(),
+                            numberController.text.toString(),
+                            complementController.text.toString());
+                      },
+                      child: Text(
+                        "Adicionar",
+                        style: Styles().styleDefaultTextButton,
+                      )),
+                ),
+              ],
             ),
-          )
+          ),
         ]);
   }
 }

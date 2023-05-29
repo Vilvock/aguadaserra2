@@ -448,8 +448,11 @@ class _CartShopping extends State<CartShopping> {
                                                                     GestureDetector(
                                                                         onTap: () =>
                                                                             {
-                                                                              showDialog(
+                                                                              showModalBottomSheet<dynamic>(
+                                                                                isScrollControlled: true,
                                                                                 context: context,
+                                                                                shape: Styles().styleShapeBottomSheet,
+                                                                                clipBehavior: Clip.antiAliasWithSaveLayer,
                                                                                 builder: (BuildContext context) {
                                                                                   return GenericAlertDialog(
                                                                                       title: Strings.attention,
