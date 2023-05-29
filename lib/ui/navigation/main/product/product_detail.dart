@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:app/config/useful.dart';
 import 'package:app/model/cart.dart';
 import 'package:app/model/favorite.dart';
+import 'package:app/model/subcategory.dart';
 import 'package:app/res/styles.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -68,9 +69,7 @@ class _ProductDetail extends State<ProductDetail> {
 
       final response = Cart.fromJson(_map[0]);
 
-      if (response.carrinho_aberto
-          .toString()
-          .isNotEmpty) {
+      if (response.carrinho_aberto.toString().isNotEmpty) {
         setState(() {
           addItemToCart(_id.toString(), unityItemValue, quantity,
               response.carrinho_aberto.toString());
@@ -174,10 +173,7 @@ class _ProductDetail extends State<ProductDetail> {
   @override
   Widget build(BuildContext context) {
     Map data = {};
-    data = ModalRoute
-        .of(context)!
-        .settings
-        .arguments as Map;
+    data = ModalRoute.of(context)!.settings.arguments as Map;
 
     _id = data['id_product'];
 
@@ -185,8 +181,8 @@ class _ProductDetail extends State<ProductDetail> {
         resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(
           title: "Detalhes da oferta",
-          isVisibleBackButton: true,
-          /*isVisibleFavoriteButton: true*/),
+          isVisibleBackButton: true, /*isVisibleFavoriteButton: true*/
+        ),
         body: RefreshIndicator(
             onRefresh: _pullRefresh,
             child: FutureBuilder<List<Map<String, dynamic>>>(
@@ -202,197 +198,209 @@ class _ProductDetail extends State<ProductDetail> {
                     items.add(CarouselItemBuilder(image: photo.url));
                   }
 
+                  var buffer = new StringBuffer();
+
+                  for (var i = 0; i < snapshot.data!.length; i++) {
+                    final item =
+                        SubCategory.fromJson(response.sub_categorias[i]);
+                    if (i + 1 == snapshot.data!.length) {
+                      buffer.write(item.nome_sub);
+                    } else {
+                      buffer.write(item.nome_sub + ", ");
+                    }
+                  }
+
                   return Stack(children: [
                     SingleChildScrollView(
                         child: Container(
-                          padding: EdgeInsets.only(bottom: 100),
-                          child: Column(
+                      padding: EdgeInsets.only(bottom: 100),
+                      child: Column(
+                        children: [
+                          Stack(
+                            alignment: Alignment.center,
                             children: [
-                              Stack(
-                                alignment: Alignment.center,
+                              CarouselSlider(
+                                items: items,
+                                options: CarouselOptions(
+                                  height: 220,
+                                  autoPlay: true,
+                                  onPageChanged: (index, reason) {
+                                    setState(() {
+                                      _pageIndex = index;
+                                    });
+                                  },
+                                ),
+                              ),
+                              Positioned(
+                                  bottom: 0,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      ...List.generate(
+                                          items.length,
+                                          (index) => Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 4),
+                                                child: DotIndicator(
+                                                    isActive:
+                                                        index == _pageIndex,
+                                                    color: OwnerColors
+                                                        .colorPrimary),
+                                              )),
+                                    ],
+                                  )),
+                            ],
+                          ),
+                          // SizedBox(height: Dimens.minMarginApplication),
+                          Container(
+                              margin: EdgeInsets.all(Dimens.marginApplication),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  CarouselSlider(
-                                    items: items,
-                                    options: CarouselOptions(
-                                      height: 220,
-                                      autoPlay: true,
-                                      onPageChanged: (index, reason) {
-                                        setState(() {
-                                          _pageIndex = index;
-                                        });
-                                      },
+                                  // SmoothStarRating(
+                                  //     allowHalfRating: true,
+                                  //     onRated: (v) {},
+                                  //     starCount: 5,
+                                  //     rating: 2,
+                                  //     size: 24.0,
+                                  //     isReadOnly: true,
+                                  //     color: Colors.amber,
+                                  //     borderColor: Colors.amber,
+                                  //     spacing: 0.0),
+                                  // SizedBox(height: Dimens.minMarginApplication),
+                                  Text(
+                                    response.nome + " (Código: " + response.id.toString() + ")",
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: Dimens.textSize7,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
                                     ),
                                   ),
-                                  Positioned(
-                                      bottom: 0,
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          ...List.generate(
-                                              items.length,
-                                                  (index) => Padding(
-                                                padding:
-                                                const EdgeInsets.only(right: 4),
-                                                child: DotIndicator(
-                                                    isActive: index == _pageIndex,
-                                                    color:
-                                                    OwnerColors.colorPrimary),
-                                              )),
-                                        ],
-                                      )),
-                                ],
-                              ),
-                              // SizedBox(height: Dimens.minMarginApplication),
-                              Container(
-                                  margin: EdgeInsets.all(
-                                      Dimens.marginApplication),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start,
+                                  SizedBox(height: Dimens.minMarginApplication),
+                                  Text(
+                                    response.nome_categoria +
+                                        "(" +
+                                        buffer.toString() +
+                                        ")" +
+                                        "\n",
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: Dimens.textSize5,
+                                      color: OwnerColors.colorPrimary,
+                                    ),
+                                  ),
+                                  Text(
+                                    Useful()
+                                        .removeAllHtmlTags(response.descricao),
+                                    /*maxLines: 2,*/
+                                    // overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: Dimens.textSize5,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  SizedBox(height: Dimens.minMarginApplication),
+                                  Row(
                                     children: [
-                                      // SmoothStarRating(
-                                      //     allowHalfRating: true,
-                                      //     onRated: (v) {},
-                                      //     starCount: 5,
-                                      //     rating: 2,
-                                      //     size: 24.0,
-                                      //     isReadOnly: true,
-                                      //     color: Colors.amber,
-                                      //     borderColor: Colors.amber,
-                                      //     spacing: 0.0),
-                                      // SizedBox(height: Dimens.minMarginApplication),
-                                      Text(
-                                        response.nome,
-                                        style: TextStyle(
-                                          fontFamily: 'Inter',
-                                          fontSize: Dimens.textSize6,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
-                                      ),
                                       SizedBox(
-                                          height: Dimens.minMarginApplication),
-                                      Text(
-                                        Useful()
-                                            .removeAllHtmlTags(
-                                            response.descricao),
-                                        /*maxLines: 2,*/
-                                        // overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontFamily: 'Inter',
-                                          fontSize: Dimens.textSize5,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                          height: Dimens.minMarginApplication),
-                                      Row(
-                                        children: [
-                                          SizedBox(
-                                              width: Dimens
-                                                  .minMarginApplication),
-                                          // Text(
-                                          //   "Avaliações (xx)",
-                                          //   /*maxLines: 2,*/
-                                          //   // overflow: TextOverflow.ellipsis,
-                                          //   style: TextStyle(
-                                          //     fontFamily: 'Inter',
-                                          //     fontSize: Dimens.textSize4,
-                                          //     color: Colors.black45,
-                                          //   ),
-                                          // ),
-                                        ],
-                                      ),
-                                      // SizedBox(height: Dimens.marginApplication),
-                                      Text(
-                                        response.valor,
-                                        style: TextStyle(
-                                            fontFamily: 'Inter',
-                                            fontSize: Dimens.textSize7,
-                                            color: OwnerColors.darkGreen,
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                          width: Dimens.minMarginApplication),
                                       // Text(
-                                      //   "(50% desconto)",
+                                      //   "Avaliações (xx)",
+                                      //   /*maxLines: 2,*/
+                                      //   // overflow: TextOverflow.ellipsis,
                                       //   style: TextStyle(
                                       //     fontFamily: 'Inter',
                                       //     fontSize: Dimens.textSize4,
-                                      //     color: OwnerColors.colorPrimaryDark,
+                                      //     color: Colors.black45,
                                       //   ),
                                       // ),
-                                      SizedBox(
-                                          height: Dimens.marginApplication),
-                                      Text(
-                                        "Quantidade:",
-                                        style: TextStyle(
-                                          fontFamily: 'Inter',
-                                          fontSize: Dimens.textSize5,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Card(
-                                              elevation: 0,
-                                              color: OwnerColors
-                                                  .categoryLightGrey,
-                                              margin: EdgeInsets.only(
-                                                  top: Dimens
-                                                      .minMarginApplication),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius
-                                                    .circular(
-                                                    Dimens
-                                                        .minRadiusApplication),
-                                              ),
-                                              child: Container(
-                                                  child: Row(children: [
-                                                    IconButton(
-                                                      icon: Icon(Icons.remove,
-                                                          color: Colors.black),
-                                                      onPressed: () {
-                                                        if (_quantity == 1)
-                                                          return;
-
-                                                        setState(() {
-                                                          _quantity--;
-                                                        });
-                                                      },
-                                                    ),
-                                                    SizedBox(
-                                                        width: Dimens
-                                                            .minMarginApplication),
-                                                    Text(
-                                                      _quantity.toString(),
-                                                      style: TextStyle(
-                                                        fontFamily: 'Inter',
-                                                        fontSize: Dimens
-                                                            .textSize5,
-                                                        color: Colors.black,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                        width: Dimens
-                                                            .minMarginApplication),
-                                                    IconButton(
-                                                      icon: Icon(Icons.add,
-                                                          color: Colors.black),
-                                                      onPressed: () {
-                                                        setState(() {
-                                                          _quantity++;
-                                                        });
-                                                      },
-                                                    ),
-                                                  ])))
-                                        ],
-                                      )
                                     ],
-                                  ))
-                            ],
-                          ),
-                        )),
+                                  ),
+                                  // SizedBox(height: Dimens.marginApplication),
+                                  Text(
+                                    response.valor,
+                                    style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        fontSize: Dimens.textSize7,
+                                        color: OwnerColors.darkGreen,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  // Text(
+                                  //   "(50% desconto)",
+                                  //   style: TextStyle(
+                                  //     fontFamily: 'Inter',
+                                  //     fontSize: Dimens.textSize4,
+                                  //     color: OwnerColors.colorPrimaryDark,
+                                  //   ),
+                                  // ),
+                                  SizedBox(height: Dimens.marginApplication),
+                                  Text(
+                                    "Quantidade:",
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: Dimens.textSize5,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Card(
+                                          elevation: 0,
+                                          color: OwnerColors.categoryLightGrey,
+                                          margin: EdgeInsets.only(
+                                              top: Dimens.minMarginApplication),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                Dimens.minRadiusApplication),
+                                          ),
+                                          child: Container(
+                                              child: Row(children: [
+                                            IconButton(
+                                              icon: Icon(Icons.remove,
+                                                  color: Colors.black),
+                                              onPressed: () {
+                                                if (_quantity == 1) return;
+
+                                                setState(() {
+                                                  _quantity--;
+                                                });
+                                              },
+                                            ),
+                                            SizedBox(
+                                                width: Dimens
+                                                    .minMarginApplication),
+                                            Text(
+                                              _quantity.toString(),
+                                              style: TextStyle(
+                                                fontFamily: 'Inter',
+                                                fontSize: Dimens.textSize5,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                                width: Dimens
+                                                    .minMarginApplication),
+                                            IconButton(
+                                              icon: Icon(Icons.add,
+                                                  color: Colors.black),
+                                              onPressed: () {
+                                                setState(() {
+                                                  _quantity++;
+                                                });
+                                              },
+                                            ),
+                                          ])))
+                                    ],
+                                  )
+                                ],
+                              ))
+                        ],
+                      ),
+                    )),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
@@ -408,74 +416,70 @@ class _ProductDetail extends State<ProductDetail> {
                             color: OwnerColors.colorPrimaryDark,
                             child: IntrinsicHeight(
                                 child: Row(
-                                  children: [
-                                    Container(
-                                      padding:
+                              children: [
+                                Container(
+                                  padding:
                                       EdgeInsets.all(Dimens.paddingApplication),
-                                      child: Icon(size: 24,
-                                        Icons.favorite_border,
-                                        color: Colors.white,),
-                                    ),
-                                    Expanded(
-                                        child: Container(
-                                          child: Wrap(
-                                            children: [
-                                              GestureDetector(
-                                                  onTap: () =>
-                                                  {
-                                                    addFavorite()
-                                                  },
-                                                  child: Text(
-                                                    "Favoritar",
-                                                    style: TextStyle(
-                                                      fontFamily: 'Inter',
-                                                      fontSize: Dimens
-                                                          .textSize6,
-                                                      color: Colors.white,
-                                                    ),
-                                                  )),
-                                            ],
-                                          ),
+                                  child: Icon(
+                                    size: 24,
+                                    Icons.favorite_border,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Expanded(
+                                    child: Container(
+                                  child: Wrap(
+                                    children: [
+                                      GestureDetector(
+                                          onTap: () => {addFavorite()},
+                                          child: Text(
+                                            "Favoritar",
+                                            style: TextStyle(
+                                              fontFamily: 'Inter',
+                                              fontSize: Dimens.textSize6,
+                                              color: Colors.white,
+                                            ),
+                                          )),
+                                    ],
+                                  ),
+                                )),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      top: Dimens.marginApplication,
+                                      bottom: Dimens.marginApplication),
+                                  child: VerticalDivider(
+                                    color: Colors.white,
+                                    width: 2,
+                                    thickness: 1.5,
+                                  ),
+                                ),
+                                Container(
+                                  padding:
+                                      EdgeInsets.all(Dimens.paddingApplication),
+                                  child: Icon(
+                                    color: Colors.white,
+                                    size: 24,
+                                    Icons.shopping_cart_outlined,
+                                  ),
+                                ),
+                                Expanded(
+                                    child: Container(
+                                        child: Wrap(children: [
+                                  GestureDetector(
+                                    onTap: () => {
+                                      openCart(
+                                          response.valor, _quantity.toString())
+                                    },
+                                    child: Text("Adicionar",
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontSize: Dimens.textSize6,
+                                          color: Colors.white,
                                         )),
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                          top: Dimens.marginApplication,
-                                          bottom: Dimens.marginApplication),
-                                      child: VerticalDivider(
-                                        color: Colors.white,
-                                        width: 2,
-                                        thickness: 1.5,
-                                      ),
-                                    ),
-                                    Container(
-                                      padding:
-                                      EdgeInsets.all(Dimens.paddingApplication),
-                                      child: Icon(
-                                        color: Colors.white,
-                                        size: 24,
-                                        Icons.shopping_cart_outlined,),
-                                    ),
-                                    Expanded(
-                                        child: Container(
-                                            child: Wrap(children: [
-                                              GestureDetector(
-                                                onTap: () =>
-                                                {
-                                                  openCart(
-                                                      response.valor,
-                                                      _quantity.toString())
-                                                },
-                                                child: Text("Adicionar",
-                                                    style: TextStyle(
-                                                      fontFamily: 'Inter',
-                                                      fontSize: Dimens
-                                                          .textSize6,
-                                                      color: Colors.white,
-                                                    )),
-                                              ),
-                                            ])))
-                                  ],
-                                )))
+                                  ),
+                                ])))
+                              ],
+                            )))
 
                         // Container(
                         //     margin: EdgeInsets.all(Dimens.minMarginApplication),
@@ -532,10 +536,7 @@ class CarouselItemBuilder extends StatelessWidget {
         ),
         margin: EdgeInsets.all(Dimens.minMarginApplication),
         child: Container(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width * 0.90,
+          width: MediaQuery.of(context).size.width * 0.90,
           child: Image.network(
             ApplicationConstant.URL_PRODUCT_PHOTO + image.toString(),
             // fit: BoxFit.fitWidth,

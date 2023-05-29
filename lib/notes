@@ -7,11 +7,11 @@ pick lat long
 ///////////////
 
 
-- produto detalhe (codigo produto é o id?, sub categoria e categoria)
+- produto detalhe (codigo produto é o id?, sub categoria e categoria) xv
 - alinhar item carrinho(add campo text categoria (pedir pra colcoar na request) e valor em verde ok) xv
 - list pedidos com dados dinamicos
 - mudar cor botao favorito e carrinho (HOME)
-- validacao sem item carrinho(tirar fora view avancar ok ), validacao quantidade minima e valor minimo antes de avancar
+- validacao sem item carrinho(tirar fora view avancar ok ), validacao quantidade minima e valor minimo antes de avancar xv
 
 - colocar valor do frete(no method payment ao trocar endereço, colocar click " alterar endereco")
 

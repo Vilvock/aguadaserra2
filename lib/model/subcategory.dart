@@ -1,22 +1,10 @@
 import 'global_ws_model.dart';
 
 class SubCategory extends GlobalWSModel {
-  final int qtd;
-  final String valor_uni;
-  final String valor;
-  final String nome_produto;
-  final String url_foto;
-  final int id_produto;
-  final int id_item;
+  final String nome_sub;
 
   SubCategory({
-    required this.qtd,
-    required this.valor_uni,
-    required this.valor,
-    required this.nome_produto,
-    required this.url_foto,
-    required this.id_produto,
-    required this.id_item,
+    required this.nome_sub,
     required super.status,
     required super.msg,
     required super.id,
@@ -25,13 +13,7 @@ class SubCategory extends GlobalWSModel {
 
   factory SubCategory.fromJson(Map<String, dynamic> json) {
     return SubCategory(
-      qtd: json['qtd'],
-      valor_uni: json['valor_uni'],
-      valor: json['valor'],
-      nome_produto: json['nome_produto'],
-      url_foto: json['url_foto'],
-      id_produto: json['id_produto'],
-      id_item: json['id_item'],
+      nome_sub: json['nome_sub'],
       status: json['status'],
       msg: json['msg'],
       id: json['id'],

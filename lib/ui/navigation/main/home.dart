@@ -567,7 +567,7 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                           exception,
                                                           stackTrack) =>
                                                       Image.asset(
-                                                    'images/no_picture.png',
+                                                    'images/default.png',
                                                     height: 90,
                                                     width: 90,
                                                   ),
