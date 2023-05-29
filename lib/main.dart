@@ -19,6 +19,7 @@ import 'package:app/ui/navigation/main/menu/categories/subcategories.dart';
 import 'package:app/ui/navigation/main/menu/payments/payments.dart';
 import 'package:app/ui/navigation/main/menu/user/profile.dart';
 import 'package:app/ui/navigation/main/notifications.dart';
+import 'package:app/ui/navigation/main/order/order_detail.dart';
 import 'package:app/ui/navigation/main/product/product_detail.dart';
 import 'package:app/ui/navigation/utilities/pdf_viewer.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -99,6 +100,7 @@ void main() async {
       '/ui/success': (context) => Success(),
       '/ui/notifications': (context) => Notifications(),
       '/ui/filter_products': (context) => FilterProducts(),
+      '/ui/order_detail': (context) => OrderDetail(),
 
       //lista horizontal
       // Container(

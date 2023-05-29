@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:app/config/application_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../../global/application_constant.dart';
 import '../../../../model/cart.dart';
@@ -86,12 +87,10 @@ class _Success extends State<Success> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Align(
-                    child: Image.asset(
-                  fit: BoxFit.fitWidth,
-                  'images/success.png',
-                  height: 120,
-                )),
+                Center(
+                    child: Lottie.network(
+                        height: 140,
+                        'https://assets1.lottiefiles.com/packages/lf20_o3kwwgtn.json')),
                 SizedBox(height: Dimens.marginApplication),
                 Text(
                   "Detalhes do pedido #0000000",

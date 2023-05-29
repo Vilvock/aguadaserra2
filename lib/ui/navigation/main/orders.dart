@@ -79,7 +79,16 @@ class _Orders extends State<Orders> {
 
                         final response = Order.fromJson(snapshot.data![index]);
 
-                        return Card(
+                        return InkWell(
+                            onTap: () => {
+                              Navigator.pushNamed(context,
+                                  "/ui/order_detail",
+                                  arguments: {
+                                    "id":
+                                    response.id,
+                                  })
+                        },
+                        child: Card(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 Dimens.minRadiusApplication),
@@ -159,7 +168,7 @@ class _Orders extends State<Orders> {
                               ],
                             ),
                           ),
-                        );
+                        ));
                       },
                     );
                   } else {
