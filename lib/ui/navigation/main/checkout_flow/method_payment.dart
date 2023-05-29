@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:app/model/freight.dart';
+import 'package:app/model/order.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../config/application_messages.dart';
@@ -49,6 +50,70 @@ class _MethodPayment extends State<MethodPayment>
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  Future<void> findWithdrawalTime(String withdrawal, String date) async {
+    try {
+      final body = {
+        "id_retirada": withdrawal,
+        "data": date,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.FIND_WITHDRAWAL_TIME, body);
+      final parsedResponse = jsonDecode(json);
+
+      print('HTTP_RESPONSE: $parsedResponse');
+
+      final response = Order.fromJson(parsedResponse);
+
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
+  Future<void> findWithdrawal(String idAddress) async {
+    try {
+      final body = {
+        "id_endereco": idAddress,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.FIND_WITHDRAWAL, body);
+      final parsedResponse = jsonDecode(json);
+
+      print('HTTP_RESPONSE: $parsedResponse');
+
+      final response = Order.fromJson(parsedResponse);
+
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
+  Future<void> findOrder() async {
+    try {
+      final body = {
+        "id": 16,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.FIND_ORDER, body);
+      final parsedResponse = jsonDecode(json);
+
+      print('HTTP_RESPONSE: $parsedResponse');
+
+      final response = Order.fromJson(parsedResponse);
+
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
   }
 
   Future<void> addOrder(
@@ -349,6 +414,42 @@ class _MethodPayment extends State<MethodPayment>
               )
             ]),
           ),
+
+                  Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            Dimens.minRadiusApplication),
+                      ),
+                      margin: EdgeInsets.all(
+                          Dimens.minMarginApplication),
+                      child: Container(
+                        padding: EdgeInsets.all(
+                            Dimens.paddingApplication),
+                        child: Column(children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "Valor do frete",
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: Dimens.textSize6,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                "",
+                                style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontSize: Dimens.textSize6,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ]),
+                      )),
           SizedBox(height: Dimens.minMarginApplication),
           Styles().div_horizontal,
           SizedBox(height: Dimens.minMarginApplication),

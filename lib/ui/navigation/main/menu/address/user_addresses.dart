@@ -13,6 +13,7 @@ import '../../../../../res/strings.dart';
 import '../../../../../res/styles.dart';
 import '../../../../../web_service/links.dart';
 import '../../../../../web_service/service_response.dart';
+import '../../../../components/alert_dialog_address_form.dart';
 import '../../../../components/alert_dialog_generic.dart';
 import '../../../../components/custom_app_bar.dart';
 import '../../../../components/progress_hud.dart';
@@ -213,7 +214,9 @@ class _UserAddresses extends State<UserAddresses> {
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
                     final response = User.fromJson(snapshot.data![index]);
-                    return Card(
+                    return InkWell(onTap: () {
+                      AddressFormAlertDialog();
+                    }, child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius:
                             BorderRadius.circular(Dimens.minRadiusApplication),
@@ -292,7 +295,7 @@ class _UserAddresses extends State<UserAddresses> {
                           ],
                         ),
                       ),
-                    );
+                    ));
                   },
                 );
               }  else {

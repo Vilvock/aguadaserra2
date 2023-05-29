@@ -6,19 +6,26 @@ pick lat long
 
 ///////////////
 
-- alinhar item carrinho(add campo text categoria (pedir pra colcoar na request) e valor em verde ok)
+
 - produto detalhe (codigo produto é o id?, sub categoria e categoria)
-- colocar valor do frete(no method payment ao trocar endereço, colocar click " alterar endereco")
-- validacao sem item carrinho(tirar fora view avancar ok ), validacao quantidade minima e valor minimo antes de avancar
-
-- terminar compra/checkout/visualizacao de itens e sucesso com todos dados dinamicos (list retirada e horarios)
-- mudar cor botao favorito e carrinho (HOME)
-- fazer troca de enderecos dinamica no pagamento
-
-- PDF https://aguadaserra.com/termos_agua.pdf
-- trocar alguns icones para finos
-- colocar pra refresh dps q add endereco
+- alinhar item carrinho(add campo text categoria (pedir pra colcoar na request) e valor em verde ok) xv
 - list pedidos com dados dinamicos
+- pix image 64
+- mudar cor botao favorito e carrinho (HOME)
+- validacao sem item carrinho(tirar fora view avancar ok ), validacao quantidade minima e valor minimo antes de avancar
+- colocar valor do frete(no method payment ao trocar endereço, colocar click " alterar endereco")
+
+- fazer troca de enderecos dinamica no pagamento
+- terminar compra/checkout/visualizacao de itens e sucesso com todos dados dinamicos (list retirada e horarios)
+
+- update address
+- update avatar
+- PDF https://aguadaserra.com/termos_agua.pdf
+- colocar pra refresh dps q add endereco
+
+
+
+- trocar alguns icones para finos
 - add metodo de pagamento boleto
 
 
