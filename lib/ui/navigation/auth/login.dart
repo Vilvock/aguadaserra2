@@ -227,17 +227,13 @@ class _LoginState extends State<Login> {
                         child: ElevatedButton(
                           style: Styles().styleDefaultButton,
                           onPressed: () async {
+
+                            if (!validator
+                                .validateEmail(emailController.text)) return;
+
                             setState(() {
                               _isLoading = true;
                             });
-                            if (!validator
-                                .validateEmail(emailController.text)) {
-                              setState(() {
-                                _isLoading = false;
-                              });
-                              return;
-                            }
-
                             // if (!validator.validatePassword(passwordController.text)) return;
                             await Preferences.init();
                             await loginRequest(

@@ -37,6 +37,7 @@ class _RegisterState extends State<Register> {
   bool visibileOne = false;
   bool visibileTwo = false;
 
+  late bool _isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -530,38 +531,55 @@ class _RegisterState extends State<Register> {
                       margin: EdgeInsets.only(top: Dimens.marginApplication),
                       width: double.infinity,
                       child: ElevatedButton(
-                          style: Styles().styleDefaultButton,
-                          onPressed: () {
-                            if (!validator.validateGenericTextField(
-                                socialReasonController.text, "Razão social"))
-                              return;
-                            if (!validator.validateGenericTextField(
-                                fantasyNameController.text, "Nome fantasia"))
-                              return;
-                            if (!validator.validateCNPJ(cnpjController.text))
-                              return;
-                            if (!validator.validateCellphone(
-                                cellphoneController.text)) return;
-                            if (!validator.validateEmail(emailController.text))
-                              return;
-                            if (!validator.validatePassword(
-                                passwordController.text)) return;
-                            if (!validator.validateCoPassword(
-                                passwordController.text,
-                                coPasswordController.text)) return;
+                        style: Styles().styleDefaultButton,
+                        onPressed: () async {
+                          if (!validator.validateGenericTextField(
+                              socialReasonController.text, "Razão social"))
+                            return;
+                          if (!validator.validateGenericTextField(
+                              fantasyNameController.text, "Nome fantasia"))
+                            return;
+                          if (!validator.validateCNPJ(cnpjController.text))
+                            return;
+                          if (!validator.validateCellphone(
+                              cellphoneController.text)) return;
+                          if (!validator.validateEmail(emailController.text))
+                            return;
+                          if (!validator.validatePassword(
+                              passwordController.text)) return;
+                          if (!validator.validateCoPassword(
+                              passwordController.text,
+                              coPasswordController.text)) return;
 
-                            registerRequest(
-                                emailController.text,
-                                passwordController.text,
-                                fantasyNameController.text,
-                                socialReasonController.text,
-                                cnpjController.text,
-                                cellphoneController.text,
-                                "432432432",
-                                "432423423");
-                          },
-                          child: Text("Criar conta",
-                              style: Styles().styleDefaultTextButton)),
+                          setState(() {
+                            _isLoading = true;
+                          });
+
+                          await registerRequest(
+                              emailController.text,
+                              passwordController.text,
+                              fantasyNameController.text,
+                              socialReasonController.text,
+                              cnpjController.text,
+                              cellphoneController.text,
+                              "432432432",
+                              "432423423");
+
+                          setState(() {
+                            _isLoading = false;
+                          });
+                        },
+                        child: (_isLoading)
+                            ? const SizedBox(
+                            width: Dimens.buttonIndicatorWidth,
+                            height: Dimens.buttonIndicatorHeight,
+                            child: CircularProgressIndicator(
+                              color: OwnerColors.colorAccent,
+                              strokeWidth: Dimens.buttonIndicatorStrokes,
+                            ))
+                            : Text("Criar conta",
+                            style: Styles().styleDefaultTextButton),
+                      ),
                     ),
                     SizedBox(height: Dimens.marginApplication),
                     GestureDetector(

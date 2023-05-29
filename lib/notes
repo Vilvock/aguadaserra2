@@ -20,15 +20,15 @@ falta 9 requests
 
 ///////////////
 
-- padronizacao (validacoes campo em branco , preencha campo senha)
 - colocar pra refresh dps q add endereco
-- alinhar item carrinho(add categoria (pedir pra colcoar na request) e valor em verde ok)
+- alinhar item carrinho(add campo text categoria (pedir pra colcoar na request) e valor em verde ok)
 - validacao sem item carrinho(tirar fora view avancar ok ), validacao quantidade minima e valor minimo antes de avancar
 - colocar valor do frete(no method payment ao trocar endereço, colocar click " alterar endereco")
 - favoritos (mesmo tratamento que produto na home)
 - produto detalhe (codigo produto é o id?, sub categoria e categoria)
 
 
+- padronizacao (validacoes campo em branco , preencha campo senha) OK
 - tudo quer for excluir sempre colocar msg de confirmacao OK
 - barra produto detail (fundo verde, text branco e trocar texto para caber em uma linha favoritar, adicionar) OK
 - icones header(cor mais clara) OK
