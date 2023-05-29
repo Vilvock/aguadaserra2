@@ -9,10 +9,14 @@ import 'package:smooth_star_rating/smooth_star_rating.dart';
 import '../../../../config/application_messages.dart';
 import '../../../../config/preferences.dart';
 import '../../../../global/application_constant.dart';
+import '../../../../model/cart.dart';
+import '../../../../model/item.dart';
+import '../../../../model/order.dart';
 import '../../../../model/product.dart';
 import '../../../../res/dimens.dart';
 import '../../../../res/owner_colors.dart';
 import '../../../../res/strings.dart';
+import '../../../../res/styles.dart';
 import '../../../../web_service/links.dart';
 import '../../../../web_service/service_response.dart';
 import '../../../components/custom_app_bar.dart';
@@ -29,12 +33,34 @@ class OrderDetail extends StatefulWidget {
 
 class _OrderDetail extends State<OrderDetail> {
   bool _isLoading = false;
-  int _pageIndex = 0;
 
   late int _id;
 
+  late String _base64;
+  late String _qrCodeClipboard;
   final postRequest = PostRequest();
-  late Product _product;
+
+
+  Future<void> findOrder() async {
+    try {
+      final body = {
+        "id": 16,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.FIND_ORDER, body);
+      final parsedResponse = jsonDecode(json);
+
+      print('HTTP_RESPONSE: $parsedResponse');
+
+      final response = Order.fromJson(parsedResponse);
+
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
 
   @override
   void initState() {
@@ -46,276 +72,231 @@ class _OrderDetail extends State<OrderDetail> {
     super.dispose();
   }
 
-  Future<void> addFavorite() async {
-    try {
-      final body = {
-        "id_user": await Preferences.getUserData()!.id,
-        "id_produto": "15",
-        "token": ApplicationConstant.TOKEN
-      };
-
-      print('HTTP_BODY: $body');
-
-      final json = await postRequest.sendPostRequest(Links.ADD_FAVORITE, body);
-
-      List<Map<String, dynamic>> _map = [];
-      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
-
-      print('HTTP_RESPONSE: $_map');
-
-      final response = Favorite.fromJson(_map[0]);
-
-      if (response.status == "01") {
-        setState(() {
-
-        });
-
-      } else {}
-      ApplicationMessages(context: context).showMessage(response.msg);
-    } catch (e) {
-      throw Exception('HTTP_ERROR: $e');
-    }
-  }
-
-  Future<void> loadProduct() async {
-    try {
-      final body = {
-        "id_user": await Preferences.getUserData()!.id,
-        "id": _id,
-        "token": ApplicationConstant.TOKEN,
-      };
-
-      print('HTTP_BODY: $body');
-
-      final json = await postRequest.sendPostRequest(Links.LOAD_PRODUCT, body);
-
-      List<Map<String, dynamic>> _map = [];
-      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
-
-      print('HTTP_RESPONSE: $_map');
-
-      final response = Product.fromJson(_map[0]);
-
-      if (response.status == "01") {
-        setState(() {
-          _product = response;
-        });
-      } else {}
-    } catch (e) {
-      throw Exception('HTTP_ERROR: $e');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     Map data = {};
     data = ModalRoute.of(context)!.settings.arguments as Map;
 
-    _id = data['id_product'];
+    _base64 = data['base64'];
+    _qrCodeClipboard = data['qrCodeClipboard'];
 
-    loadProduct();
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(
-            title: "Detalhes da oferta",
-            isVisibleBackButton: true,
-            isVisibleFavoriteButton: true),
-        body: ProgressHUD(
-            inAsyncCall: _isLoading,
-            valueColor: AlwaysStoppedAnimation<Color>(OwnerColors.colorPrimary),
-            child: RefreshIndicator(
-              onRefresh: _pullRefresh,
-              child: Stack(children: [
-                SingleChildScrollView(
-                    child: Container(
-                  padding: EdgeInsets.only(bottom: 100),
-                  child: Column(
-                    children: [
-                      CarouselSlider(
-                        items: carouselItems,
-                        options: CarouselOptions(
-                          height: 160,
-                          autoPlay: false,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _pageIndex = index;
-                            });
-                          },
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ...List.generate(
-                              carouselItems.length,
-                              (index) => Padding(
-                                    padding: const EdgeInsets.only(right: 4),
-                                    child: DotIndicator(
-                                        isActive: index == _pageIndex,
-                                        color: OwnerColors.colorPrimaryDark),
-                                  )),
-                        ],
-                      ),
-                      SizedBox(height: Dimens.minMarginApplication),
-                      Container(
-                          margin: EdgeInsets.all(Dimens.marginApplication),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SmoothStarRating(
-                                  allowHalfRating: true,
-                                  onRated: (v) {},
-                                  starCount: 5,
-                                  rating: 2,
-                                  size: 24.0,
-                                  isReadOnly: true,
-                                  color: Colors.amber,
-                                  borderColor: Colors.amber,
-                                  spacing: 0.0),
-                              SizedBox(height: Dimens.minMarginApplication),
-                              Text(
-                                _product.nome,
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontSize: Dimens.textSize6,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              SizedBox(height: Dimens.marginApplication),
-                              Text(
-                                Strings.longLoremIpsum,
-                                /*maxLines: 2,*/
-                                // overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontSize: Dimens.textSize5,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              SizedBox(height: Dimens.minMarginApplication),
-                              Row(
-                                children: [
-                                  SizedBox(width: Dimens.minMarginApplication),
-                                  Text(
-                                    "Avaliações (xx)",
-                                    /*maxLines: 2,*/
-                                    // overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontSize: Dimens.textSize4,
-                                      color: Colors.black45,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: Dimens.marginApplication),
-                              Text(
-                                "50,00",
-                                style: TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontSize: Dimens.textSize8,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                "(50% desconto)",
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontSize: Dimens.textSize4,
-                                  color: OwnerColors.colorPrimaryDark,
-                                ),
-                              ),
-                              SizedBox(height: Dimens.marginApplication),
-                              Row(children: [
-                                Text(
-                                  "Quantidade",
-                                  style: TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontSize: Dimens.textSize5,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                SizedBox(width: Dimens.minMarginApplication),
-                                FloatingActionButton(
-                                  mini: true,
-                                  child: Icon(Icons.chevron_left,
-                                      color: Colors.black),
-                                  backgroundColor: Colors.white,
-                                  onPressed: () {
-                                    // Add your onPressed code here!
-                                  },
-                                ),
-                                SizedBox(width: Dimens.minMarginApplication),
-                                Text(
-                                  "1",
-                                  style: TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontSize: Dimens.textSize5,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                SizedBox(width: Dimens.minMarginApplication),
-                                FloatingActionButton(
-                                  mini: true,
-                                  child: Icon(Icons.chevron_right,
-                                      color: Colors.black),
-                                  backgroundColor: Colors.white,
-                                  onPressed: () {
-                                    // Add your onPressed code here!
-                                  },
-                                ),
-                              ])
-                            ],
-                          ))
-                    ],
-                  ),
-                )),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                        margin: EdgeInsets.all(Dimens.minMarginApplication),
-                        width: double.infinity,
-                        child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                  OwnerColors.colorPrimary),
-                            ),
-                            onPressed: () {},
-                            child: Row(
-                              children: [
-                                Icon(Icons.shopping_cart_outlined),
-                                SizedBox(width: Dimens.minMarginApplication),
-                                Text(
-                                  "Adicionar ao carrinho",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: Dimens.textSize8,
-                                      color: Colors.white,
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.normal,
-                                      decoration: TextDecoration.none),
-                                )
-                              ],
-                            )))
-                  ],
-                )
-              ]),
-            )));
-  }
+          title: "Compra finalizada!",
+          // isVisibleBackButton: true,
+        ),
+        body: /*FutureBuilder<List<Map<String, dynamic>>>(
+              future: loadProduct(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
 
-  Future<void> _pullRefresh() async {
-    setState(() {
-      _isLoading = true;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Sending Message"),
-      ));
-      _isLoading = false;
-    });
+                  final response = Product.fromJson(snapshot.data![0]);
+
+                  return */
+        Stack(children: [
+          SingleChildScrollView(
+              child: Container(
+                margin: EdgeInsets.all(Dimens.marginApplication),
+                padding: EdgeInsets.only(bottom: 100),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Align(
+                        child: Image.asset(
+                          fit: BoxFit.fitWidth,
+                          'images/success.png',
+                          height: 120,
+                        )),
+                    SizedBox(height: Dimens.marginApplication),
+                    Text(
+                      "Detalhes do pedido #0000000",
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: Dimens.textSize6,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(height: Dimens.minMarginApplication),
+                    Text(
+                      "Itens:",
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: Dimens.textSize5,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    // FutureBuilder<Cart>(
+                    //   future:
+                    //   listCartItems(_idCart.toString()),
+                    //   builder: (context, snapshot) {
+                    //     if (snapshot.hasData) {
+                    //       return ListView.builder(
+                    //         primary: false,
+                    //         shrinkWrap: true,
+                    //         itemCount: snapshot.data!.itens.length,
+                    //         itemBuilder: (context, index) {
+                    //
+                    //           final response = Item.fromJson(snapshot.data!.itens[index]);
+                    //
+                    //           return InkWell(
+                    //               onTap: () => {
+                    //                 Navigator.pushNamed(
+                    //                     context, "/ui/product_detail",
+                    //                     arguments: {
+                    //                       "id_product": response.id,
+                    //                     })
+                    //               },
+                    //               child: Card(
+                    //                 shape: RoundedRectangleBorder(
+                    //                   borderRadius: BorderRadius.circular(
+                    //                       Dimens.minRadiusApplication),
+                    //                 ),
+                    //                 margin: EdgeInsets.all(
+                    //                     Dimens.minMarginApplication),
+                    //                 child: Container(
+                    //                   padding: EdgeInsets.all(
+                    //                       Dimens.paddingApplication),
+                    //                   child: Row(
+                    //                     crossAxisAlignment:
+                    //                     CrossAxisAlignment.start,
+                    //                     children: [
+                    //                       Container(
+                    //                           margin: EdgeInsets.only(
+                    //                               right: Dimens
+                    //                                   .minMarginApplication),
+                    //                           child: ClipRRect(
+                    //                               borderRadius: BorderRadius
+                    //                                   .circular(Dimens
+                    //                                   .minRadiusApplication),
+                    //                               child: Image.network(
+                    //                                 ApplicationConstant.URL_PRODUCT_PHOTO + response.url_foto.toString(),
+                    //                                 height: 90,
+                    //                                 width: 90,
+                    //                                 errorBuilder: (context, exception, stackTrack) => Icon(Icons.error, size: 90),
+                    //                               ))),
+                    //                       Expanded(
+                    //                         child: Column(
+                    //                           crossAxisAlignment:
+                    //                           CrossAxisAlignment.start,
+                    //                           children: [
+                    //                             Text(
+                    //                               response.nome_produto,
+                    //                               maxLines: 1,
+                    //                               overflow:
+                    //                               TextOverflow.ellipsis,
+                    //                               style: TextStyle(
+                    //                                 fontFamily: 'Inter',
+                    //                                 fontSize:
+                    //                                 Dimens.textSize6,
+                    //                                 fontWeight:
+                    //                                 FontWeight.bold,
+                    //                                 color: Colors.black,
+                    //                               ),
+                    //                             ),
+                    //                             SizedBox(
+                    //                                 height: Dimens
+                    //                                     .minMarginApplication),
+                    //                             Text(
+                    //                               response.valor,
+                    //                               style: TextStyle(
+                    //                                 fontFamily: 'Inter',
+                    //                                 fontSize:
+                    //                                 Dimens.textSize6,
+                    //                                 color: Colors.black,
+                    //                               ),
+                    //                             ),
+                    //                           ],
+                    //                         ),
+                    //                       ),
+                    //                     ],
+                    //                   ),
+                    //                 ),
+                    //               ));
+                    //         },
+                    //       );
+                    //     } else if (snapshot.hasError) {
+                    //       return Text('${snapshot.error}');
+                    //     }
+                    //     return Center( child: CircularProgressIndicator());
+                    //   },
+                    // ),
+                    SizedBox(height: Dimens.marginApplication),
+                    Text(
+                      "Pagamento",
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: Dimens.textSize5,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(height: Dimens.minMarginApplication),
+                    Text(
+                      Strings.shortLoremIpsum +
+                          "\n\n" +
+                          "Copie este código para pagar" +
+                          "\n\n" +
+                          "1. Acesse seu Internet Banking ou app de pagamentos." +
+                          "\n\n" +
+                          "2. Escolha pagar via Pix/QR Code" +
+                          "\n\n" +
+                          "3. Escaneie o seguinte código:",
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: Dimens.textSize5,
+                        color: Colors.black,
+                      ),
+                    ),
+
+                    Image.memory(Base64Decoder().convert(_base64.toString()))
+                  ],
+                ),
+              )),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                  margin: EdgeInsets.all(Dimens.minMarginApplication),
+                  width: double.infinity,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Clipboard.setData(new ClipboardData(text: _qrCodeClipboard));
+                        ApplicationMessages(context: context).showMessage("Link Copiado!");
+                      },
+                      style: Styles().styleAlternativeButton,
+                      child: Container(
+                          child: Text("Copiar chave",
+                              textAlign: TextAlign.center,
+                              style: Styles().styleDefaultTextButton)))),
+              Container(
+                  margin: EdgeInsets.all(Dimens.minMarginApplication),
+                  width: double.infinity,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => Home()),
+                            ModalRoute.withName("/ui/home"));
+                      },
+                      style: Styles().styleDefaultButton,
+                      child: Container(
+                          child: Text("Ok",
+                              textAlign: TextAlign.center,
+                              style: Styles().styleDefaultTextButton))))
+            ],
+          )
+        ]));
+    /*     } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+                return Center( child: CircularProgressIndicator());
+              },
+            )));*/
   }
 }

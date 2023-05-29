@@ -78,37 +78,47 @@ class _Products extends State<Products> {
                         child: Card(
                           elevation: 0,
                           color: OwnerColors.categoryLightGrey,
-                          margin: EdgeInsets.all(Dimens.minMarginApplication),
+                          margin: EdgeInsets.all(
+                              Dimens.minMarginApplication),
                           shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(Dimens.minRadiusApplication),
+                            borderRadius: BorderRadius.circular(
+                                Dimens.minRadiusApplication),
                           ),
                           child: Container(
-                            padding:
-                                EdgeInsets.all(Dimens.minPaddingApplication),
+                            padding: EdgeInsets.all(
+                                Dimens.minPaddingApplication),
                             child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment:
+                              CrossAxisAlignment.center,
                               children: [
                                 Container(
                                     margin: EdgeInsets.only(
-                                        right: Dimens.minMarginApplication),
+                                        right: Dimens
+                                            .minMarginApplication),
                                     child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(
-                                            Dimens.minRadiusApplication),
+                                        borderRadius:
+                                        BorderRadius.circular(Dimens
+                                            .minRadiusApplication),
                                         child: Image.network(
                                           ApplicationConstant
-                                                  .URL_PRODUCT_PHOTO +
-                                              response.url_foto.toString(),
+                                              .URL_PRODUCT_PHOTO +
+                                              response.url_foto
+                                                  .toString(),
                                           height: 90,
                                           width: 90,
-                                          errorBuilder: (context, exception,
-                                                  stackTrack) =>
-                                              Icon(Icons.error, size: 90),
+                                          errorBuilder: (context,
+                                              exception,
+                                              stackTrack) =>
+                                              Image.asset(
+                                                'images/no_picture.png',
+                                                height: 90,
+                                                width: 90,
+                                              ),
                                         ))),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         response.nome,
@@ -122,10 +132,10 @@ class _Products extends State<Products> {
                                         ),
                                       ),
                                       SizedBox(
-                                          height: Dimens.minMarginApplication),
+                                          height: Dimens
+                                              .minMarginApplication),
                                       Text(
-                                        Useful().removeAllHtmlTags(
-                                            response.descricao),
+                                        response.nome_categoria,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
@@ -135,31 +145,20 @@ class _Products extends State<Products> {
                                         ),
                                       ),
                                       SizedBox(
-                                          height: Dimens.marginApplication),
+                                          height:
+                                          Dimens.marginApplication),
                                       Text(
                                         response.valor,
                                         style: TextStyle(
                                           fontFamily: 'Inter',
                                           fontSize: Dimens.textSize6,
-                                          color: Colors.black,
+                                          color: OwnerColors.darkGreen,
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                                IconButton(
-                                  icon: Icon(Icons.shopping_cart,
-                                      color: Colors.black38),
-                                  onPressed: () => {
-                                    // openCart(response.id.toString(),
-                                    //     response.valor, 1.toString())
-                                  },
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.favorite,
-                                      color: Colors.black38),
-                                  onPressed: () => {},
-                                )
+
                               ],
                             ),
                           ),

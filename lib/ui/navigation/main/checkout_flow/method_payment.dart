@@ -95,27 +95,6 @@ class _MethodPayment extends State<MethodPayment>
     }
   }
 
-  Future<void> findOrder() async {
-    try {
-      final body = {
-        "id": 16,
-        "token": ApplicationConstant.TOKEN
-      };
-
-      print('HTTP_BODY: $body');
-
-      final json = await postRequest.sendPostRequest(Links.FIND_ORDER, body);
-      final parsedResponse = jsonDecode(json);
-
-      print('HTTP_RESPONSE: $parsedResponse');
-
-      final response = Order.fromJson(parsedResponse);
-
-    } catch (e) {
-      throw Exception('HTTP_ERROR: $e');
-    }
-  }
-
   Future<void> addOrder(
       String idCart,
       String typeDelivery, // 1 tipo entrega no endereco e 2 retirada eu acho
