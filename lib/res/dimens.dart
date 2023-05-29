@@ -1,5 +1,10 @@
 class Dimens {
 
+
+  static const double buttonIndicatorHeight = 24.0;
+  static const double buttonIndicatorWidth = 24.0;
+  static const double buttonIndicatorStrokes = 2.0;
+
   static const double buttonPaddingApplication = 12.0;
 
   static const double textSize4 = 12.0;

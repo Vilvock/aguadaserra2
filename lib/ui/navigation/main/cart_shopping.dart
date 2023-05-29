@@ -187,6 +187,10 @@ class _CartShopping extends State<CartShopping> {
                           if (snapshot.hasData) {
                             final response = snapshot.data!;
 
+                            final responseList = Item.fromJson(
+                                snapshot.data!.itens[0]);
+
+
                             return Stack(children: [
                               ListView.builder(
                                 padding: EdgeInsets.only(bottom: 300),
@@ -224,7 +228,7 @@ class _CartShopping extends State<CartShopping> {
                                                   Dimens.paddingApplication),
                                               child: Row(
                                                 crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                    CrossAxisAlignment.center,
                                                 children: [
                                                   Container(
                                                       margin: EdgeInsets.only(
@@ -297,10 +301,8 @@ class _CartShopping extends State<CartShopping> {
                                                               style: TextStyle(
                                                                 fontFamily:
                                                                     'Inter',
-                                                                fontSize: Dimens
-                                                                    .textSize6,
-                                                                color: Colors
-                                                                    .black,
+                                                                fontSize: Dimens.textSize6,
+                                                                color: OwnerColors.darkGreen,
                                                               ),
                                                             )),
                                                             Row(
@@ -531,96 +533,100 @@ class _CartShopping extends State<CartShopping> {
                                       /*width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.height, child: Center(child: CircularProgressIndicator())*/);
                                 },
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Card(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            Dimens.minRadiusApplication),
-                                      ),
-                                      margin: EdgeInsets.all(
-                                          Dimens.minMarginApplication),
-                                      child: Container(
-                                        padding: EdgeInsets.all(
-                                            Dimens.paddingApplication),
-                                        child: Column(children: [
-                                          // Row(
-                                          //   children: [
-                                          //     Expanded(
-                                          //       child: Text(
-                                          //         "Subtotal",
-                                          //         style: TextStyle(
-                                          //           fontFamily: 'Inter',
-                                          //           fontSize: Dimens.textSize5,
-                                          //           color: Colors.black45,
-                                          //         ),
-                                          //       ),
-                                          //     ),
-                                          //     Text(
-                                          //       "-- , --",
-                                          //       style: TextStyle(
-                                          //         fontFamily: 'Inter',
-                                          //         fontSize: Dimens.textSize5,
-                                          //         color: Colors.black45,
-                                          //       ),
-                                          //     ),
-                                          //   ],
-                                          // ),
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  "Valor total em produtos",
+                              Visibility(
+                                visible: responseList.rows != 0,
+                                child:  Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Card(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              Dimens.minRadiusApplication),
+                                        ),
+                                        margin: EdgeInsets.all(
+                                            Dimens.minMarginApplication),
+                                        child: Container(
+                                          padding: EdgeInsets.all(
+                                              Dimens.paddingApplication),
+                                          child: Column(children: [
+                                            // Row(
+                                            //   children: [
+                                            //     Expanded(
+                                            //       child: Text(
+                                            //         "Subtotal",
+                                            //         style: TextStyle(
+                                            //           fontFamily: 'Inter',
+                                            //           fontSize: Dimens.textSize5,
+                                            //           color: Colors.black45,
+                                            //         ),
+                                            //       ),
+                                            //     ),
+                                            //     Text(
+                                            //       "-- , --",
+                                            //       style: TextStyle(
+                                            //         fontFamily: 'Inter',
+                                            //         fontSize: Dimens.textSize5,
+                                            //         color: Colors.black45,
+                                            //       ),
+                                            //     ),
+                                            //   ],
+                                            // ),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    "Valor total em produtos",
+                                                    style: TextStyle(
+                                                      fontFamily: 'Inter',
+                                                      fontSize: Dimens.textSize6,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  response.total,
                                                   style: TextStyle(
                                                     fontFamily: 'Inter',
                                                     fontSize: Dimens.textSize6,
                                                     color: Colors.black,
                                                   ),
                                                 ),
-                                              ),
-                                              Text(
-                                                response.total,
-                                                style: TextStyle(
-                                                  fontFamily: 'Inter',
-                                                  fontSize: Dimens.textSize6,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                              height: Dimens.marginApplication),
-                                          Divider(
-                                            color: Colors.black12,
-                                            height: 2,
-                                            thickness: 1.5,
-                                          ),
-                                          SizedBox(
-                                              height: Dimens.marginApplication),
-                                          Container(
-                                            width: double.infinity,
-                                            child: ElevatedButton(
-                                                style:
-                                                    Styles().styleDefaultButton,
-                                                onPressed: () {
-                                                  Navigator.pushNamed(context,
-                                                      "/ui/method_payment",
-                                                      arguments: {
-                                                        "id_cart": _idCart,
-                                                      });
-                                                },
-                                                child: Text("Avançar",
-                                                    textAlign: TextAlign.center,
-                                                    style: Styles()
-                                                        .styleDefaultTextButton)),
-                                          ),
-                                        ]),
-                                      ))
-                                ],
-                              )
+                                              ],
+                                            ),
+                                            SizedBox(
+                                                height: Dimens.marginApplication),
+                                            Divider(
+                                              color: Colors.black12,
+                                              height: 2,
+                                              thickness: 1.5,
+                                            ),
+                                            SizedBox(
+                                                height: Dimens.marginApplication),
+                                            Container(
+                                              width: double.infinity,
+                                              child: ElevatedButton(
+                                                  style:
+                                                  Styles().styleDefaultButton,
+                                                  onPressed: () {
+                                                    Navigator.pushNamed(context,
+                                                        "/ui/method_payment",
+                                                        arguments: {
+                                                          "id_cart": _idCart,
+                                                        });
+                                                  },
+                                                  child: Text("Avançar",
+                                                      textAlign: TextAlign.center,
+                                                      style: Styles()
+                                                          .styleDefaultTextButton)),
+                                            ),
+                                          ]),
+                                        ))
+                                  ],
+                                ),
+                              ),
+
                             ]);
                           } else if (snapshot.hasError) {
                             return Text('${snapshot.error}');
