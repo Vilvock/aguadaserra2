@@ -40,7 +40,7 @@ class _SucessAlertDialogState extends State<SucessAlertDialog> {
                     Align(
                         child: Image.asset(
                           fit: BoxFit.fitWidth,
-                          'images/admin.png',
+                          'images/success.png',
                           height: 100,
                         )),
                     SizedBox(height: Dimens.marginApplication),

@@ -91,7 +91,7 @@ class Validator {
       return true;
     } else {
       ApplicationMessages(context: context)
-          .showMessage("$field não pode estar vazio!");
+          .showMessage("Preencha o campo $field!");
       return false;
     }
   }

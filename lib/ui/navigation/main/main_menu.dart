@@ -76,18 +76,15 @@ class _MainMenu extends State<MainMenu> {
       final response = User.fromJson(_map[0]);
 
       if (response.status == "01") {
-
         await Preferences.init();
         Preferences.clearUserData();
 
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(
-                builder: (context) => Login()),
+            MaterialPageRoute(builder: (context) => Login()),
             ModalRoute.withName("/ui/login"));
-
       } else {}
-      ApplicationMessages(context: context).showMessage(response.msg);
+      ApplicationMessages(context: context).showMessage(response.msg + "\n\n" + Strings.enable_account);
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
     }
@@ -96,386 +93,404 @@ class _MainMenu extends State<MainMenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "Menu Principal", isVisibleBackButton: false),
-      resizeToAvoidBottomInset: false,
-      body: Container(
-        child: Column(
-          children: [
-            // Expanded(
-            FutureBuilder<Map<String, dynamic>>(
-              future: loadProfileRequest(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final response = User.fromJson(snapshot.data!);
+        appBar:
+            CustomAppBar(title: "Menu Principal", isVisibleBackButton: false),
+        resizeToAvoidBottomInset: false,
+        body: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              children: [
+                // Expanded(
+                FutureBuilder<Map<String, dynamic>>(
+                  future: loadProfileRequest(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final response = User.fromJson(snapshot.data!);
 
-                  return Material(
-                      elevation: Dimens.elevationApplication,
-                      child: Container(
-                        padding: EdgeInsets.all(Dimens.paddingApplication),
-                        color: OwnerColors.lightGrey,
-                        child: Row(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(
-                                  right: Dimens.marginApplication),
-                              child: ClipOval(
-                                child: SizedBox.fromSize(
-                                  size: Size.fromRadius(32), // Image radius
-                                  child: Image.network(ApplicationConstant.URL_AVATAR +
-                                      response.avatar.toString(), fit: BoxFit.cover, /*fit: BoxFit.cover*/),
+                      return Material(
+                          elevation: Dimens.elevationApplication,
+                          child: Container(
+                            padding: EdgeInsets.all(Dimens.paddingApplication),
+                            color: OwnerColors.lightGrey,
+                            child: Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      right: Dimens.marginApplication),
+                                  child: ClipOval(
+                                    child: SizedBox.fromSize(
+                                      size: Size.fromRadius(32), // Image radius
+                                      child: Image.network(
+                                        ApplicationConstant.URL_AVATAR +
+                                            response.avatar.toString(),
+                                        fit: BoxFit.cover, /*fit: BoxFit.cover*/
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        response.nome,
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontSize: Dimens.textSize6,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                          height: Dimens.minMarginApplication),
+                                      Text(
+                                        response.email,
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontSize: Dimens.textSize5,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.arrow_forward_ios,
+                                      color: Colors.black38),
+                                  onPressed: () => {
+                                    Navigator.pushNamed(context, "/ui/profile")
+                                  },
+                                )
+                              ],
                             ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    response.nome,
+                          ));
+                    } else if (snapshot.hasError) {
+                      return Text('${snapshot.error}');
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  },
+                ),
+
+                GestureDetector(
+                    child: Container(
+                      padding: EdgeInsets.all(Dimens.maxPaddingApplication),
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.all(Dimens.minMarginApplication),
+                            child: Icon(Icons.pin_drop_outlined,
+                                color: Colors.black),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Meus endereços",
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: Dimens.textSize5,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                SizedBox(height: Dimens.minMarginApplication),
+                                Text(
+                                  "Atualize ou determine seu endereço principal",
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: Dimens.textSize4,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(context, "/ui/user_addresses");
+                    }),
+
+                Styles().div_horizontal,
+
+                GestureDetector(
+                    child: Container(
+                      padding: EdgeInsets.all(Dimens.maxPaddingApplication),
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.all(Dimens.minMarginApplication),
+                            child: Icon(Icons.monetization_on_outlined,
+                                color: Colors.black),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Meus pegamentos",
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: Dimens.textSize5,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                SizedBox(height: Dimens.minMarginApplication),
+                                Text(
+                                  "Visualize seu histórico de pagamentos",
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: Dimens.textSize4,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(context, "/ui/payments");
+                    }),
+
+                Styles().div_horizontal,
+                GestureDetector(
+                    child: Container(
+                      padding: EdgeInsets.all(Dimens.maxPaddingApplication),
+                      child: Row(
+                        children: [
+                          Container(
+                              margin:
+                                  EdgeInsets.all(Dimens.minMarginApplication),
+                              child: Icon(Icons.category_outlined,
+                                  color: Colors.black)),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Categorias",
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: Dimens.textSize5,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                SizedBox(height: Dimens.minMarginApplication),
+                                Text(
+                                  "Visualize categorias de ofertas",
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: Dimens.textSize4,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(context, "/ui/categories");
+                    }),
+
+                Styles().div_horizontal,
+                GestureDetector(
+                    child: Container(
+                      padding: EdgeInsets.all(Dimens.maxPaddingApplication),
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.all(Dimens.minMarginApplication),
+                            child: Icon(Icons.contact_support_outlined,
+                                color: Colors.black),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Suporte",
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: Dimens.textSize5,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                SizedBox(height: Dimens.minMarginApplication),
+                                Text(
+                                  "Contacte o suporte",
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: Dimens.textSize4,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: () {}),
+
+                Styles().div_horizontal,
+
+                GestureDetector(
+                    child: Container(
+                      padding: EdgeInsets.all(Dimens.maxPaddingApplication),
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.all(Dimens.minMarginApplication),
+                            child: Icon(Icons.disabled_by_default_outlined,
+                                color: Colors.black),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Desativar",
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: Dimens.textSize5,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                SizedBox(height: Dimens.minMarginApplication),
+                                Text(
+                                  "Desativará permanentemente sua conta",
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: Dimens.textSize4,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      showModalBottomSheet<dynamic>(
+                        isScrollControlled: true,
+                        context: context,
+                        shape: Styles().styleShapeBottomSheet,
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        builder: (BuildContext context) {
+                          return GenericAlertDialog(
+                              title: Strings.attention,
+                              content: Strings.disable_account,
+                              btnBack: TextButton(
+                                  child: Text(Strings.no,
+                                      style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        color: Colors.black54,
+                                      )),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  }),
+                              btnConfirm: TextButton(
+                                  child: Text(Strings.yes),
+                                  onPressed: () {
+                                    disableAccount();
+                                  }));
+                        },
+                      );
+                    }),
+
+                Styles().div_horizontal,
+
+                GestureDetector(
+                    child: Container(
+                      padding: EdgeInsets.all(Dimens.maxPaddingApplication),
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.all(Dimens.minMarginApplication),
+                            child: Icon(Icons.logout_outlined,
+                                color: Colors.black),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Sair",
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: Dimens.textSize5,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                SizedBox(height: Dimens.minMarginApplication),
+                                Text(
+                                  "Deslogar desta conta",
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: Dimens.textSize4,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      showModalBottomSheet<dynamic>(
+                        isScrollControlled: true,
+                        context: context,
+                        shape: Styles().styleShapeBottomSheet,
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        builder: (BuildContext context) {
+                          return GenericAlertDialog(
+                              title: Strings.attention,
+                              content: Strings.logout,
+                              btnBack: TextButton(
+                                  child: Text(
+                                    Strings.no,
                                     style: TextStyle(
                                       fontFamily: 'Inter',
-                                      fontSize: Dimens.textSize6,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
+                                      color: Colors.black54,
                                     ),
                                   ),
-                                  SizedBox(height: Dimens.minMarginApplication),
-                                  Text(
-                                    response.email,
-                                    style: TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontSize: Dimens.textSize5,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.arrow_forward_ios,
-                                  color: Colors.black38),
-                              onPressed: () =>
-                                  {Navigator.pushNamed(context, "/ui/profile")},
-                            )
-                          ],
-                        ),
-                      ));
-                } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
-                }
-                return Center(child: CircularProgressIndicator());
-              },
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  }),
+                              btnConfirm: TextButton(
+                                  child: Text(Strings.yes),
+                                  onPressed: () async {
+                                    await Preferences.init();
+                                    Preferences.clearUserData();
+
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Login()),
+                                        ModalRoute.withName("/ui/login"));
+                                  }));
+                        },
+                      );
+                    }),
+
+                Styles().div_horizontal,
+              ],
             ),
-
-            GestureDetector(
-                child: Container(
-                  padding: EdgeInsets.all(Dimens.maxPaddingApplication),
-                  child: Row(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.all(Dimens.minMarginApplication),
-                        child:
-                            Icon(Icons.pin_drop_outlined, color: Colors.black),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Meus endereços",
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: Dimens.textSize5,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                            SizedBox(height: Dimens.minMarginApplication),
-                            Text(
-                              "Atualize ou determine seu endereço principal",
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: Dimens.textSize4,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pushNamed(context, "/ui/user_addresses");
-                }),
-
-            Styles().div_horizontal,
-
-            GestureDetector(
-                child: Container(
-                  padding: EdgeInsets.all(Dimens.maxPaddingApplication),
-                  child: Row(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.all(Dimens.minMarginApplication),
-                        child: Icon(Icons.monetization_on_outlined,
-                            color: Colors.black),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Meus pegamentos",
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: Dimens.textSize5,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                            SizedBox(height: Dimens.minMarginApplication),
-                            Text(
-                              "Visualize seu histórico de pagamentos",
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: Dimens.textSize4,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pushNamed(context, "/ui/payments");
-                }),
-
-            Styles().div_horizontal,
-            GestureDetector(
-                child: Container(
-                  padding: EdgeInsets.all(Dimens.maxPaddingApplication),
-                  child: Row(
-                    children: [
-                      Container(
-                          margin: EdgeInsets.all(Dimens.minMarginApplication),
-                          child: Icon(Icons.category_outlined,
-                              color: Colors.black)),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Categorias",
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: Dimens.textSize5,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                            SizedBox(height: Dimens.minMarginApplication),
-                            Text(
-                              "Visualize categorias de ofertas",
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: Dimens.textSize4,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pushNamed(context, "/ui/categories");
-                }),
-
-            Styles().div_horizontal,
-            GestureDetector(
-                child: Container(
-                  padding: EdgeInsets.all(Dimens.maxPaddingApplication),
-                  child: Row(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.all(Dimens.minMarginApplication),
-                        child: Icon(Icons.contact_support_outlined,
-                            color: Colors.black),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Suporte",
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: Dimens.textSize5,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                            SizedBox(height: Dimens.minMarginApplication),
-                            Text(
-                              "Contacte o suporte",
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: Dimens.textSize4,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                onTap: () {}),
-
-            Styles().div_horizontal,
-
-
-            GestureDetector(
-                child: Container(
-                  padding: EdgeInsets.all(Dimens.maxPaddingApplication),
-                  child: Row(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.all(Dimens.minMarginApplication),
-                        child: Icon(Icons.disabled_by_default_outlined, color: Colors.black),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Desativar",
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: Dimens.textSize5,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                            SizedBox(height: Dimens.minMarginApplication),
-                            Text(
-                              "Desativará permanentemente sua conta",
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: Dimens.textSize4,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return GenericAlertDialog(
-                          title: Strings.attention,
-                          content: Strings.disable_account,
-                          btnBack: TextButton(
-                              child: Text(Strings.no, style: TextStyle(
-                                fontFamily: 'Inter',
-                                color: Colors.black54,
-                              )),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              }),
-                          btnConfirm: TextButton(
-                              child: Text(Strings.yes),
-                              onPressed: () {
-
-                                disableAccount();
-                              }));
-                    },
-                  );
-                }),
-
-            Styles().div_horizontal,
-
-            GestureDetector(
-                child: Container(
-                  padding: EdgeInsets.all(Dimens.maxPaddingApplication),
-                  child: Row(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.all(Dimens.minMarginApplication),
-                        child: Icon(Icons.logout_outlined, color: Colors.black),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Sair",
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: Dimens.textSize5,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                            SizedBox(height: Dimens.minMarginApplication),
-                            Text(
-                              "Deslogar desta conta",
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: Dimens.textSize4,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return GenericAlertDialog(
-                          title: Strings.attention,
-                          content: Strings.logout,
-                          btnBack: TextButton(
-                              child: Text(Strings.no, style: TextStyle(
-                                fontFamily: 'Inter',
-                                color: Colors.black54,
-                              ),),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              }),
-                          btnConfirm: TextButton(
-                              child: Text(Strings.yes),
-                              onPressed: () async {
-                                await Preferences.init();
-                                Preferences.clearUserData();
-
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Login()),
-                                    ModalRoute.withName("/ui/login"));
-                              }));
-                    },
-                  );
-                }),
-
-            Styles().div_horizontal,
-
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }

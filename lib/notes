@@ -7,21 +7,19 @@ pick lat long
 
 - botao com loading xv
 - trocar alguns icones para finos
+- https://aguadaserra.com/termos_agua.pdf
 
-
+- list pedidos com dados dinamicos
 - fazer troca de enderecos dinamica no pagamento
 - terminar compra/checkout/visualizacao de itens e sucesso com todos dados dinamicos (list retirada e horarios)
 - add metodo de pagamento boleto
-- list pedidos com dados dinamicos
 
 
-https://aguadaserra.com/termos_agua.pdf
 falta 9 requests
 
 
 ///////////////
 
-- login scroll(occupy space text)
 - padronizacao (validacoes campo em branco , preencha campo senha)
 - colocar pra refresh dps q add endereco
 - alinhar item carrinho(add categoria (pedir pra colcoar na request) e valor em verde ok)

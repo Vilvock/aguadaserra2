@@ -82,7 +82,7 @@ class _Success extends State<Success> {
                 Align(
                     child: Image.asset(
                   fit: BoxFit.fitWidth,
-                  'images/sucess.png',
+                  'images/success.png',
                   height: 120,
                 )),
                 SizedBox(height: Dimens.marginApplication),

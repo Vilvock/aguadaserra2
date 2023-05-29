@@ -18,6 +18,7 @@ abstract class Strings {
   static const String no = "Não";
   static const String attention = "Atenção";
   static const String empty_list = "Não foram encontrados resultados :(";
+  static const String enable_account = "Para reativar sua conta, entre em contato com o administrador";
 
   static const String email_denied = "E-mail Inválido!";
   static const String password_denied = "Senha Inválida!";

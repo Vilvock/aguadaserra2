@@ -31,6 +31,12 @@ class Styles {
     color: Colors.black,
   );
 
+  var styleShapeBottomSheet = RoundedRectangleBorder(
+    borderRadius: BorderRadius.vertical(
+      top: Radius.circular(Dimens.minRadiusApplication),
+    ),
+  );
+
   var styleDescriptionText = TextStyle(
     fontFamily: 'Inter',
     fontSize: Dimens.textSize6,
