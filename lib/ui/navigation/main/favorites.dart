@@ -44,7 +44,7 @@ class _Favorites extends State<Favorites> {
       print('HTTP_BODY: $body');
 
       final json =
-      await postRequest.sendPostRequest(Links.DELETE_FAVORITE, body);
+          await postRequest.sendPostRequest(Links.DELETE_FAVORITE, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -72,7 +72,7 @@ class _Favorites extends State<Favorites> {
       print('HTTP_BODY: $body');
 
       final json =
-      await postRequest.sendPostRequest(Links.LIST_FAVORITES, body);
+          await postRequest.sendPostRequest(Links.LIST_FAVORITES, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -85,8 +85,8 @@ class _Favorites extends State<Favorites> {
     }
   }
 
-  Future<void> openCart(String idProduct, String unityItemValue,
-      String quantity) async {
+  Future<void> openCart(
+      String idProduct, String unityItemValue, String quantity) async {
     try {
       final body = {
         "id_user": await Preferences.getUserData()!.id,
@@ -104,9 +104,7 @@ class _Favorites extends State<Favorites> {
 
       final response = Cart.fromJson(_map[0]);
 
-      if (response.carrinho_aberto
-          .toString()
-          .isNotEmpty) {
+      if (response.carrinho_aberto.toString().isNotEmpty) {
         // setState(() {
 
         addItemToCart(idProduct, unityItemValue, quantity,
@@ -173,26 +171,24 @@ class _Favorites extends State<Favorites> {
                       final response = Favorite.fromJson(snapshot.data![index]);
 
                       return InkWell(
-                          onTap: () =>
-                          {
-                            Navigator.pushNamed(
-                                context, "/ui/product_detail",
-                                arguments: {
-                                  "id_product": response.id_produto,
-                                })
-                          },
+                          onTap: () => {
+                                Navigator.pushNamed(
+                                    context, "/ui/product_detail",
+                                    arguments: {
+                                      "id_product": response.id_produto,
+                                    })
+                              },
                           child: Card(
                             elevation: 0,
                             color: OwnerColors.categoryLightGrey,
-                            margin: EdgeInsets.all(
-                                Dimens.minMarginApplication),
+                            margin: EdgeInsets.all(Dimens.minMarginApplication),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
                                   Dimens.minRadiusApplication),
                             ),
                             child: Container(
-                              padding: EdgeInsets.all(
-                                  Dimens.paddingApplication),
+                              padding:
+                                  EdgeInsets.all(Dimens.paddingApplication),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
@@ -204,25 +200,22 @@ class _Favorites extends State<Favorites> {
                                               Dimens.minRadiusApplication),
                                           child: Image.network(
                                             ApplicationConstant
-                                                .URL_PRODUCT_PHOTO +
+                                                    .URL_PRODUCT_PHOTO +
                                                 response.url_foto.toString(),
                                             height: 90,
                                             width: 90,
-                                            errorBuilder:
-                                                (context, exception,
-                                                stackTrack) =>
-                                                    Image.asset(
-                                                      'images/default.png',
-                                                      height:
-                                                      90,
-                                                      width:
-                                                      90,
-                                                    ),
+                                            errorBuilder: (context, exception,
+                                                    stackTrack) =>
+                                                Image.asset(
+                                              'images/default.png',
+                                              height: 90,
+                                              width: 90,
+                                            ),
                                           ))),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           response.nome,
@@ -236,8 +229,8 @@ class _Favorites extends State<Favorites> {
                                           ),
                                         ),
                                         SizedBox(
-                                            height: Dimens
-                                                .minMarginApplication),
+                                            height:
+                                                Dimens.minMarginApplication),
                                         Text(
                                           Useful().removeAllHtmlTags(
                                               response.descricao),
@@ -258,135 +251,134 @@ class _Favorites extends State<Favorites> {
                                           ),
                                         ),
                                         SizedBox(
-                                            height: Dimens
-                                                .minMarginApplication),
+                                            height:
+                                                Dimens.minMarginApplication),
                                         Divider(
                                           color: Colors.black12,
                                           height: 2,
                                           thickness: 1.5,
                                         ),
                                         SizedBox(
-                                            height: Dimens
-                                                .minMarginApplication),
+                                            height:
+                                                Dimens.minMarginApplication),
                                         Container(
                                             child: IntrinsicHeight(
                                                 child: Row(
-                                                  children: [
-                                                    Container(
-                                                      margin: EdgeInsets.only(
-                                                          right: Dimens
-                                                              .minMarginApplication),
-                                                      child: Icon(
-                                                          size: 20,
-                                                          Icons
-                                                              .shopping_cart_outlined),
-                                                    ),
-                                                    Expanded(
-                                                        child: Container(
-                                                          child: Wrap(
-                                                            children: [
-                                                              GestureDetector(
-                                                                  onTap: () =>
-                                                                  {
-                                                                    openCart(
-                                                                        response
-                                                                            .id_produto
-                                                                            .toString(),
-                                                                        response
-                                                                            .valor,
-                                                                        1
-                                                                            .toString())
-                                                                  },
-                                                                  child: Text(
-                                                                    "Adicionar ao carrinho",
-                                                                    style: TextStyle(
-                                                                      fontFamily: 'Inter',
-                                                                      fontSize:
-                                                                      Dimens
-                                                                          .textSize4,
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                                  )),
-                                                            ],
-                                                          ),
-                                                        )),
-                                                    Container(
-                                                      child: Styles()
-                                                          .div_vertical,
-                                                    ),
-                                                    Container(
-                                                      margin: EdgeInsets.only(
-                                                          right: Dimens
-                                                              .minMarginApplication),
-                                                      child: Icon(
-                                                          size: 20,
-                                                          Icons.delete_outline),
-                                                    ),
-                                                    Expanded(
-                                                      child: Container(
-                                                          child: Wrap(
-                                                              children: [
-                                                                GestureDetector(
-                                                                    onTap: () =>
-                                                                    {
-                                                                      showModalBottomSheet<dynamic>(
-                                                                        isScrollControlled: true,
-                                                                        context: context,
-                                                                        shape: Styles().styleShapeBottomSheet,
-                                                                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                                                                        builder: (BuildContext context) {
-                                                                          return GenericAlertDialog(
-                                                                              title: Strings
-                                                                                  .attention,
-                                                                              content: "Tem certeza que deseja remover este produto dos favoritos?",
-                                                                              btnBack: TextButton(
-                                                                                  child: Text(
-                                                                                    Strings
-                                                                                        .no,
-                                                                                    style: TextStyle(
-                                                                                      fontFamily: 'Inter',
-                                                                                      color: Colors
-                                                                                          .black54,
-                                                                                    ),),
-                                                                                  onPressed: () {
-                                                                                    Navigator
-                                                                                        .of(
-                                                                                        context)
-                                                                                        .pop();
-                                                                                  }),
-                                                                              btnConfirm: TextButton(
-                                                                                  child: Text(
-                                                                                      Strings
-                                                                                          .yes),
-                                                                                  onPressed: () {
-                                                                                    removeFavorite(
-                                                                                        response
-                                                                                            .id
-                                                                                            .toString());
-                                                                                    Navigator
-                                                                                        .of(
-                                                                                        context)
-                                                                                        .pop();
-                                                                                  }));
-                                                                        },
-                                                                      )
-                                                                    },
-                                                                    child: Text(
-                                                                      "Remover",
-                                                                      style: TextStyle(
-                                                                        fontFamily: 'Inter',
-                                                                        fontSize:
-                                                                        Dimens
-                                                                            .textSize4,
-                                                                        color: Colors
-                                                                            .black,
-                                                                      ),
-                                                                    )),
-                                                              ])),
-                                                    )
-                                                  ],
-                                                )))
+                                          children: [
+                                            Expanded(
+                                                child: Container(
+                                              child: Wrap(
+                                                direction: Axis.horizontal,
+                                                alignment: WrapAlignment.center,
+                                                crossAxisAlignment:
+                                                    WrapCrossAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    margin: EdgeInsets.only(
+                                                        right: Dimens
+                                                            .minMarginApplication),
+                                                    child: Icon(
+                                                        size: 20,
+                                                        Icons.shopping_cart_outlined),
+                                                  ),
+                                                  GestureDetector(
+                                                      onTap: () => {
+                                                            openCart(
+                                                                response
+                                                                    .id_produto
+                                                                    .toString(),
+                                                                response.valor,
+                                                                1.toString())
+                                                          },
+                                                      child: Text(
+                                                        "Adicionar",
+                                                        style: TextStyle(
+                                                          fontFamily: 'Inter',
+                                                          fontSize:
+                                                              Dimens.textSize4,
+                                                          color: Colors.black,
+                                                        ),
+                                                      )),
+                                                ],
+                                              ),
+                                            )),
+                                            Container(
+                                              child: Styles().div_vertical,
+                                            ),
+                                            Expanded(
+                                                child: Container(
+                                              child: Wrap(
+                                                direction: Axis.horizontal,
+                                                alignment: WrapAlignment.center,
+                                                crossAxisAlignment:
+                                                    WrapCrossAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    margin: EdgeInsets.only(
+                                                        right: Dimens
+                                                            .minMarginApplication),
+                                                    child: Icon(
+                                                        size: 20,
+                                                        Icons.delete_outline),
+                                                  ),
+                                                  GestureDetector(
+                                                      onTap: () => {
+                                                            showModalBottomSheet<
+                                                                dynamic>(
+                                                              isScrollControlled:
+                                                                  true,
+                                                              context: context,
+                                                              shape: Styles()
+                                                                  .styleShapeBottomSheet,
+                                                              clipBehavior: Clip
+                                                                  .antiAliasWithSaveLayer,
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                                return GenericAlertDialog(
+                                                                    title: Strings
+                                                                        .attention,
+                                                                    content:
+                                                                        "Tem certeza que deseja remover este produto dos favoritos?",
+                                                                    btnBack:
+                                                                        TextButton(
+                                                                            child:
+                                                                                Text(
+                                                                              Strings.no,
+                                                                              style: TextStyle(
+                                                                                fontFamily: 'Inter',
+                                                                                color: Colors.black54,
+                                                                              ),
+                                                                            ),
+                                                                            onPressed:
+                                                                                () {
+                                                                              Navigator.of(context).pop();
+                                                                            }),
+                                                                    btnConfirm:
+                                                                        TextButton(
+                                                                            child:
+                                                                                Text(Strings.yes),
+                                                                            onPressed: () {
+                                                                              removeFavorite(response.id.toString());
+                                                                              Navigator.of(context).pop();
+                                                                            }));
+                                                              },
+                                                            )
+                                                          },
+                                                      child: Text(
+                                                        "Remover",
+                                                        style: TextStyle(
+                                                          fontFamily: 'Inter',
+                                                          fontSize:
+                                                              Dimens.textSize4,
+                                                          color: Colors.black,
+                                                        ),
+                                                      )),
+                                                ],
+                                              ),
+                                            )),
+                                          ],
+                                        )))
                                       ],
                                     ),
                                   ),
@@ -399,22 +391,15 @@ class _Favorites extends State<Favorites> {
                 } else {
                   return Container(
                       padding: EdgeInsets.only(
-                          top: MediaQuery
-                              .of(context)
-                              .size
-                              .height /
-                              20),
+                          top: MediaQuery.of(context).size.height / 20),
                       child: Column(
-                          mainAxisAlignment:
-                          MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Center(
                                 child: Lottie.network(
                                     height: 160,
                                     'https://assets3.lottiefiles.com/private_files/lf30_cgfdhxgx.json')),
-                            SizedBox(
-                                height: Dimens
-                                    .marginApplication),
+                            SizedBox(height: Dimens.marginApplication),
                             Text(
                               Strings.empty_list,
                               style: TextStyle(
