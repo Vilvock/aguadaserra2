@@ -542,7 +542,13 @@ class CarouselItemBuilder extends StatelessWidget {
             // fit: BoxFit.fitWidth,
             height: 220,
             errorBuilder: (context, exception, stackTrack) =>
-                Icon(Icons.error, size: 220),
+                Image.asset(
+                  'images/default.png',
+                  height:
+                  220,
+                  width:
+                  220,
+                ),
           ),
         ),
       ),

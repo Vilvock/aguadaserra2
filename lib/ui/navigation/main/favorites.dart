@@ -211,7 +211,13 @@ class _Favorites extends State<Favorites> {
                                             errorBuilder:
                                                 (context, exception,
                                                 stackTrack) =>
-                                                Icon(Icons.error, size: 90),
+                                                    Image.asset(
+                                                      'images/default.png',
+                                                      height:
+                                                      90,
+                                                      width:
+                                                      90,
+                                                    ),
                                           ))),
                                   Expanded(
                                     child: Column(

@@ -110,9 +110,11 @@ class _Products extends State<Products> {
                                               exception,
                                               stackTrack) =>
                                               Image.asset(
-                                                'images/no_picture.png',
-                                                height: 90,
-                                                width: 90,
+                                                'images/default.png',
+                                                height:
+                                                90,
+                                                width:
+                                                90,
                                               ),
                                         ))),
                                 Expanded(
