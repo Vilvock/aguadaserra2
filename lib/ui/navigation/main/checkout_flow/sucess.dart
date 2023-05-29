@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:app/config/application_messages.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../../global/application_constant.dart';
 import '../../../../model/cart.dart';
@@ -13,6 +15,7 @@ import '../../../../web_service/links.dart';
 import '../../../../web_service/service_response.dart';
 import '../../../components/custom_app_bar.dart';
 import '../../../components/progress_hud.dart';
+import '../home.dart';
 
 class Success extends StatefulWidget {
   const Success({Key? key}) : super(key: key);
@@ -245,7 +248,10 @@ class _Success extends State<Success> {
                   margin: EdgeInsets.all(Dimens.minMarginApplication),
                   width: double.infinity,
                   child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Clipboard.setData(new ClipboardData(text: _qrCodeClipboard));
+                        ApplicationMessages(context: context).showMessage("Link Copiado!");
+                      },
                       style: Styles().styleAlternativeButton,
                       child: Container(
                           child: Text("Copiar chave",
@@ -255,7 +261,12 @@ class _Success extends State<Success> {
                   margin: EdgeInsets.all(Dimens.minMarginApplication),
                   width: double.infinity,
                   child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => Home()),
+                            ModalRoute.withName("/ui/home"));
+                      },
                       style: Styles().styleDefaultButton,
                       child: Container(
                           child: Text("Ok",

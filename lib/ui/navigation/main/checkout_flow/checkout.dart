@@ -34,7 +34,6 @@ class _Checkout extends State<Checkout> {
 
   final postRequest = PostRequest();
 
-
   @override
   void initState() {
     super.initState();
@@ -52,7 +51,7 @@ class _Checkout extends State<Checkout> {
       print('HTTP_BODY: $body');
 
       final json =
-      await postRequest.sendPostRequest(Links.LIST_CART_ITEMS, body);
+          await postRequest.sendPostRequest(Links.LIST_CART_ITEMS, body);
       final parsedResponse = jsonDecode(json);
 
       print('HTTP_RESPONSE: $parsedResponse');
@@ -67,8 +66,8 @@ class _Checkout extends State<Checkout> {
     }
   }
 
-  Future<void> payWithCreditCard(String idOrder, String totalValue,
-      String idCreditCard) async {
+  Future<void> payWithCreditCard(
+      String idOrder, String totalValue, String idCreditCard) async {
     try {
       final body = {
         "id_usuario": await Preferences.getUserData()!.id,
@@ -100,8 +99,8 @@ class _Checkout extends State<Checkout> {
     }
   }
 
-  Future<void> payWithTicketWithOutAddress(String idOrder,
-      String totalValue) async {
+  Future<void> payWithTicketWithOutAddress(
+      String idOrder, String totalValue) async {
     try {
       final body = {
         "id_pedido": idOrder,
@@ -189,13 +188,13 @@ class _Checkout extends State<Checkout> {
       final response = Payment.fromJson(_map[0]);
 
       if (response.status == "01") {
-        Navigator.pushNamed(context,
-          "/ui/success",
-          arguments: {
-            "id_cart": _idCart,
-            "base64": response.qrcode_64,
-            "qrCodeClipboard": response.qrcode,
-          });
+        Navigator.pushNamedAndRemoveUntil(
+            context, "/ui/success", (route) => false,
+            arguments: {
+              "id_cart": _idCart,
+              "base64": response.qrcode_64,
+              "qrCodeClipboard": response.qrcode,
+            });
       } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
@@ -216,7 +215,8 @@ class _Checkout extends State<Checkout> {
         resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(
           title: "Revisão do pedido",
-          isVisibleBackButton: true,),
+          isVisibleBackButton: true,
+        ),
         body: RefreshIndicator(
             onRefresh: _pullRefresh,
             child: /*FutureBuilder<List<Map<String, dynamic>>>(
@@ -227,212 +227,220 @@ class _Checkout extends State<Checkout> {
                   final response = Product.fromJson(snapshot.data![0]);
 
                   return */
-            Stack(children: [
+                Stack(children: [
               SingleChildScrollView(
                   child: Container(
-                    padding: EdgeInsets.only(bottom: 100),
-                    child: Column(
-                      children: [
+                padding: EdgeInsets.only(bottom: 100),
+                child: Column(
+                  children: [
+                    Container(
+                        margin: EdgeInsets.all(Dimens.marginApplication),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Resumo",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: Dimens.textSize6,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            SizedBox(height: Dimens.minMarginApplication),
+                            Text(
+                              "Endereço:",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: Dimens.textSize5,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            SizedBox(height: Dimens.minMarginApplication),
+                            Text(
+                              "Cidade - estado" +
+                                  "\n" +
+                                  "Endereço e numero 000" +
+                                  "\n\n" +
+                                  "Complemento: lorem ipsum",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: Dimens.textSize5,
+                                color: Colors.black,
+                              ),
+                            ),
+                            SizedBox(height: Dimens.marginApplication),
+                            Styles().div_horizontal,
+                            SizedBox(height: Dimens.marginApplication),
+                            Text(
+                              "Itens:",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: Dimens.textSize5,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            FutureBuilder<Cart>(
+                              future: listCartItems(_idCart.toString()),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return ListView.builder(
+                                    primary: false,
+                                    shrinkWrap: true,
+                                    itemCount: snapshot.data!.itens.length,
+                                    itemBuilder: (context, index) {
+                                      final response = Item.fromJson(
+                                          snapshot.data!.itens[index]);
 
-                        Container(
-                            margin: EdgeInsets.all(Dimens.marginApplication),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Resumo",
-                                  style: TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontSize: Dimens.textSize6,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                SizedBox(height: Dimens.minMarginApplication),
-                                Text(
-                                  "Endereço:",
-                                  style: TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontSize: Dimens.textSize5,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                SizedBox(height: Dimens.minMarginApplication),
-                                Text(
-                                      "Cidade - estado" +
-                                      "\n" +
-                                      "Endereço e numero 000" +
-                                      "\n\n" +
-                                      "Complemento: lorem ipsum" ,
-                                  style: TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontSize: Dimens.textSize5,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                SizedBox(height: Dimens.marginApplication),
-                                Styles().div_horizontal,
-                                SizedBox(height: Dimens.marginApplication),
-                                Text(
-                                  "Itens:",
-                                  style: TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontSize: Dimens.textSize5,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                FutureBuilder<Cart>(
-                                  future:
-                                  listCartItems(_idCart.toString()),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      return ListView.builder(
-                                        primary: false,
-                                        shrinkWrap: true,
-                                        itemCount: snapshot.data!.itens.length,
-                                        itemBuilder: (context, index) {
-
-                                          final response = Item.fromJson(snapshot.data!.itens[index]);
-
-                                          return InkWell(
-                                              onTap: () => {
-                                              },
-                                              child: Card(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(
-                                                      Dimens.minRadiusApplication),
-                                                ),
-                                                margin: EdgeInsets.all(
-                                                    Dimens.minMarginApplication),
-                                                child: Container(
-                                                  padding: EdgeInsets.all(
-                                                      Dimens.paddingApplication),
-                                                  child: Row(
-                                                    crossAxisAlignment:
+                                      return InkWell(
+                                          onTap: () => {},
+                                          child: Card(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(Dimens
+                                                      .minRadiusApplication),
+                                            ),
+                                            margin: EdgeInsets.all(
+                                                Dimens.minMarginApplication),
+                                            child: Container(
+                                              padding: EdgeInsets.all(
+                                                  Dimens.paddingApplication),
+                                              child: Row(
+                                                crossAxisAlignment:
                                                     CrossAxisAlignment.start,
-                                                    children: [
-                                                      Container(
-                                                          margin: EdgeInsets.only(
-                                                              right: Dimens
-                                                                  .minMarginApplication),
-                                                          child: ClipRRect(
-                                                              borderRadius: BorderRadius
-                                                                  .circular(Dimens
+                                                children: [
+                                                  Container(
+                                                      margin: EdgeInsets.only(
+                                                          right: Dimens
+                                                              .minMarginApplication),
+                                                      child: ClipRRect(
+                                                          borderRadius: BorderRadius
+                                                              .circular(Dimens
                                                                   .minRadiusApplication),
-                                                              child: Image.network(
-                                                                ApplicationConstant.URL_PRODUCT_PHOTO + response.url_foto.toString(),
-                                                                height: 90,
-                                                                width: 90,
-                                                                errorBuilder: (context, exception, stackTrack) => Icon(Icons.error, size: 90),
-                                                              ))),
-                                                      Expanded(
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                          CrossAxisAlignment.start,
-                                                          children: [
-                                                            Text(
-                                                              response.nome_produto,
-                                                              maxLines: 1,
-                                                              overflow:
-                                                              TextOverflow.ellipsis,
-                                                              style: TextStyle(
-                                                                fontFamily: 'Inter',
-                                                                fontSize:
-                                                                Dimens.textSize6,
-                                                                fontWeight:
+                                                          child: Image.network(
+                                                            ApplicationConstant
+                                                                    .URL_PRODUCT_PHOTO +
+                                                                response
+                                                                    .url_foto
+                                                                    .toString(),
+                                                            height: 90,
+                                                            width: 90,
+                                                            errorBuilder: (context,
+                                                                    exception,
+                                                                    stackTrack) =>
+                                                                Icon(
+                                                                    Icons.error,
+                                                                    size: 90),
+                                                          ))),
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          response.nome_produto,
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: TextStyle(
+                                                            fontFamily: 'Inter',
+                                                            fontSize: Dimens
+                                                                .textSize6,
+                                                            fontWeight:
                                                                 FontWeight.bold,
-                                                                color: Colors.black,
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                                height: Dimens
-                                                                    .minMarginApplication),
-                                                            Text(
-                                                              response.valor,
-                                                              style: TextStyle(
-                                                                fontFamily: 'Inter',
-                                                                fontSize:
-                                                                Dimens.textSize6,
-                                                                color: Colors.black,
-                                                              ),
-                                                            ),
-                                                          ],
+                                                            color: Colors.black,
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                        SizedBox(
+                                                            height: Dimens
+                                                                .minMarginApplication),
+                                                        Text(
+                                                          response.valor,
+                                                          style: TextStyle(
+                                                            fontFamily: 'Inter',
+                                                            fontSize: Dimens
+                                                                .textSize6,
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                              ));
-                                        },
-                                      );
-                                    } else if (snapshot.hasError) {
-                                      return Text('${snapshot.error}');
-                                    }
-                                    return Center( child: CircularProgressIndicator());
-                                  },
-                                ),
-
-                                SizedBox(height: Dimens.marginApplication),
-                                Styles().div_horizontal,
-                                SizedBox(height: Dimens.marginApplication),
-                                Text(
-                                  "Pagamento",
-                                  style: TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontSize: Dimens.textSize5,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                SizedBox(height: Dimens.minMarginApplication),
-                                Text(
-                                  "Tipo de pagamento: PIX",
-                                  style: TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontSize: Dimens.textSize5,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ))
-                      ],
-                    ),
-                  )),
+                                                ],
+                                              ),
+                                            ),
+                                          ));
+                                    },
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Text('${snapshot.error}');
+                                }
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              },
+                            ),
+                            SizedBox(height: Dimens.marginApplication),
+                            Styles().div_horizontal,
+                            SizedBox(height: Dimens.marginApplication),
+                            Text(
+                              "Pagamento",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: Dimens.textSize5,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            SizedBox(height: Dimens.minMarginApplication),
+                            Text(
+                              "Tipo de pagamento: PIX",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: Dimens.textSize5,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ))
+                  ],
+                ),
+              )),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Container(
-                      margin: EdgeInsets.all(Dimens.minMarginApplication),
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: Styles().styleDefaultButton,
-                        onPressed: () async {
+                    margin: EdgeInsets.all(Dimens.minMarginApplication),
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: Styles().styleDefaultButton,
+                      onPressed: () async {
+                        setState(() {
+                          _isLoading = true;
+                        });
 
-                          setState(() {
-                            _isLoading = true;
-                          });
+                        await payWithPIX(_idOrder.toString(), _totalValue);
 
-                          await payWithPIX(_idOrder.toString(), _totalValue);
-
-                          setState(() {
-                            _isLoading = false;
-                          });
-                        },
-                        child: (_isLoading)
-                            ? const SizedBox(
-                            width: Dimens.buttonIndicatorWidth,
-                            height: Dimens.buttonIndicatorHeight,
-                            child: CircularProgressIndicator(
-                              color: OwnerColors.colorAccent,
-                              strokeWidth: Dimens.buttonIndicatorStrokes,
-                            ))
-                            : Text("Fazer Pedido",
-                            style: Styles().styleDefaultTextButton),
-                      ),)
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      },
+                      child: (_isLoading)
+                          ? const SizedBox(
+                              width: Dimens.buttonIndicatorWidth,
+                              height: Dimens.buttonIndicatorHeight,
+                              child: CircularProgressIndicator(
+                                color: OwnerColors.colorAccent,
+                                strokeWidth: Dimens.buttonIndicatorStrokes,
+                              ))
+                          : Text("Fazer Pedido",
+                              style: Styles().styleDefaultTextButton),
+                    ),
+                  )
                 ],
               )
             ])));

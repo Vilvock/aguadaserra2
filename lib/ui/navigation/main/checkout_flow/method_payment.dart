@@ -163,7 +163,7 @@ class _MethodPayment extends State<MethodPayment>
         });
 
       } else {}
-      ApplicationMessages(context: context).showMessage(response.msg);
+      // ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
     }

@@ -12,15 +12,16 @@ pick lat long
 - list pedidos com dados dinamicos
 - mudar cor botao favorito e carrinho (HOME)
 - validacao sem item carrinho(tirar fora view avancar ok ), validacao quantidade minima e valor minimo antes de avancar
+
 - colocar valor do frete(no method payment ao trocar endereço, colocar click " alterar endereco")
 
 - fazer troca de enderecos dinamica no pagamento
 - terminar compra/checkout/visualizacao de itens e sucesso com todos dados dinamicos (list retirada e horarios)
 
+- colocar pra refresh dps q add endereco
 - update address
 - update avatar
 - PDF https://aguadaserra.com/termos_agua.pdf
-- colocar pra refresh dps q add endereco
 
 
 
