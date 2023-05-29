@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:app/res/styles.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../config/application_messages.dart';
@@ -38,6 +39,7 @@ class _RegisterState extends State<Register> {
   bool visibileTwo = false;
 
   late bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -510,23 +512,36 @@ class _RegisterState extends State<Register> {
                         ],
                       ),
                     ),
-                    GestureDetector(
-                        child: Container(
-                            margin: EdgeInsets.only(
-                                top: Dimens.marginApplication,
-                                bottom: Dimens.marginApplication),
-                            child: Text(
-                              "Ao clicar no botão Criar conta, você aceita os termos de privacidade do aplicativo.",
+                    SizedBox(height: Dimens.marginApplication,),
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: Dimens.textSize5,
+                          fontFamily: 'Inter',
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(text: 'Ao clicar no botão Criar conta, você aceita os'),
+                          TextSpan(
+                              text: ' Termos de uso',
                               style: TextStyle(
-                                color: Colors.white,
-                                fontSize: Dimens.textSize5,
-                                fontFamily: 'Inter',
+                                  color: Colors.white,
+                                  fontSize: Dimens.textSize5,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.bold
                               ),
-                              textAlign: TextAlign.center,
-                            )),
-                        onTap: () {
-                          Navigator.pushNamed(context, "/ui/pdf_viewer");
-                        }),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+
+                                  Navigator.pushNamed(context, "/ui/pdf_viewer");
+                                }),
+
+                          TextSpan(text: ' do aplicativo.'),
+
+                        ],
+                      ),
+                    ),
                     Container(
                       margin: EdgeInsets.only(top: Dimens.marginApplication),
                       width: double.infinity,
@@ -582,23 +597,33 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
                     SizedBox(height: Dimens.marginApplication),
-                    GestureDetector(
-                        child: Container(
-                            margin: EdgeInsets.only(
-                                top: Dimens.marginApplication,
-                                bottom: Dimens.marginApplication),
-                            child: Text(
-                              "Já possui uma conta? Entre aqui",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: Dimens.textSize5,
-                                fontFamily: 'Inter',
-                              ),
-                              textAlign: TextAlign.center,
-                            )),
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        }),
+
+                  RichText(
+                    text: TextSpan(
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: Dimens.textSize5,
+                        fontFamily: 'Inter',
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(text: 'Já possui uma conta? '),
+                        TextSpan(
+                            text: 'Entre aqui',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: Dimens.textSize5,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.bold
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+
+                                Navigator.of(context).pop();
+                              }),
+
+                      ],
+                    ),
+                  )
                   ],
                 ),
               ),

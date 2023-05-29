@@ -1,6 +1,9 @@
 
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:path_provider/path_provider.dart';
 
 import '../global/application_constant.dart';
 
@@ -42,5 +45,22 @@ class PostRequest {
     } catch (e) {
       throw Exception('Erro durante a solicitação GET: $e');
     }
+  }
+
+  static Future<String> loadPDF(String fileUr) async {
+    var response = await http.get(Uri.parse(fileUr));
+
+    var dir = await getApplicationDocumentsDirectory();
+    File file = new File("${dir.path}/data.pdf");
+    file.writeAsBytesSync(response.bodyBytes, flush: true);
+    return file.path;
+  }
+  static Future<String> loadPDFUrl(String fileUr) async {
+    var response = await http.get(Uri.parse(fileUr));
+
+    var dir = await getApplicationDocumentsDirectory();
+    File file = new File("${dir.path}/data.pdf");
+    file.writeAsBytesSync(response.bodyBytes, flush: true);
+    return file.path;
   }
 }

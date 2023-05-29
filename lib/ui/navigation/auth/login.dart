@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ffi';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -257,18 +258,32 @@ class _LoginState extends State<Login> {
                       ),
                       Spacer(),
                       SizedBox(height: Dimens.marginApplication),
-                      GestureDetector(
-                          child: Text(
-                            "Ainda não possui uma conta? Entre aqui",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: Dimens.textSize5,
-                              fontFamily: 'Inter',
-                            ),
+                      RichText(
+                        text: TextSpan(
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: Dimens.textSize5,
+                            fontFamily: 'Inter',
                           ),
-                          onTap: () {
-                            Navigator.pushNamed(context, "/ui/register");
-                          })
+                          children: <TextSpan>[
+                            TextSpan(text: 'Ainda não possui uma conta? '),
+                            TextSpan(
+                                text: 'Entre aqui',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: Dimens.textSize5,
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.bold
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+
+                                    Navigator.pushNamed(context, "/ui/register");
+                                  }),
+
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ),

@@ -117,15 +117,15 @@ class _OnboardingState extends State<Onboarding> {
                               style: Styles().styleDefaultTextButton,
                             )),
                       ),
-                      Text(
-                        "Já possui uma conta? Entre aqui",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize:Dimens.textSize5,
-                            fontFamily: 'Inter',
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
+                      // Text(
+                      //   "Já possui uma conta? Entre aqui",
+                      //   style: TextStyle(
+                      //       color: Colors.white,
+                      //       fontSize:Dimens.textSize5,
+                      //       fontFamily: 'Inter',
+                      //   ),
+                      //   textAlign: TextAlign.center,
+                      // ),
                     ],
                   ),
                 ),
