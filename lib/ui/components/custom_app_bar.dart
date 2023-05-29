@@ -102,7 +102,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               return AddressFormAlertDialog();}
           );
           if(result == true){
-            ApplicationMessages(context: context).showMessage("dasdsads");
+            Navigator.popUntil(
+              context,
+              ModalRoute.withName('/ui/home'),
+            );
+            Navigator.pushNamed(context, "/ui/user_addresses");
           }
         },
       ));
