@@ -23,7 +23,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: _returnIcons(this.isVisibleFavoriteButton, this.isVisibleAddressButton, this.isVisibleSearchButton, this.isVisibleNotificationsButton, context),
       automaticallyImplyLeading: this.isVisibleBackButton,
       leading: _returnBackIcon(this.isVisibleBackButton, context),
-      backgroundColor: Colors.grey[50], //defalut screen color
+      backgroundColor: Colors.white,
       elevation: 0,
       titleSpacing: 0,
       title: Row(

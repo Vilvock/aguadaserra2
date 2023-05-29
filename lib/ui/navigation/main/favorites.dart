@@ -182,16 +182,19 @@ class _Favorites extends State<Favorites> {
                                 })
                           },
                           child: Card(
+                            elevation: 0,
+                            color: OwnerColors.categoryLightGrey,
+                            margin: EdgeInsets.all(
+                                Dimens.minMarginApplication),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
                                   Dimens.minRadiusApplication),
                             ),
-                            margin: EdgeInsets.all(Dimens.minMarginApplication),
                             child: Container(
                               padding: EdgeInsets.all(
                                   Dimens.paddingApplication),
                               child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Container(
                                       margin: EdgeInsets.only(
@@ -240,14 +243,12 @@ class _Favorites extends State<Favorites> {
                                             color: Colors.black,
                                           ),
                                         ),
-                                        SizedBox(
-                                            height: Dimens.marginApplication),
                                         Text(
                                           response.valor,
                                           style: TextStyle(
                                             fontFamily: 'Inter',
                                             fontSize: Dimens.textSize6,
-                                            color: Colors.black,
+                                            color: OwnerColors.darkGreen,
                                           ),
                                         ),
                                         SizedBox(
@@ -262,7 +263,6 @@ class _Favorites extends State<Favorites> {
                                             height: Dimens
                                                 .minMarginApplication),
                                         Container(
-                                            color: Colors.white,
                                             child: IntrinsicHeight(
                                                 child: Row(
                                                   children: [
