@@ -8,6 +8,7 @@ class Item extends GlobalWSModel {
   final String url_foto;
   final int id_produto;
   final int id_item;
+  final String categoria;
 
   Item({
     required this.qtd,
@@ -17,6 +18,7 @@ class Item extends GlobalWSModel {
     required this.url_foto,
     required this.id_produto,
     required this.id_item,
+    required this.categoria,
     required super.status,
     required super.msg,
     required super.id,
@@ -32,6 +34,7 @@ class Item extends GlobalWSModel {
       url_foto: json['url_foto'],
       id_produto: json['id_produto'],
       id_item: json['id_item'],
+      categoria: json['categoria'],
       status: json['status'],
       msg: json['msg'],
       id: json['id'],

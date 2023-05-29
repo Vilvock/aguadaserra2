@@ -269,7 +269,7 @@ class _ProductDetail extends State<ProductDetail> {
                                   //     spacing: 0.0),
                                   // SizedBox(height: Dimens.minMarginApplication),
                                   Text(
-                                    response.nome + " (Código: " + response.id.toString() + ")",
+                                    response.nome + " (Código: " + response.codigo.toString() + ")",
                                     style: TextStyle(
                                       fontFamily: 'Inter',
                                       fontSize: Dimens.textSize7,

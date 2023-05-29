@@ -920,7 +920,7 @@ class GridItemBuilder extends StatelessWidget {
                             height: 140,
                             errorBuilder: (context, exception, stackTrack) =>
                                 Image.asset(
-                                  'images/no_picture.png',
+                                  'images/default.png',
                                   height: 140,
                                   width: 140,
                                 ),
@@ -997,6 +997,9 @@ class GridItemBuilder extends StatelessWidget {
                           color: Colors.black,
                         ),
                       ),
+                      SizedBox(
+                          height: Dimens
+                              .minMarginApplication),
                       Text(
                         category,
                         style: TextStyle(

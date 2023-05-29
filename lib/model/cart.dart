@@ -5,6 +5,8 @@ class Cart extends GlobalWSModel{
   int qtd_minima;
   String valor_minimo;
   String total;
+  dynamic valor_minimo_2;
+  dynamic total_2;
   dynamic carrinho_aberto;
   List<dynamic> itens;
 
@@ -13,7 +15,9 @@ class Cart extends GlobalWSModel{
     required this.carrinho_aberto,
     required this.itens,
     required this.qtd_minima,
-    required this.qtd_atual, required super.status, required super.msg, required super.id, required super.rows,
+    required this.qtd_atual,
+    required this.valor_minimo_2,
+    required this.total_2, required super.status, required super.msg, required super.id, required super.rows,
   });
 
   factory Cart.fromJson(Map<String, dynamic> json) {
@@ -24,6 +28,8 @@ class Cart extends GlobalWSModel{
       qtd_minima: json['qtd_minima'],
       qtd_atual: json['qtd_atual'],
       carrinho_aberto: json['carrinho_aberto'],
+      valor_minimo_2: json['valor_minimo_2'],
+      total_2: json['total_2'],
       status: json['status'],
       msg: json['msg'],
       id: json['id'],

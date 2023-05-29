@@ -7,8 +7,6 @@ pick lat long
 ///////////////
 
 
-- produto detalhe (codigo produto é o id?, sub categoria e categoria) xv
-- alinhar item carrinho(add campo text categoria (pedir pra colcoar na request) e valor em verde ok) xv
 - list pedidos com dados dinamicos
 - mudar cor botao favorito e carrinho (HOME)
 - validacao sem item carrinho(tirar fora view avancar ok ), validacao quantidade minima e valor minimo antes de avancar xv
@@ -28,6 +26,8 @@ pick lat long
 - add metodo de pagamento boleto
 
 
+- alinhar item carrinho(add campo text categoria (pedir pra colcoar na request) e valor em verde ok) OK
+- produto detalhe (codigo produto é o id?, sub categoria e categoria) OK
 - favoritos (mesmo tratamento que produto na home) OK
 - padronizacao (validacoes campo em branco , preencha campo senha) OK
 - tudo quer for excluir sempre colocar msg de confirmacao OK
