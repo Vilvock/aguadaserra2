@@ -269,7 +269,10 @@ class _ProductDetail extends State<ProductDetail> {
                                   //     spacing: 0.0),
                                   // SizedBox(height: Dimens.minMarginApplication),
                                   Text(
-                                    response.nome + " (Código: " + response.codigo.toString() + ")",
+                                    response.nome +
+                                        " (Código: " +
+                                        response.codigo.toString() +
+                                        ")",
                                     style: TextStyle(
                                       fontFamily: 'Inter',
                                       fontSize: Dimens.textSize7,
@@ -413,23 +416,28 @@ class _ProductDetail extends State<ProductDetail> {
                           ),
                         ),
                         Container(
+                          padding: EdgeInsets.all(Dimens.minPaddingApplication),
                             color: OwnerColors.colorPrimaryDark,
                             child: IntrinsicHeight(
                                 child: Row(
                               children: [
-                                Container(
-                                  padding:
-                                      EdgeInsets.all(Dimens.paddingApplication),
-                                  child: Icon(
-                                    size: 24,
-                                    Icons.favorite_border,
-                                    color: Colors.white,
-                                  ),
-                                ),
                                 Expanded(
                                     child: Container(
                                   child: Wrap(
+                                    direction: Axis.horizontal,
+                                    alignment: WrapAlignment.center,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
                                     children: [
+                                      Container(
+                                        padding: EdgeInsets.all(
+                                            Dimens.minMarginApplication),
+                                        child: Icon(
+                                          size: 24,
+                                          Icons.favorite_border,
+                                          color: Colors.white,
+                                        ),
+                                      ),
                                       GestureDetector(
                                           onTap: () => {addFavorite()},
                                           child: Text(
@@ -445,39 +453,46 @@ class _ProductDetail extends State<ProductDetail> {
                                 )),
                                 Container(
                                   margin: EdgeInsets.only(
-                                      top: Dimens.marginApplication,
-                                      bottom: Dimens.marginApplication),
+                                      top: Dimens.minMarginApplication,
+                                      bottom: Dimens.minMarginApplication),
                                   child: VerticalDivider(
                                     color: Colors.white,
                                     width: 2,
                                     thickness: 1.5,
                                   ),
                                 ),
-                                Container(
-                                  padding:
-                                      EdgeInsets.all(Dimens.paddingApplication),
-                                  child: Icon(
-                                    color: Colors.white,
-                                    size: 24,
-                                    Icons.shopping_cart_outlined,
-                                  ),
-                                ),
                                 Expanded(
                                     child: Container(
-                                        child: Wrap(children: [
-                                  GestureDetector(
-                                    onTap: () => {
-                                      openCart(
-                                          response.valor, _quantity.toString())
-                                    },
-                                    child: Text("Adicionar",
-                                        style: TextStyle(
-                                          fontFamily: 'Inter',
-                                          fontSize: Dimens.textSize6,
+                                  child: Wrap(
+                                    direction: Axis.horizontal,
+                                    alignment: WrapAlignment.center,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.all(
+                                            Dimens.minMarginApplication),
+                                        child: Icon(
                                           color: Colors.white,
-                                        )),
+                                          size: 24,
+                                          Icons.shopping_cart_outlined,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () => {
+                                          openCart(response.valor,
+                                              _quantity.toString())
+                                        },
+                                        child: Text("Adicionar",
+                                            style: TextStyle(
+                                              fontFamily: 'Inter',
+                                              fontSize: Dimens.textSize6,
+                                              color: Colors.white,
+                                            )),
+                                      ),
+                                    ],
                                   ),
-                                ])))
+                                )),
                               ],
                             )))
 
@@ -541,14 +556,11 @@ class CarouselItemBuilder extends StatelessWidget {
             ApplicationConstant.URL_PRODUCT_PHOTO + image.toString(),
             // fit: BoxFit.fitWidth,
             height: 220,
-            errorBuilder: (context, exception, stackTrack) =>
-                Image.asset(
-                  'images/default.png',
-                  height:
-                  220,
-                  width:
-                  220,
-                ),
+            errorBuilder: (context, exception, stackTrack) => Image.asset(
+              'images/default.png',
+              height: 220,
+              width: 220,
+            ),
           ),
         ),
       ),
