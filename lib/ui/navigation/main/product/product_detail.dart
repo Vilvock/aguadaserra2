@@ -208,32 +208,38 @@ class _ProductDetail extends State<ProductDetail> {
                           padding: EdgeInsets.only(bottom: 100),
                           child: Column(
                             children: [
-                              CarouselSlider(
-                                items: items,
-                                options: CarouselOptions(
-                                  height: 200,
-                                  autoPlay: false,
-                                  onPageChanged: (index, reason) {
-                                    setState(() {
-                                      _pageIndex = index;
-                                    });
-                                  },
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                              Stack(
+                                alignment: Alignment.center,
                                 children: [
-                                  ...List.generate(
-                                      items.length,
-                                          (index) =>
-                                          Padding(
-                                            padding:
-                                            const EdgeInsets.only(right: 4),
-                                            child: DotIndicator(
-                                                isActive: index == _pageIndex,
-                                                color:
-                                                OwnerColors.colorPrimaryDark),
-                                          )),
+                                  CarouselSlider(
+                                    items: items,
+                                    options: CarouselOptions(
+                                      height: 220,
+                                      autoPlay: true,
+                                      onPageChanged: (index, reason) {
+                                        setState(() {
+                                          _pageIndex = index;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  Positioned(
+                                      bottom: 0,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          ...List.generate(
+                                              items.length,
+                                                  (index) => Padding(
+                                                padding:
+                                                const EdgeInsets.only(right: 4),
+                                                child: DotIndicator(
+                                                    isActive: index == _pageIndex,
+                                                    color:
+                                                    OwnerColors.colorPrimary),
+                                              )),
+                                        ],
+                                      )),
                                 ],
                               ),
                               // SizedBox(height: Dimens.minMarginApplication),
@@ -265,7 +271,7 @@ class _ProductDetail extends State<ProductDetail> {
                                         ),
                                       ),
                                       SizedBox(
-                                          height: Dimens.marginApplication),
+                                          height: Dimens.minMarginApplication),
                                       Text(
                                         Useful()
                                             .removeAllHtmlTags(
@@ -303,7 +309,7 @@ class _ProductDetail extends State<ProductDetail> {
                                         style: TextStyle(
                                             fontFamily: 'Inter',
                                             fontSize: Dimens.textSize7,
-                                            color: Colors.black,
+                                            color: OwnerColors.darkGreen,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       // Text(
@@ -533,9 +539,9 @@ class CarouselItemBuilder extends StatelessWidget {
           child: Image.network(
             ApplicationConstant.URL_PRODUCT_PHOTO + image.toString(),
             // fit: BoxFit.fitWidth,
-            height: 200,
+            height: 220,
             errorBuilder: (context, exception, stackTrack) =>
-                Icon(Icons.error, size: 140),
+                Icon(Icons.error, size: 220),
           ),
         ),
       ),

@@ -13,6 +13,7 @@ import '../../../../../res/strings.dart';
 import '../../../../../res/styles.dart';
 import '../../../../../web_service/links.dart';
 import '../../../../../web_service/service_response.dart';
+import '../../../../components/alert_dialog_generic.dart';
 import '../../../../components/custom_app_bar.dart';
 import '../../../../components/progress_hud.dart';
 
@@ -257,7 +258,32 @@ class _UserAddresses extends State<UserAddresses> {
                                     color: Colors.black,
                                   ),
                                   onPressed: () {
-                                    deleteAddress(response.id.toString());
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return GenericAlertDialog(
+                                            title: Strings.attention,
+                                            content: "Tem certeza que deseja remover este endereço salvo?",
+                                            btnBack: TextButton(
+                                                child: Text(Strings.no, style: TextStyle(
+                                                  fontFamily: 'Inter',
+                                                  color: Colors.black54,
+                                                ),),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                }),
+                                            btnConfirm: TextButton(
+                                                child: Text(Strings.yes),
+                                                onPressed: () {
+
+                                                  deleteAddress(response.id.toString());
+                                                  Navigator
+                                                      .of(
+                                                      context)
+                                                      .pop();
+                                                }));
+                                      },
+                                    );
                                   },
                                 )),
                           ],

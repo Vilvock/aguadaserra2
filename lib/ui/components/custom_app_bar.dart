@@ -1,3 +1,4 @@
+import 'package:app/config/application_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -89,13 +90,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           Icons.add_location_alt_outlined,
           color: Colors.black54,
         ),
-        onPressed: () {
-          showDialog(
+        onPressed: () async {
+
+          final result = await showDialog<bool>(
             context: context,
-            builder: (BuildContext context) {
-              return AddressFormAlertDialog();
-            },
+            builder: (context) => AddressFormAlertDialog(),
           );
+          if(result == true){
+            ApplicationMessages(context: context).showMessage("dasdsads");
+          }
         },
       ));
     }

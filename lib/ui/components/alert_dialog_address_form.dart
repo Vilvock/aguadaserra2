@@ -94,7 +94,7 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
 
       if (response.status == "1") {
 
-        Navigator.of(context).pop();
+        Navigator.of(context).pop(true);
 
       } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
