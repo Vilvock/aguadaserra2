@@ -1,6 +1,6 @@
 bug:
 
-notificacoes ios
+confirmar notificacoes ios
 MIGRACAO bgl do android 13
 pick lat long
 
@@ -18,7 +18,7 @@ pick lat long
 
 - update address
 - update avatar
-- PDF https://aguadaserra.com/termos_agua.pdf OK android 13
+- PDF https://aguadaserra.com/termos_agua.pdf OK falta android 13
 
 - trocar alguns icones para finos
 - add metodo de pagamento boleto

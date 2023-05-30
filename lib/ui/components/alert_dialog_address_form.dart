@@ -15,8 +15,19 @@ import '../../web_service/links.dart';
 import '../../web_service/service_response.dart';
 
 class AddressFormAlertDialog extends StatefulWidget {
+
+  final String? id;
+  final String? name;
+  final String? cep;
+  final String? city;
+  final String? state;
+  final String? nbh;
+  final String? address;
+  final String? number;
+  final String? complement;
+
   AddressFormAlertDialog({
-    Key? key,
+    Key? key, this.id, this.name, this.cep, this.city, this.state, this.nbh, this.address, this.number, this.complement,
   });
 
   // DialogGeneric({Key? key}) : super(key: key);
@@ -32,6 +43,16 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
 
   @override
   void initState() {
+
+    nameController.text = widget.name!;
+    cepController.text = widget.cep!;
+    cityController.text = widget.city!;
+    stateController.text = widget.state!;
+    nbhController.text = widget.nbh!;
+    addressController.text = widget.address!;
+    numberController.text = widget.number!;
+    complementController.text = widget.complement!;
+
     super.initState();
   }
 
@@ -84,6 +105,50 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
 
       final json = await postRequest.sendPostRequest(Links.SAVE_ADDRESS, body);
       // final parsedResponse = jsonDecode(json); // pegar um objeto so
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      final response = User.fromJson(_map[0]);
+
+      if (response.status == "1") {
+        Navigator.of(context).pop(true);
+      } else {}
+      ApplicationMessages(context: context).showMessage(response.msg);
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
+  Future<void> updateAddress(
+      String idAddress,
+      String nameAddress,
+      String cep,
+      String state,
+      String city,
+      String address,
+      String nbh,
+      String number,
+      String complement) async {
+    try {
+      final body = {
+        "id_endereco": idAddress,
+        "nome": nameAddress,
+        "cep": cep,
+        "estado": state,
+        "cidade": city,
+        "endereco": address,
+        "bairro": nbh,
+        "numero": number,
+        "complemento": complement,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.UPDATE_ADDRESS, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -458,15 +523,30 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                         _isLoading = true;
                       });
 
-                      await saveAddress(
-                          nameController.text.toString(),
-                          cepController.text.toString(),
-                          stateController.text.toString(),
-                          cityController.text.toString(),
-                          addressController.text.toString(),
-                          nbhController.text.toString(),
-                          numberController.text.toString(),
-                          complementController.text.toString());
+                      if (widget.id != null) {
+                        await updateAddress(
+                            widget.id!,
+                            nameController.text.toString(),
+                            cepController.text.toString(),
+                            stateController.text.toString(),
+                            cityController.text.toString(),
+                            addressController.text.toString(),
+                            nbhController.text.toString(),
+                            numberController.text.toString(),
+                            complementController.text.toString());
+                      } else {
+                        await saveAddress(
+                            nameController.text.toString(),
+                            cepController.text.toString(),
+                            stateController.text.toString(),
+                            cityController.text.toString(),
+                            addressController.text.toString(),
+                            nbhController.text.toString(),
+                            numberController.text.toString(),
+                            complementController.text.toString());
+                      }
+
+
 
                       setState(() {
                         _isLoading = false;

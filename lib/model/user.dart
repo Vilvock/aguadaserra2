@@ -10,6 +10,7 @@ class User extends GlobalWSModel{
   final String cep;
   final String uf;
   final String cidade;
+  final String estado;
   final String endereco;
   final String bairro;
   final String numero;
@@ -31,6 +32,7 @@ class User extends GlobalWSModel{
     required this.avatar,
     required this.cep,
     required this.uf,
+    required this.estado,
     required this.cidade,
     required this.endereco,
     required this.bairro,
@@ -55,6 +57,7 @@ class User extends GlobalWSModel{
       avatar: json['avatar'],
       cep: json['cep'],
       uf: json['uf'],
+      estado: json['estado'],
       cidade: json['cidade'],
       endereco: json['endereco'],
       bairro: json['bairro'],
