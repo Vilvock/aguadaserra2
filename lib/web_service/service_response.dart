@@ -11,18 +11,43 @@ class PostRequest {
 
   PostRequest();
 
-  Future<String> sendPostRequest(String request, dynamic body) async {
+  Future<String> sendPostRequest(String requestEndpoint, dynamic body) async {
     try {
-      print(ApplicationConstant.URL_BASE + request);
+      print(ApplicationConstant.URL_BASE + requestEndpoint);
 
       final response = await http.post(
-        Uri.parse(ApplicationConstant.URL_BASE + request),
+        Uri.parse(ApplicationConstant.URL_BASE + requestEndpoint),
 
         body: jsonEncode(body),
       );
 
       if (response.statusCode == 200) {
         return response.body;
+      } else {
+        throw Exception('Falha na solicitação POST: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Erro durante a solicitação POST: $e');
+    }
+  }
+
+  Future<String> sendPostRequestMultiPart(String requestEndpoint, File file) async {
+    try {
+      print(ApplicationConstant.URL_BASE + requestEndpoint);
+
+      var request = http.MultipartRequest("POST", Uri.parse(ApplicationConstant.URL_BASE + requestEndpoint));
+      request.fields['app_users_id'] = '24';
+      request.fields['token'] = ApplicationConstant.TOKEN;
+
+      request.files.add(await http.MultipartFile.fromPath('url', file.path));
+
+      final response = await request.send();
+      final responseString = await response.stream.bytesToString();
+
+      print(responseString + " " + response.statusCode.toString());
+
+      if (response.statusCode == 200) {
+        return responseString;
       } else {
         throw Exception('Falha na solicitação POST: ${response.statusCode}');
       }

@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:app/res/styles.dart';
+import 'package:app/ui/components/alert_dialog_pick_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../../config/application_messages.dart';
 import '../../../../../config/masks.dart';
@@ -47,6 +50,54 @@ class _ProfileState extends State<Profile> {
   final postRequest = PostRequest();
   User? _profileResponse;
 
+  Future pickImageGallery() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+      final imageTemp = File(image.path);
+
+      sendPhoto(imageTemp);
+
+    } on PlatformException catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
+
+  Future pickImageCamera() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.camera);
+      if (image == null) return;
+      final imageTemp = File(image.path);
+
+      sendPhoto(imageTemp);
+
+    } on PlatformException catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
+
+  Future<void> sendPhoto(File image) async {
+    try {
+
+      final json = await postRequest.sendPostRequestMultiPart(Links.UPDATE_AVATAR, image);
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      final response = User.fromJson(_map[0]);
+
+      if (response.status == "01") {
+        setState(() {});
+      } else {}
+      ApplicationMessages(context: context).showMessage(response.msg);
+
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
   Future<Map<String, dynamic>> loadProfileRequest() async {
     try {
       final body = {
@@ -65,12 +116,12 @@ class _ProfileState extends State<Profile> {
       //
       // if (response.status == "01") {
       // setState(() {
-        _profileResponse = response;
+      _profileResponse = response;
 
-        fantasyNameController.text = _profileResponse!.nome.toString();
-        emailController.text = _profileResponse!.email.toString();
-        cnpjController.text = _profileResponse!.documento.toString();
-        cellphoneController.text = _profileResponse!.celular.toString();
+      fantasyNameController.text = _profileResponse!.nome.toString();
+      emailController.text = _profileResponse!.email.toString();
+      cnpjController.text = _profileResponse!.documento.toString();
+      cellphoneController.text = _profileResponse!.celular.toString();
       // });
       // } else {}
 
@@ -106,9 +157,7 @@ class _ProfileState extends State<Profile> {
       final response = User.fromJson(_map[0]);
 
       if (response.status == "01") {
-        setState(() {
-
-        });
+        setState(() {});
       } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
@@ -196,19 +245,22 @@ class _ProfileState extends State<Profile> {
                           final response = User.fromJson(snapshot.data!);
 
                           return Container(
-                            height: 128,
+                              height: 128,
                               width: 128,
                               margin: EdgeInsets.only(
                                   right: Dimens.marginApplication),
                               child:
                                   Stack(alignment: Alignment.center, children: [
-                                    ClipOval(
-                                      child: SizedBox.fromSize(
-                                        size: Size.fromRadius(72), // Image radius
-                                        child: Image.network(ApplicationConstant.URL_AVATAR +
-                                            response.avatar.toString(), fit: BoxFit.cover),
-                                      ),
-                                    ),
+                                ClipOval(
+                                  child: SizedBox.fromSize(
+                                    size: Size.fromRadius(72),
+                                    // Image radius
+                                    child: Image.network(
+                                        ApplicationConstant.URL_AVATAR +
+                                            response.avatar.toString(),
+                                        fit: BoxFit.cover),
+                                  ),
+                                ),
                                 Align(
                                   alignment: Alignment.bottomRight,
                                   child: FloatingActionButton(
@@ -217,7 +269,33 @@ class _ProfileState extends State<Profile> {
                                         color: Colors.black),
                                     backgroundColor: Colors.white,
                                     onPressed: () {
-                                      // Add your onPressed code here!
+                                      showModalBottomSheet<dynamic>(
+                                          isScrollControlled: true,
+                                          context: context,
+                                          shape: Styles().styleShapeBottomSheet,
+                                          clipBehavior:
+                                              Clip.antiAliasWithSaveLayer,
+                                          builder: (BuildContext context) {
+                                            return PickImageAlertDialog(
+                                                iconCamera: IconButton(
+                                                    onPressed: () {
+                                                      pickImageCamera();
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    icon: Icon(Icons.camera_alt,
+                                                        color: Colors.black),
+                                                    iconSize: 60),
+                                                iconGallery: IconButton(
+                                                    onPressed: () {
+                                                      pickImageGallery();
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    icon: Icon(Icons.photo,
+                                                        color: Colors.black),
+                                                    iconSize: 60));
+                                          });
                                     },
                                   ),
                                 )
@@ -359,7 +437,6 @@ class _ProfileState extends State<Profile> {
                       child: ElevatedButton(
                         style: Styles().styleDefaultButton,
                         onPressed: () async {
-
                           if (!validator.validateGenericTextField(
                               fantasyNameController.text, "Nome fantasia"))
                             return;
@@ -386,14 +463,14 @@ class _ProfileState extends State<Profile> {
                         },
                         child: (_isLoading)
                             ? const SizedBox(
-                            width: Dimens.buttonIndicatorWidth,
-                            height: Dimens.buttonIndicatorHeight,
-                            child: CircularProgressIndicator(
-                              color: OwnerColors.colorAccent,
-                              strokeWidth: Dimens.buttonIndicatorStrokes,
-                            ))
+                                width: Dimens.buttonIndicatorWidth,
+                                height: Dimens.buttonIndicatorHeight,
+                                child: CircularProgressIndicator(
+                                  color: OwnerColors.colorAccent,
+                                  strokeWidth: Dimens.buttonIndicatorStrokes,
+                                ))
                             : Text("Atualizar dados",
-                            style: Styles().styleDefaultTextButton),
+                                style: Styles().styleDefaultTextButton),
                       ),
                     ),
                     SizedBox(height: Dimens.marginApplication),
@@ -449,19 +526,19 @@ class _ProfileState extends State<Profile> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                          BorderSide(color: Colors.grey, width: 1.0),
+                              BorderSide(color: Colors.grey, width: 1.0),
                         ),
                         hintText: 'Senha',
                         hintStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius:
-                          BorderRadius.circular(Dimens.radiusApplication),
+                              BorderRadius.circular(Dimens.radiusApplication),
                           borderSide: BorderSide.none,
                         ),
                         filled: true,
                         fillColor: Colors.white,
                         contentPadding:
-                        EdgeInsets.all(Dimens.textFieldPaddingApplication),
+                            EdgeInsets.all(Dimens.textFieldPaddingApplication),
                       ),
                       keyboardType: TextInputType.visiblePassword,
                       obscureText: !_passwordVisible,
@@ -544,19 +621,19 @@ class _ProfileState extends State<Profile> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                          BorderSide(color: Colors.grey, width: 1.0),
+                              BorderSide(color: Colors.grey, width: 1.0),
                         ),
                         hintText: 'Confirmar Senha',
                         hintStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius:
-                          BorderRadius.circular(Dimens.radiusApplication),
+                              BorderRadius.circular(Dimens.radiusApplication),
                           borderSide: BorderSide.none,
                         ),
                         filled: true,
                         fillColor: Colors.white,
                         contentPadding:
-                        EdgeInsets.all(Dimens.textFieldPaddingApplication),
+                            EdgeInsets.all(Dimens.textFieldPaddingApplication),
                       ),
                       keyboardType: TextInputType.visiblePassword,
                       obscureText: !_passwordVisible2,
@@ -593,13 +670,11 @@ class _ProfileState extends State<Profile> {
                       child: ElevatedButton(
                         style: Styles().styleDefaultButton,
                         onPressed: () async {
-
                           if (!validator.validatePassword(
                               passwordController.text)) return;
                           if (!validator.validateCoPassword(
                               passwordController.text,
                               coPasswordController.text)) return;
-
 
                           setState(() {
                             _isLoading = true;
@@ -613,14 +688,14 @@ class _ProfileState extends State<Profile> {
                         },
                         child: (_isLoading)
                             ? const SizedBox(
-                            width: Dimens.buttonIndicatorWidth,
-                            height: Dimens.buttonIndicatorHeight,
-                            child: CircularProgressIndicator(
-                              color: OwnerColors.colorAccent,
-                              strokeWidth: Dimens.buttonIndicatorStrokes,
-                            ))
+                                width: Dimens.buttonIndicatorWidth,
+                                height: Dimens.buttonIndicatorHeight,
+                                child: CircularProgressIndicator(
+                                  color: OwnerColors.colorAccent,
+                                  strokeWidth: Dimens.buttonIndicatorStrokes,
+                                ))
                             : Text("Atualizar senha",
-                            style: Styles().styleDefaultTextButton),
+                                style: Styles().styleDefaultTextButton),
                       ),
                     ),
                   ],
