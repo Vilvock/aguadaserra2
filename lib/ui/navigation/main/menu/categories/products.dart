@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../../../config/preferences.dart';
 import '../../../../../config/useful.dart';
@@ -23,6 +24,7 @@ class Products extends StatefulWidget {
 
 class _Products extends State<Products> {
   bool _isLoading = false;
+  late int _idSub;
 
   final postRequest = PostRequest();
 
@@ -51,13 +53,19 @@ class _Products extends State<Products> {
 
   @override
   Widget build(BuildContext context) {
+    Map data = {};
+    data = ModalRoute.of(context)!.settings.arguments as Map;
+
+    _idSub = data['id_sub'];
+
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(title: "Produtos", isVisibleBackButton: true),
       body: RefreshIndicator(
         onRefresh: _pullRefresh,
         child: FutureBuilder<List<Map<String, dynamic>>>(
-          future: listProducts("1"),
+          future: listProducts(_idSub.toString()),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final responseItem = Product.fromJson(snapshot.data![0]);
@@ -167,11 +175,32 @@ class _Products extends State<Products> {
                         ));
                   },
                 );
+              } else {
+                return Container(
+                    padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height / 20),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                              child: Lottie.network(
+                                  height: 160,
+                                  'https://assets3.lottiefiles.com/private_files/lf30_cgfdhxgx.json')),
+                          SizedBox(height: Dimens.marginApplication),
+                          Text(
+                            Strings.empty_list,
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: Dimens.textSize5,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ]));
               }
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             }
-            return const CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           },
         ),
       ),

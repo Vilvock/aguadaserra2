@@ -2,19 +2,19 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import '../../../config/application_messages.dart';
-import '../../../config/preferences.dart';
-import '../../../config/validator.dart';
-import '../../../global/application_constant.dart';
-import '../../../model/favorite.dart';
-import '../../../model/user.dart';
-import '../../../res/dimens.dart';
-import '../../../res/owner_colors.dart';
-import '../../../res/strings.dart';
-import '../../../web_service/links.dart';
-import '../../../web_service/service_response.dart';
-import '../../components/custom_app_bar.dart';
-import '../../components/progress_hud.dart';
+import '../../../../config/application_messages.dart';
+import '../../../../config/preferences.dart';
+import '../../../../config/validator.dart';
+import '../../../../global/application_constant.dart';
+import '../../../../model/favorite.dart';
+import '../../../../model/user.dart';
+import '../../../../res/dimens.dart';
+import '../../../../res/owner_colors.dart';
+import '../../../../res/strings.dart';
+import '../../../../web_service/links.dart';
+import '../../../../web_service/service_response.dart';
+import '../../../components/custom_app_bar.dart';
+import '../../../components/progress_hud.dart';
 
 class Notifications extends StatefulWidget {
   const Notifications({Key? key}) : super(key: key);

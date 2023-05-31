@@ -2,16 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import '../../../../config/preferences.dart';
-import '../../../../global/application_constant.dart';
-import '../../../../res/dimens.dart';
-import '../../../../res/owner_colors.dart';
-import '../../../../res/strings.dart';
-import '../../../../web_service/links.dart';
-import '../../../../web_service/service_response.dart';
-import '../../../res/styles.dart';
-import '../../components/custom_app_bar.dart';
-import '../../components/progress_hud.dart';
+import '../../../../../config/preferences.dart';
+import '../../../../../global/application_constant.dart';
+import '../../../../../res/dimens.dart';
+import '../../../../../res/owner_colors.dart';
+import '../../../../../res/strings.dart';
+import '../../../../../web_service/links.dart';
+import '../../../../../web_service/service_response.dart';
+import '../../../../res/styles.dart';
+import '../../../components/custom_app_bar.dart';
+import '../../../components/progress_hud.dart';
 
 class FilterProducts extends StatefulWidget {
   const FilterProducts ({Key? key}) : super(key: key);
@@ -38,14 +38,16 @@ class _FilterProducts extends State<FilterProducts> {
     try {
       final body = {
         "id_user": await Preferences.getUserData()!.id,
-        "id_subcategoria": 1,
-        "token": ApplicationConstant.TOKEN
+        "nome": "",
+        "categoria": "1",
+        "sub_categoria": "1",
+        "valor_de": "",
+        "valor_ate": "", "token": ApplicationConstant.TOKEN
       };
 
       print('HTTP_BODY: $body');
 
-      final json =
-      await postRequest.sendPostRequest(Links.FILTER_PRODUCTS, body);
+      final json = await postRequest.sendPostRequest(Links.FILTER_PRODUCTS, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));

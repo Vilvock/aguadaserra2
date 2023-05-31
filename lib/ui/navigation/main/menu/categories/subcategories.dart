@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:app/model/product.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../../../global/application_constant.dart';
 import '../../../../../res/dimens.dart';
@@ -21,6 +22,7 @@ class SubCategories extends StatefulWidget {
 
 class _SubCategories extends State<SubCategories> {
   bool _isLoading = false;
+  late int _idCategory;
 
   final postRequest = PostRequest();
 
@@ -49,13 +51,19 @@ class _SubCategories extends State<SubCategories> {
 
   @override
   Widget build(BuildContext context) {
+    Map data = {};
+    data = ModalRoute.of(context)!.settings.arguments as Map;
+
+    _idCategory = data['id_category'];
+
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(title: "Subcategorias", isVisibleBackButton: true),
       body: RefreshIndicator(
         onRefresh: _pullRefresh,
         child: FutureBuilder<List<Map<String, dynamic>>>(
-          future: listSubCategories("2"),
+          future: listSubCategories(_idCategory.toString()),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final responseItem = Product.fromJson(snapshot.data![0]);
@@ -79,7 +87,7 @@ class _SubCategories extends State<SubCategories> {
                             Navigator.pushNamed(
                                 context, "/ui/products",
                                 arguments: {
-                                  "id_subCategory": response.id,
+                                  "id_sub": response.id,
                                 })
                           },
                           child: Container(
@@ -195,11 +203,32 @@ class _SubCategories extends State<SubCategories> {
                     );
                   },
                 );
+              } else {
+                return Container(
+                    padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height / 20),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                              child: Lottie.network(
+                                  height: 160,
+                                  'https://assets3.lottiefiles.com/private_files/lf30_cgfdhxgx.json')),
+                          SizedBox(height: Dimens.marginApplication),
+                          Text(
+                            Strings.empty_list,
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: Dimens.textSize5,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ]));
               }
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             }
-            return const CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           },
         ),
       ),
