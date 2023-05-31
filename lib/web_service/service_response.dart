@@ -31,12 +31,12 @@ class PostRequest {
     }
   }
 
-  Future<String> sendPostRequestMultiPart(String requestEndpoint, File file) async {
+  Future<String> sendPostRequestMultiPart(String requestEndpoint, File file, String idUser) async {
     try {
       print(ApplicationConstant.URL_BASE + requestEndpoint);
 
       var request = http.MultipartRequest("POST", Uri.parse(ApplicationConstant.URL_BASE + requestEndpoint));
-      request.fields['app_users_id'] = '24';
+      request.fields['app_users_id'] = idUser;
       request.fields['token'] = ApplicationConstant.TOKEN;
 
       request.files.add(await http.MultipartFile.fromPath('url', file.path));

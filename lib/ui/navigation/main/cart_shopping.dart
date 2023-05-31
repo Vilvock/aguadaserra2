@@ -666,8 +666,8 @@ class _CartShopping extends State<CartShopping> {
                                                       return;
                                                     }
 
-                                                    if (double.parse(response
-                                                            .valor_minimo_2) >
+                                                    if (response
+                                                            .valor_minimo_2 >
                                                         response.total_2) {
                                                       ApplicationMessages(
                                                               context: context)

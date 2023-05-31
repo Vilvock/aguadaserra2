@@ -79,7 +79,7 @@ class _ProfileState extends State<Profile> {
   Future<void> sendPhoto(File image) async {
     try {
 
-      final json = await postRequest.sendPostRequestMultiPart(Links.UPDATE_AVATAR, image);
+      final json = await postRequest.sendPostRequestMultiPart(Links.UPDATE_AVATAR, image, await Preferences.getUserData()!.id.toString());
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
