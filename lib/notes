@@ -3,10 +3,10 @@ bug:
 confirmar notificacoes ios
 MIGRACAO bgl do android 13
 pick lat long
+validacoes de permissoes(camera, galeria, notificacoes)
 
 ///////////////
 
-- validacoes de permissoes(camera, galeria, notificacoes)
 - depois que escolher retirada local, mostrar endereco completo e a data e o intervalo (em um card)
 - list pedidos com dados dinamicos
 - mudar cor botao favorito e carrinho (HOME) OK falta os do grid

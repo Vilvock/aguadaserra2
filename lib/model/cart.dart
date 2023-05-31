@@ -3,7 +3,7 @@ import 'global_ws_model.dart';
 class Cart extends GlobalWSModel{
   int qtd_atual;
   int qtd_minima;
-  String valor_minimo;
+  dynamic valor_minimo;
   String total;
   dynamic valor_minimo_2;
   dynamic total_2;

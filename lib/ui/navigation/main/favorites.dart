@@ -242,6 +242,9 @@ class _Favorites extends State<Favorites> {
                                             color: Colors.black,
                                           ),
                                         ),
+                                        SizedBox(
+                                            height:
+                                            Dimens.minMarginApplication),
                                         Text(
                                           response.valor,
                                           style: TextStyle(
