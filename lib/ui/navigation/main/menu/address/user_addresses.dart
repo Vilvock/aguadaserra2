@@ -226,7 +226,7 @@ class _UserAddresses extends State<UserAddresses> {
                               clipBehavior: Clip.antiAliasWithSaveLayer,
                               builder: (BuildContext context) {
                                 return AddressFormAlertDialog(
-                                    id: response.id,
+                                    id: response.id.toString(),
                                     name: response.nome,
                                     cep: response.cep,
                                     city: response.cidade,
@@ -364,7 +364,7 @@ class _UserAddresses extends State<UserAddresses> {
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             }
-            return const CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           },
         ),
       ),

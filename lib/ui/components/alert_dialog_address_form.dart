@@ -44,14 +44,16 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
   @override
   void initState() {
 
-    nameController.text = widget.name!;
-    cepController.text = widget.cep!;
-    cityController.text = widget.city!;
-    stateController.text = widget.state!;
-    nbhController.text = widget.nbh!;
-    addressController.text = widget.address!;
-    numberController.text = widget.number!;
-    complementController.text = widget.complement!;
+    if (widget.id != null) {
+      nameController.text = widget.name!;
+      cepController.text = widget.cep!;
+      cityController.text = widget.city!;
+      stateController.text = widget.state!;
+      nbhController.text = widget.nbh!;
+      addressController.text = widget.address!;
+      numberController.text = widget.number!;
+      complementController.text = widget.complement!;
+    }
 
     super.initState();
   }
@@ -157,7 +159,7 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
 
       final response = User.fromJson(_map[0]);
 
-      if (response.status == "1") {
+      if (response.status == "01") {
         Navigator.of(context).pop(true);
       } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
