@@ -895,7 +895,7 @@ class _ContainerHomeState extends State<ContainerHome> {
 
                                                 return Container(
                                                   child: GridView.count(
-                                                    childAspectRatio: 0.75,
+                                                    childAspectRatio: 0.70,
                                                     primary: false,
                                                     shrinkWrap: true,
                                                     crossAxisCount: 2,
