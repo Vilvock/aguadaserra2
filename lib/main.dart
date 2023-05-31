@@ -11,6 +11,7 @@ import 'package:app/ui/navigation/main/checkout_flow/checkout.dart';
 import 'package:app/ui/navigation/main/checkout_flow/method_payment.dart';
 import 'package:app/ui/navigation/main/checkout_flow/sucess.dart';
 import 'package:app/ui/navigation/main/filter/filter_products.dart';
+import 'package:app/ui/navigation/main/filter/filter_products_results.dart';
 import 'package:app/ui/navigation/main/home.dart';
 import 'package:app/ui/navigation/main/menu/address/user_addresses.dart';
 import 'package:app/ui/navigation/main/menu/categories/categories.dart';
@@ -100,6 +101,7 @@ void main() async {
       '/ui/success': (context) => Success(),
       '/ui/notifications': (context) => Notifications(),
       '/ui/filter_products': (context) => FilterProducts(),
+      '/ui/filter_products_results': (context) => FilterProductsResults(),
       '/ui/order_detail': (context) => OrderDetail(),
 
       //lista horizontal
