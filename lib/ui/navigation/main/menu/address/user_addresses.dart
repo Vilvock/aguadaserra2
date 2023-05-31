@@ -218,8 +218,8 @@ class _UserAddresses extends State<UserAddresses> {
                   itemBuilder: (context, index) {
                     final response = User.fromJson(snapshot.data![index]);
                     return InkWell(
-                        onTap: () {
-                          showModalBottomSheet<dynamic>(
+                        onTap: () async {
+                          final result = await showModalBottomSheet<dynamic>(
                               isScrollControlled: true,
                               context: context,
                               shape: Styles().styleShapeBottomSheet,
@@ -236,6 +236,13 @@ class _UserAddresses extends State<UserAddresses> {
                                     number: response.numero,
                                     complement: response.complemento);
                               });
+                          if(result == true){
+                            Navigator.popUntil(
+                              context,
+                              ModalRoute.withName('/ui/home'),
+                            );
+                            Navigator.pushNamed(context, "/ui/user_addresses");
+                          }
                         },
                         child: Card(
                           shape: RoundedRectangleBorder(
