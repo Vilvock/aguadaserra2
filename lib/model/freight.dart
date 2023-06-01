@@ -4,7 +4,7 @@ class Freight extends GlobalWSModel{
   String valor_itens;
   String valor_frete;
   String valor_total;
-  String valor_minimo;
+  dynamic valor_minimo;
   String total;
 
   Freight({required this.valor_total, required this.valor_minimo, required this.total,

@@ -6,6 +6,7 @@ MIGRACAO bgl do android 13
 
 ///////////////
 
+bug location register
 (list perfil, se saldo_aprovado = 1 pode fazer boleto a prazo)
 
 -cor status pedido

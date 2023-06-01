@@ -28,8 +28,6 @@ class MethodPayment extends StatefulWidget {
 
 class _MethodPayment extends State<MethodPayment>
     with TickerProviderStateMixin {
-
-
   bool _isChanged = false;
 
   int _idAddress = 29;
@@ -94,19 +92,19 @@ class _MethodPayment extends State<MethodPayment>
 
       print('HTTP_BODY: $body');
 
-      final json = await postRequest.sendPostRequest(Links.FIND_WITHDRAWAL_TIME, body);
+      final json =
+          await postRequest.sendPostRequest(Links.FIND_WITHDRAWAL_TIME, body);
       final parsedResponse = jsonDecode(json);
 
       print('HTTP_RESPONSE: $parsedResponse');
 
       final response = Order.fromJson(parsedResponse);
-
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
     }
   }
 
-  Future<void> findWithdrawal(String idAddress) async {
+  Future<Map<String, dynamic>> findWithdrawal(String idAddress) async {
     try {
       final body = {
         "id_endereco": idAddress,
@@ -115,13 +113,15 @@ class _MethodPayment extends State<MethodPayment>
 
       print('HTTP_BODY: $body');
 
-      final json = await postRequest.sendPostRequest(Links.FIND_WITHDRAWAL, body);
+      final json =
+          await postRequest.sendPostRequest(Links.FIND_WITHDRAWAL, body);
       final parsedResponse = jsonDecode(json);
 
       print('HTTP_RESPONSE: $parsedResponse');
 
       final response = Order.fromJson(parsedResponse);
 
+      return parsedResponse;
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
     }
@@ -166,13 +166,11 @@ class _MethodPayment extends State<MethodPayment>
       final response = Cart.fromJson(_map[0]);
 
       if (response.status == "01") {
-
         Navigator.pushNamed(context, "/ui/checkout", arguments: {
           "id_cart": _idCart,
           "total_value": _totalValue,
           "id_order": response.id.toString(),
         });
-
       } else {}
       // ApplicationMessages(context: context).showMessage(response.msg);
     } catch (e) {
@@ -277,7 +275,6 @@ class _MethodPayment extends State<MethodPayment>
               isScrollable: false,
               controller: _tabController,
               onTap: (value) {
-
                 setState(() {
                   if (value == 0) {
                     _isChanged = false;
@@ -286,14 +283,13 @@ class _MethodPayment extends State<MethodPayment>
                   }
                 });
 
-
                 print(value);
-
               },
             ),
           ),
           Container(
-            child: AutoScaleTabBarView(controller: _tabController, children: <Widget>[
+            child: AutoScaleTabBarView(controller: _tabController, children: <
+                Widget>[
               Container(
                 height: 150,
                 child: FutureBuilder<List<Map<String, dynamic>>>(
@@ -336,8 +332,8 @@ class _MethodPayment extends State<MethodPayment>
                                             SizedBox(
                                                 height: Dimens
                                                     .minMarginApplication),
-                                            Expanded(child:
-                                            Text(
+                                            Expanded(
+                                                child: Text(
                                               response.endereco_completo,
                                               style: TextStyle(
                                                 fontFamily: 'Inter',
@@ -349,7 +345,6 @@ class _MethodPayment extends State<MethodPayment>
                                                 height: Dimens
                                                     .minMarginApplication),
                                             Styles().div_horizontal,
-
                                             SizedBox(
                                                 height: Dimens
                                                     .minMarginApplication),
@@ -378,92 +373,193 @@ class _MethodPayment extends State<MethodPayment>
                     }),
               ),
               Container(
-                padding: EdgeInsets.all(Dimens.paddingApplication),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Escolha a data e horário para retirada",
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: Dimens.textSize6,
-                          fontWeight: FontWeight.w300,
-                          color: Colors.black,
-                        ),
+                      Container(
+                        height: 150,
+                        child: FutureBuilder<List<Map<String, dynamic>>>(
+                            future: findAddress(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                final response =
+                                    User.fromJson(snapshot.data![0]);
+
+                                if (response.rows != 0) {
+                                  return Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          Dimens.minRadiusApplication),
+                                    ),
+                                    margin: EdgeInsets.all(
+                                        Dimens.minMarginApplication),
+                                    child: InkWell(
+                                        onTap: () {
+                                          Navigator.pushNamed(
+                                              context, "/ui/user_addresses");
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.all(
+                                              Dimens.paddingApplication),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      response.nome,
+                                                      style: TextStyle(
+                                                        fontFamily: 'Inter',
+                                                        fontSize:
+                                                            Dimens.textSize5,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                        height: Dimens
+                                                            .minMarginApplication),
+                                                    Expanded(
+                                                        child: Text(
+                                                      response
+                                                          .endereco_completo,
+                                                      style: TextStyle(
+                                                        fontFamily: 'Inter',
+                                                        fontSize:
+                                                            Dimens.textSize5,
+                                                        color: Colors.black,
+                                                      ),
+                                                    )),
+                                                    SizedBox(
+                                                        height: Dimens
+                                                            .minMarginApplication),
+                                                    Styles().div_horizontal,
+                                                    SizedBox(
+                                                        height: Dimens
+                                                            .minMarginApplication),
+                                                    Text(
+                                                      "Alterar endereço",
+                                                      style: TextStyle(
+                                                        fontFamily: 'Inter',
+                                                        fontSize:
+                                                            Dimens.textSize4,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: OwnerColors
+                                                            .colorPrimaryDark,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        )),
+                                  );
+                                }
+                              } else if (snapshot.hasError) {
+                                return Text('${snapshot.error}');
+                              }
+                              return Center(child: CircularProgressIndicator());
+                            }),
                       ),
-                      SizedBox(height: Dimens.marginApplication),
-                      TextField(
-                        decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: OwnerColors.colorPrimary, width: 1.5),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.grey, width: 1.0),
-                          ),
-                          hintText: 'Data',
-                          hintStyle: TextStyle(color: Colors.grey),
-                          border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(Dimens.radiusApplication),
-                            borderSide: BorderSide.none,
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                          contentPadding: EdgeInsets.all(
-                              Dimens.textFieldPaddingApplication),
-                        ),
-                        keyboardType: TextInputType.emailAddress,
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: Dimens.textSize5,
-                        ),
-                      ),
-                      SizedBox(height: Dimens.marginApplication),
-                      TextField(
-                        decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: OwnerColors.colorPrimary, width: 1.5),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.grey, width: 1.0),
-                          ),
-                          hintText: 'Horário',
-                          hintStyle: TextStyle(color: Colors.grey),
-                          border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(Dimens.radiusApplication),
-                            borderSide: BorderSide.none,
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                          contentPadding: EdgeInsets.all(
-                              Dimens.textFieldPaddingApplication),
-                        ),
-                        keyboardType: TextInputType.emailAddress,
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: Dimens.textSize5,
-                        ),
-                      ),
+                      Container(
+                          padding: EdgeInsets.all(Dimens.paddingApplication),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Escolha a data e horário para retirada",
+                                style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontSize: Dimens.textSize6,
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              SizedBox(height: Dimens.marginApplication),
+                              TextField(
+                                decoration: InputDecoration(
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: OwnerColors.colorPrimary,
+                                        width: 1.5),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.grey, width: 1.0),
+                                  ),
+                                  hintText: 'Data',
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        Dimens.radiusApplication),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  contentPadding: EdgeInsets.all(
+                                      Dimens.textFieldPaddingApplication),
+                                ),
+                                keyboardType: TextInputType.emailAddress,
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: Dimens.textSize5,
+                                ),
+                              ),
+                              SizedBox(height: Dimens.marginApplication),
+                              TextField(
+                                decoration: InputDecoration(
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: OwnerColors.colorPrimary,
+                                        width: 1.5),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.grey, width: 1.0),
+                                  ),
+                                  hintText: 'Horário',
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        Dimens.radiusApplication),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  contentPadding: EdgeInsets.all(
+                                      Dimens.textFieldPaddingApplication),
+                                ),
+                                keyboardType: TextInputType.emailAddress,
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: Dimens.textSize5,
+                                ),
+                              ),
+                            ],
+                          ))
                     ]),
               )
             ]),
           ),
+          FutureBuilder<Map<String, dynamic>>(
+              future: findWithdrawal(_idAddress.toString()),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  // final response = User.fromJson(snapshot.data![0]);
 
-                  Card(
+                  return Card(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            Dimens.minRadiusApplication),
+                        borderRadius:
+                            BorderRadius.circular(Dimens.minRadiusApplication),
                       ),
-                      margin: EdgeInsets.all(
-                          Dimens.minMarginApplication),
+                      margin: EdgeInsets.all(Dimens.minMarginApplication),
                       child: Container(
-                        padding: EdgeInsets.all(
-                            Dimens.paddingApplication),
+                        padding: EdgeInsets.all(Dimens.paddingApplication),
                         child: Column(children: [
                           Row(
                             children: [
@@ -488,7 +584,11 @@ class _MethodPayment extends State<MethodPayment>
                             ],
                           ),
                         ]),
-                      )),
+                      ));
+                }
+
+                return Center();
+              }),
           SizedBox(height: Dimens.minMarginApplication),
           Styles().div_horizontal,
           SizedBox(height: Dimens.minMarginApplication),
@@ -507,20 +607,18 @@ class _MethodPayment extends State<MethodPayment>
                       _totalValue,
                       "");
                 } else {
-                  // addOrder(
-                  //     _idCart.toString(),
-                  //     ApplicationConstant.TYPE_DELIVERY_2.toString(),
-                  //     null,
-                  //     "",
-                  //     "",
-                  //     ApplicationConstant.PIX.toString(),
-                  //     _itensValue,
-                  //     _freightValue,
-                  //     _totalValue,
-                  //     "");
+                  addOrder(
+                      _idCart.toString(),
+                      ApplicationConstant.TYPE_DELIVERY_2.toString(),
+                      null,
+                      "",
+                      "",
+                      ApplicationConstant.PIX.toString(),
+                      _itensValue,
+                      _freightValue,
+                      _totalValue,
+                      "");
                 }
-
-
               },
               child: Card(
                   shape: RoundedRectangleBorder(
@@ -536,10 +634,10 @@ class _MethodPayment extends State<MethodPayment>
                         Container(
                             margin: EdgeInsets.all(Dimens.minMarginApplication),
                             child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimens.minRadiusApplication),
-                                    child: Image.asset('images/qr_code.png',
-                                        height: 50, width: 50))),
+                                borderRadius: BorderRadius.circular(
+                                    Dimens.minRadiusApplication),
+                                child: Image.asset('images/qr_code.png',
+                                    height: 50, width: 50))),
                         Expanded(
                             child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -592,11 +690,11 @@ class _MethodPayment extends State<MethodPayment>
                       children: [
                         Container(
                             margin: EdgeInsets.all(Dimens.minMarginApplication),
-                            child:  ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimens.minRadiusApplication),
-                                    child: Image.asset('images/credit_card.png',
-                                        height: 50, width: 50))),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(
+                                    Dimens.minRadiusApplication),
+                                child: Image.asset('images/credit_card.png',
+                                    height: 50, width: 50))),
                         Expanded(
                             child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -650,10 +748,10 @@ class _MethodPayment extends State<MethodPayment>
                         Container(
                             margin: EdgeInsets.all(Dimens.minMarginApplication),
                             child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimens.minRadiusApplication),
-                                    child: Image.asset('images/ticket.png',
-                                        height: 50, width: 50))),
+                                borderRadius: BorderRadius.circular(
+                                    Dimens.minRadiusApplication),
+                                child: Image.asset('images/ticket.png',
+                                    height: 50, width: 50))),
                         Expanded(
                             child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -691,64 +789,63 @@ class _MethodPayment extends State<MethodPayment>
                       ],
                     ),
                   ))),
-
-                  InkWell(
-                      onTap: () {},
-                      child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(Dimens.minRadiusApplication),
-                          ),
-                          margin: EdgeInsets.all(Dimens.minMarginApplication),
-                          child: Container(
-                            padding: EdgeInsets.all(Dimens.minPaddingApplication),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                    margin: EdgeInsets.all(Dimens.minMarginApplication),
-                                    child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(
-                                            Dimens.minRadiusApplication),
-                                        child: Image.asset('images/calendar.png',
-                                            height: 50, width: 50))),
-                                Expanded(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Boleto à prazo",
-                                          style: TextStyle(
-                                            fontFamily: 'Inter',
-                                            fontSize: Dimens.textSize5,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: Dimens.minMarginApplication,
-                                        ),
-                                        Text(
-                                          ".",
-                                          style: TextStyle(
-                                            fontFamily: 'Inter',
-                                            fontSize: Dimens.textSize4,
-                                            color: Colors.black87,
-                                          ),
-                                        ),
-                                      ],
-                                    )),
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.arrow_forward_ios,
-                                    color: Colors.black38,
-                                    size: 20,
-                                  ),
-                                  onPressed: () => {},
-                                )
-                              ],
+          InkWell(
+              onTap: () {},
+              child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(Dimens.minRadiusApplication),
+                  ),
+                  margin: EdgeInsets.all(Dimens.minMarginApplication),
+                  child: Container(
+                    padding: EdgeInsets.all(Dimens.minPaddingApplication),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                            margin: EdgeInsets.all(Dimens.minMarginApplication),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(
+                                    Dimens.minRadiusApplication),
+                                child: Image.asset('images/calendar.png',
+                                    height: 50, width: 50))),
+                        Expanded(
+                            child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Boleto à prazo",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: Dimens.textSize5,
+                                color: Colors.black,
+                              ),
                             ),
-                          )))
+                            SizedBox(
+                              height: Dimens.minMarginApplication,
+                            ),
+                            Text(
+                              ".",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: Dimens.textSize4,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ],
+                        )),
+                        IconButton(
+                          icon: Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.black38,
+                            size: 20,
+                          ),
+                          onPressed: () => {},
+                        )
+                      ],
+                    ),
+                  )))
         ]))));
   }
 }
