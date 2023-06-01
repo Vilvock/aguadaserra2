@@ -88,11 +88,20 @@ class Preferences {
     return preferences.getBool('login') ?? false;
   }
 
+  static Future<void> setDefaultAddress(String value) async {
+    await setString('address', value);
+  }
+
+  static String? getDefaultAddress() {
+    return getString('address');
+  }
+
   static Future<void> clearUserData() async {
     final preferences = await getSharedPreferences();
     await preferences.remove('getData');
     await preferences.remove('login');
     await preferences.remove('token');
+    await preferences.remove('address');
     await preferences.remove('arrayNotifyCompare');
   }
 

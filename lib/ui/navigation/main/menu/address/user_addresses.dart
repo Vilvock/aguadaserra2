@@ -28,6 +28,17 @@ class UserAddresses extends StatefulWidget {
 class _UserAddresses extends State<UserAddresses> {
   bool _isLoading = false;
 
+  @override
+  void initState() {
+    Preferences.init();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   final postRequest = PostRequest();
 
   Future<List<Map<String, dynamic>>> listAddresses() async {
@@ -198,6 +209,7 @@ class _UserAddresses extends State<UserAddresses> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
@@ -260,7 +272,7 @@ class _UserAddresses extends State<UserAddresses> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Visibility(
-                                        visible: index == 0,
+                                        visible: response.id.toString() == Preferences.getDefaultAddress().toString(),
                                         child: Text(
                                           "Endereço selecionado",
                                           style: TextStyle(
@@ -293,7 +305,33 @@ class _UserAddresses extends State<UserAddresses> {
                                       ),
                                       SizedBox(
                                           height: Dimens.minMarginApplication),
-                                      Styles().div_horizontal
+                                      Styles().div_horizontal,
+                                      SizedBox(
+                                          height: Dimens.minMarginApplication),
+                                      Visibility(
+                                        visible: response.id.toString() != Preferences.getDefaultAddress().toString(),
+                                        child: GestureDetector(onTap:() async {
+
+
+                                            await Preferences.init();
+                                            await Preferences.setDefaultAddress(response.id.toString());
+
+
+                                            setState(() {
+
+                                            });
+
+
+                                        }, child: Text(
+                                          "Definir endereço padrão",
+                                          style: TextStyle(
+                                            fontFamily: 'Inter',
+                                            fontSize: Dimens.textSize4,
+                                            fontWeight: FontWeight.bold,
+                                            color: OwnerColors.colorPrimary,
+                                          )),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),

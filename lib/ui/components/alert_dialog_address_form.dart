@@ -562,7 +562,7 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                           color: OwnerColors.colorAccent,
                           strokeWidth: Dimens.buttonIndicatorStrokes,
                         ))
-                        : Text("Adicionar",
+                        : Text("Salvar",
                         style: Styles().styleDefaultTextButton),
                   ),
                 ),
