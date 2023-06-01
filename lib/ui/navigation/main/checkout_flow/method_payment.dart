@@ -30,7 +30,7 @@ class _MethodPayment extends State<MethodPayment>
     with TickerProviderStateMixin {
   bool _isChanged = false;
 
-  int _idAddress = 29;
+  String _idAddress = "";
   late int _idCart;
   late String _totalValue;
   late String _freightValue;
@@ -46,6 +46,8 @@ class _MethodPayment extends State<MethodPayment>
       length: 2,
       vsync: this,
     );
+    Preferences.init();
+    _idAddress = Preferences.getDefaultAddress().toString();
     super.initState();
   }
 
@@ -308,7 +310,10 @@ class _MethodPayment extends State<MethodPayment>
                             child: InkWell(
                                 onTap: () {
                                   Navigator.pushNamed(
-                                      context, "/ui/user_addresses");
+                                      context, "/ui/user_addresses").then((_) => setState(() {
+
+                                      _idAddress = Preferences.getDefaultAddress().toString();
+                                  }));
                                 },
                                 child: Container(
                                   padding:
