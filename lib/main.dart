@@ -103,30 +103,6 @@ void main() async {
       '/ui/filter_products': (context) => FilterProducts(),
       '/ui/filter_products_results': (context) => FilterProductsResults(),
       '/ui/order_detail': (context) => OrderDetail(),
-
-      //lista horizontal
-      // Container(
-      //   height: 180,
-      //   child: ListView.builder(
-      //     scrollDirection: Axis.horizontal,
-      //     itemCount: /*numbersList.length*/ 2,
-      //     itemBuilder: (context, index) {
-      //       return Card(
-      //         shape: RoundedRectangleBorder(
-      //           borderRadius: BorderRadius.circular(
-      //               Dimens.minRadiusApplication),
-      //         ),
-      //         margin:
-      //             EdgeInsets.all(Dimens.minMarginApplication),
-      //         child: Container(
-      //           width: MediaQuery.of(context).size.width * 0.80,
-      //           padding:
-      //               EdgeInsets.all(Dimens.paddingApplication),
-      //         ),
-      //       );
-      //     },
-      //   ),
-      // ),
     },
   ));
 }

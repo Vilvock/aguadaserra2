@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:app/model/freight.dart';
 import 'package:app/model/order.dart';
+import 'package:autoscale_tabbarview/autoscale_tabbarview.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../config/application_messages.dart';
@@ -27,6 +28,10 @@ class MethodPayment extends StatefulWidget {
 
 class _MethodPayment extends State<MethodPayment>
     with TickerProviderStateMixin {
+
+
+  bool _isChanged = false;
+
   int _idAddress = 29;
   late int _idCart;
   late String _totalValue;
@@ -50,6 +55,33 @@ class _MethodPayment extends State<MethodPayment>
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  Future<Map<String, dynamic>> loadProfileRequest() async {
+    try {
+      final body = {
+        "id": await Preferences.getUserData()!.id,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.LOAD_PROFILE, body);
+      final parsedResponse = jsonDecode(json);
+
+      print('HTTP_RESPONSE: $parsedResponse');
+
+      final response = User.fromJson(parsedResponse);
+      //
+      // if (response.status == "01") {
+      // setState(() {
+      // });
+      // } else {}
+
+      return parsedResponse;
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
   }
 
   Future<void> findWithdrawalTime(String withdrawal, String date) async {
@@ -244,12 +276,26 @@ class _MethodPayment extends State<MethodPayment>
               indicatorPadding: EdgeInsets.all(Dimens.minPaddingApplication),
               isScrollable: false,
               controller: _tabController,
+              onTap: (value) {
+
+                setState(() {
+                  if (value == 0) {
+                    _isChanged = false;
+                  } else {
+                    _isChanged = true;
+                  }
+                });
+
+
+                print(value);
+
+              },
             ),
           ),
           Container(
-            height: 200,
-            child: TabBarView(controller: _tabController, children: <Widget>[
+            child: AutoScaleTabBarView(controller: _tabController, children: <Widget>[
               Container(
+                height: 150,
                 child: FutureBuilder<List<Map<String, dynamic>>>(
                     future: findAddress(),
                     builder: (context, snapshot) {
@@ -279,7 +325,36 @@ class _MethodPayment extends State<MethodPayment>
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "Endereço selecionado",
+                                              response.nome,
+                                              style: TextStyle(
+                                                fontFamily: 'Inter',
+                                                fontSize: Dimens.textSize5,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                                height: Dimens
+                                                    .minMarginApplication),
+                                            Expanded(child:
+                                            Text(
+                                              response.endereco_completo,
+                                              style: TextStyle(
+                                                fontFamily: 'Inter',
+                                                fontSize: Dimens.textSize5,
+                                                color: Colors.black,
+                                              ),
+                                            )),
+                                            SizedBox(
+                                                height: Dimens
+                                                    .minMarginApplication),
+                                            Styles().div_horizontal,
+
+                                            SizedBox(
+                                                height: Dimens
+                                                    .minMarginApplication),
+                                            Text(
+                                              "Alterar endereço",
                                               style: TextStyle(
                                                 fontFamily: 'Inter',
                                                 fontSize: Dimens.textSize4,
@@ -288,21 +363,6 @@ class _MethodPayment extends State<MethodPayment>
                                                     .colorPrimaryDark,
                                               ),
                                             ),
-                                            SizedBox(
-                                                height: Dimens
-                                                    .minMarginApplication),
-                                            Text(
-                                              response.endereco_completo,
-                                              style: TextStyle(
-                                                fontFamily: 'Inter',
-                                                fontSize: Dimens.textSize5,
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                                height: Dimens
-                                                    .minMarginApplication),
-                                            Styles().div_horizontal
                                           ],
                                         ),
                                       )
@@ -314,7 +374,7 @@ class _MethodPayment extends State<MethodPayment>
                       } else if (snapshot.hasError) {
                         return Text('${snapshot.error}');
                       }
-                      return const CircularProgressIndicator();
+                      return Center(child: CircularProgressIndicator());
                     }),
               ),
               Container(
@@ -475,15 +535,11 @@ class _MethodPayment extends State<MethodPayment>
                       children: [
                         Container(
                             margin: EdgeInsets.all(Dimens.minMarginApplication),
-                            child: Material(
-                                borderRadius: BorderRadius.circular(
-                                    Dimens.minRadiusApplication),
-                                elevation: Dimens.elevationApplication,
-                                child: ClipRRect(
+                            child: ClipRRect(
                                     borderRadius: BorderRadius.circular(
                                         Dimens.minRadiusApplication),
                                     child: Image.asset('images/qr_code.png',
-                                        height: 70, width: 70)))),
+                                        height: 50, width: 50))),
                         Expanded(
                             child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -493,7 +549,7 @@ class _MethodPayment extends State<MethodPayment>
                               "PIX",
                               style: TextStyle(
                                 fontFamily: 'Inter',
-                                fontSize: Dimens.textSize6,
+                                fontSize: Dimens.textSize5,
                                 color: Colors.black,
                               ),
                             ),
@@ -536,15 +592,11 @@ class _MethodPayment extends State<MethodPayment>
                       children: [
                         Container(
                             margin: EdgeInsets.all(Dimens.minMarginApplication),
-                            child: Material(
-                                borderRadius: BorderRadius.circular(
-                                    Dimens.minRadiusApplication),
-                                elevation: Dimens.elevationApplication,
-                                child: ClipRRect(
+                            child:  ClipRRect(
                                     borderRadius: BorderRadius.circular(
                                         Dimens.minRadiusApplication),
                                     child: Image.asset('images/credit_card.png',
-                                        height: 70, width: 70)))),
+                                        height: 50, width: 50))),
                         Expanded(
                             child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -554,7 +606,7 @@ class _MethodPayment extends State<MethodPayment>
                               "Novo Cartão de Crédito",
                               style: TextStyle(
                                 fontFamily: 'Inter',
-                                fontSize: Dimens.textSize6,
+                                fontSize: Dimens.textSize5,
                                 color: Colors.black,
                               ),
                             ),
@@ -597,15 +649,11 @@ class _MethodPayment extends State<MethodPayment>
                       children: [
                         Container(
                             margin: EdgeInsets.all(Dimens.minMarginApplication),
-                            child: Material(
-                                borderRadius: BorderRadius.circular(
-                                    Dimens.minRadiusApplication),
-                                elevation: Dimens.elevationApplication,
-                                child: ClipRRect(
+                            child: ClipRRect(
                                     borderRadius: BorderRadius.circular(
                                         Dimens.minRadiusApplication),
                                     child: Image.asset('images/ticket.png',
-                                        height: 70, width: 70)))),
+                                        height: 50, width: 50))),
                         Expanded(
                             child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -615,7 +663,7 @@ class _MethodPayment extends State<MethodPayment>
                               "Boleto",
                               style: TextStyle(
                                 fontFamily: 'Inter',
-                                fontSize: Dimens.textSize6,
+                                fontSize: Dimens.textSize5,
                                 color: Colors.black,
                               ),
                             ),
@@ -642,7 +690,65 @@ class _MethodPayment extends State<MethodPayment>
                         )
                       ],
                     ),
-                  )))
+                  ))),
+
+                  InkWell(
+                      onTap: () {},
+                      child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius.circular(Dimens.minRadiusApplication),
+                          ),
+                          margin: EdgeInsets.all(Dimens.minMarginApplication),
+                          child: Container(
+                            padding: EdgeInsets.all(Dimens.minPaddingApplication),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                    margin: EdgeInsets.all(Dimens.minMarginApplication),
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                            Dimens.minRadiusApplication),
+                                        child: Image.asset('images/calendar.png',
+                                            height: 50, width: 50))),
+                                Expanded(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Boleto à prazo",
+                                          style: TextStyle(
+                                            fontFamily: 'Inter',
+                                            fontSize: Dimens.textSize5,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: Dimens.minMarginApplication,
+                                        ),
+                                        Text(
+                                          ".",
+                                          style: TextStyle(
+                                            fontFamily: 'Inter',
+                                            fontSize: Dimens.textSize4,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: Colors.black38,
+                                    size: 20,
+                                  ),
+                                  onPressed: () => {},
+                                )
+                              ],
+                            ),
+                          )))
         ]))));
   }
 }

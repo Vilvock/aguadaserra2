@@ -9,6 +9,7 @@ MIGRACAO bgl do android 13
 (list perfil, se saldo_aprovado = 1 pode fazer boleto a prazo)
 
 -cor status pedido
+- colocar quantiodade digitando tbm
 
 -colcoar spinner
 colocar pra entrar cpf no cadastro (nome)
