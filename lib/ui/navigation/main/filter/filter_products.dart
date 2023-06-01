@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app/config/application_messages.dart';
 import 'package:app/model/product.dart';
 import 'package:flutter/material.dart';
 
@@ -23,8 +24,8 @@ class FilterProducts extends StatefulWidget {
 
 class _FilterProducts extends State<FilterProducts> {
   bool _isLoading = false;
-  var currentSelectedValue;
-  static const deviceTypes = ["Mac", "Windows", "Mobile"];
+  String currentSelectedValueCategory = "Selecione";
+  String currentSelectedValueSubcategory = "Selecione";
 
   final postRequest = PostRequest();
 
@@ -33,12 +34,17 @@ class _FilterProducts extends State<FilterProducts> {
   double _startValue = 0;
   double _endValue = 1000.0;
 
+  int? _categoryPosition;
+  int? _subcategoryPosition;
+
+  String? _idCategory;
+  String? _idSubcategory;
+
   @override
   void dispose() {
     queryController.dispose();
     super.dispose();
   }
-
 
   Future<List<Map<String, dynamic>>> listCategories() async {
     try {
@@ -47,7 +53,7 @@ class _FilterProducts extends State<FilterProducts> {
       print('HTTP_BODY: $body');
 
       final json =
-      await postRequest.sendPostRequest(Links.LIST_CATEGORIES, body);
+          await postRequest.sendPostRequest(Links.LIST_CATEGORIES, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -60,7 +66,8 @@ class _FilterProducts extends State<FilterProducts> {
     }
   }
 
-  Future<List<Map<String, dynamic>>> listSubCategories(String idCategory) async {
+  Future<List<Map<String, dynamic>>> listSubCategories(
+      String idCategory) async {
     try {
       final body = {
         "id_categoria": idCategory,
@@ -70,7 +77,7 @@ class _FilterProducts extends State<FilterProducts> {
       print('HTTP_BODY: $body');
 
       final json =
-      await postRequest.sendPostRequest(Links.LIST_SUBCATEGORIES, body);
+          await postRequest.sendPostRequest(Links.LIST_SUBCATEGORIES, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -83,15 +90,20 @@ class _FilterProducts extends State<FilterProducts> {
     }
   }
 
-  Future<void> filterProducts({String? name, String? idCategory, String? idSubCategory, String? valueFrom, String? valueTo}) async {
+  Future<void> filterProducts(
+      {String? name,
+      String? idCategory,
+      String? idSubCategory,
+      String? valueFrom,
+      String? valueTo}) async {
     try {
       final body = {
         "id_user": await Preferences.getUserData()!.id,
         "nome": name,
         "categoria": idCategory,
         "sub_categoria": idSubCategory,
-        "valor_de": valueFrom,
-        "valor_ate": valueTo,
+        "valor_de": "R\$ " + valueFrom!.replaceAll(".", ","),
+        "valor_ate": "R\$ " + valueTo!.replaceAll(".", ","),
         "token": ApplicationConstant.TOKEN
       };
 
@@ -107,16 +119,13 @@ class _FilterProducts extends State<FilterProducts> {
 
       final response = Product.fromJson(_map[0]);
 
-      if (response.rows != "0") {
-
-        Navigator.pushNamed(context, "/ui/filter_products_results",
-            arguments: {
-              "filtered_products": json,
+      if (response.rows != 0) {
+        Navigator.pushNamed(context, "/ui/filter_products_results", arguments: {
+          "filtered_products": json,
         });
       } else {
-
+        ApplicationMessages(context: context).showMessage(Strings.empty_list);
       }
-
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
     }
@@ -183,33 +192,75 @@ class _FilterProducts extends State<FilterProducts> {
                     color: Colors.black,
                   ),
                 ),
-                Container(
-                    padding: EdgeInsets.only(top: Dimens.minPaddingApplication, bottom: Dimens.minPaddingApplication),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        isExpanded: true,
-                        hint: Text("Selecione", style: TextStyle(
-                          fontFamily: 'Inter',
-                          color: OwnerColors.colorPrimary,
-                        ),),
-                        value: currentSelectedValue,
-                        isDense: true,
-                        onChanged: (newValue) {
-                          setState(() {
-                            currentSelectedValue = newValue;
-                          });
-                          print(currentSelectedValue);
-                        },
-                        items: deviceTypes.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value, style: TextStyle(
-                            fontFamily: 'Inter',
-                              color: OwnerColors.colorPrimary,)),
-                          );
-                        }).toList(),
-                      ),
-                    )),
+                FutureBuilder<List<Map<String, dynamic>>>(
+                  future: listCategories(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final responseItem = Product.fromJson(snapshot.data![0]);
+
+                      if (responseItem.rows != 0) {
+
+                        var categoryList = <String>[];
+
+                        categoryList.add("Selecione");
+                        for (var i = 0; i < snapshot.data!.length; i++) {
+                          categoryList.add(Product.fromJson(snapshot.data![i]).nome);
+                        }
+
+                        print("aaaaaaaaaaaaa" + categoryList.toString());
+
+                        return Container(
+                            padding: EdgeInsets.only(
+                                top: Dimens.minPaddingApplication,
+                                bottom: Dimens.minPaddingApplication),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                hint: Text(
+                                  "Selecione",
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    color: OwnerColors.colorPrimary,
+                                  ),
+                                ),
+                                value: currentSelectedValueCategory,
+                                isDense: true,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    currentSelectedValueSubcategory = "Selecione";
+                                    currentSelectedValueCategory = newValue!;
+
+                                    if(categoryList.indexOf(newValue) > 0) {
+                                      _categoryPosition = categoryList.indexOf(newValue) - 1;
+                                      _idCategory = Product.fromJson(snapshot.data![_categoryPosition!]).id.toString();
+                                    } else {
+                                      _idCategory = null;
+                                    }
+
+                                    print(currentSelectedValueCategory + _categoryPosition.toString() + _idCategory.toString());
+                                  });
+                                },
+                                items: categoryList.map((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value,
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          color: OwnerColors.colorPrimary,
+                                        )),
+                                  );
+                                }).toList(),
+                              ),
+                            ));
+                      } else {
+
+                      }
+                    } else if (snapshot.hasError) {
+                      return Text('${snapshot.error}');
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  },
+                ),
                 SizedBox(height: Dimens.marginApplication),
                 Text(
                   "Subcategoria:",
@@ -219,32 +270,75 @@ class _FilterProducts extends State<FilterProducts> {
                     color: Colors.black,
                   ),
                 ),
+                FutureBuilder<List<Map<String, dynamic>>>(
+                  future: listSubCategories(_idCategory.toString()),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final responseItem = Product.fromJson(snapshot.data![0]);
 
-                Container(
-                    padding: EdgeInsets.only(top: Dimens.minPaddingApplication, bottom: Dimens.minPaddingApplication),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        isExpanded: true,
-                        hint: Text("Selecione", style: TextStyle(
-                          fontFamily: 'Inter',
-                          color: OwnerColors.colorPrimary,
-                        ),),
-                        value: currentSelectedValue,
-                        isDense: true,
-                        onChanged: (newValue) {
-                          setState(() {
-                            currentSelectedValue = newValue;
-                          });
-                          print(currentSelectedValue);
-                        },
-                        items: deviceTypes.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                    )),
+                      if (responseItem.rows != 0) {
+
+                        var subCategoryList = <String>[];
+
+                        subCategoryList.add("Selecione");
+                        for (var i = 0; i < snapshot.data!.length; i++) {
+                          subCategoryList.add(Product.fromJson(snapshot.data![i]).nome);
+                        }
+
+                        print("aaaaaaaaaaaaa" + subCategoryList.toString());
+
+                        return Container(
+                            padding: EdgeInsets.only(
+                                top: Dimens.minPaddingApplication,
+                                bottom: Dimens.minPaddingApplication),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                hint: Text(
+                                  "Selecione",
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    color: OwnerColors.colorPrimary,
+                                  ),
+                                ),
+                                value: currentSelectedValueSubcategory,
+                                isDense: true,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    currentSelectedValueSubcategory = newValue!;
+                                    _subcategoryPosition = subCategoryList.indexOf(newValue) - 1;
+
+                                    if(subCategoryList.indexOf(newValue) > 0) {
+                                      _subcategoryPosition = subCategoryList.indexOf(newValue) - 1;
+                                      _idSubcategory = Product.fromJson(snapshot.data![_subcategoryPosition!]).id.toString();
+                                    } else {
+                                      _idSubcategory = null;
+                                    }
+
+                                    print(currentSelectedValueSubcategory + _subcategoryPosition.toString() + _idSubcategory.toString());
+                                  });
+                                },
+                                items: subCategoryList.map((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value,
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          color: OwnerColors.colorPrimary,
+                                        )),
+                                  );
+                                }).toList(),
+                              ),
+                            ));
+                      } else {
+
+                      }
+                    } else if (snapshot.hasError) {
+                      return Text('${snapshot.error}');
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  },
+                ),
                 SizedBox(height: Dimens.marginApplication),
                 Text(
                   "Valor(minímo - máximo):",
@@ -254,16 +348,14 @@ class _FilterProducts extends State<FilterProducts> {
                     color: Colors.black,
                   ),
                 ),
-
                 SizedBox(height: Dimens.marginApplication),
-
                 RangeSlider(
                   min: 0.0,
                   max: 1000.0,
                   divisions: 100,
                   labels: RangeLabels(
                     "R\$ " + _startValue.round().toString(),
-                    "R\$ " +_endValue.round().toString(),
+                    "R\$ " + _endValue.round().toString(),
                   ),
                   values: RangeValues(_startValue, _endValue),
                   onChanged: (values) {
@@ -287,29 +379,30 @@ class _FilterProducts extends State<FilterProducts> {
                 child: ElevatedButton(
                   style: Styles().styleDefaultButton,
                   onPressed: () async {
-
                     setState(() {
                       _isLoading = true;
                     });
 
-                    await filterProducts();
+                    await filterProducts(
+                        name: queryController.text,
+                        idCategory: _idCategory,
+                        idSubCategory: _idSubcategory,
+                        valueFrom: _startValue.toString(),
+                        valueTo: _endValue.toString());
 
                     setState(() {
                       _isLoading = false;
                     });
-
-
                   },
                   child: (_isLoading)
                       ? const SizedBox(
-                      width: Dimens.buttonIndicatorWidth,
-                      height: Dimens.buttonIndicatorHeight,
-                      child: CircularProgressIndicator(
-                        color: OwnerColors.colorAccent,
-                        strokeWidth: Dimens.buttonIndicatorStrokes,
-                      ))
-                      : Text("Filtrar",
-                      style: Styles().styleDefaultTextButton),
+                          width: Dimens.buttonIndicatorWidth,
+                          height: Dimens.buttonIndicatorHeight,
+                          child: CircularProgressIndicator(
+                            color: OwnerColors.colorAccent,
+                            strokeWidth: Dimens.buttonIndicatorStrokes,
+                          ))
+                      : Text("Filtrar", style: Styles().styleDefaultTextButton),
                 ),
               ),
             ],

@@ -7,6 +7,8 @@ pick lat long (get location)
 
 ///////////////
 
+(list perfil, se saldo aprovado = 1 pode fazer boleto a prazo)
+
 cor status pedido
 colocar pra entrar cpf no cadastro (nome)
 cnpj (nome fantasia)
