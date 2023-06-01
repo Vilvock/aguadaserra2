@@ -180,7 +180,7 @@ class _MethodPayment extends State<MethodPayment>
     }
   }
 
-  Future<void> calculeFreightValue() async {
+  Future<Map<String, dynamic>> calculeFreightValue() async {
     try {
       final body = {
         "id_endereco": _idAddress,
@@ -201,6 +201,8 @@ class _MethodPayment extends State<MethodPayment>
       _itensValue = response.valor_itens;
       _freightValue = response.valor_frete;
       _totalValue = response.valor_total;
+
+      return parsedResponse;
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
     }
@@ -221,8 +223,6 @@ class _MethodPayment extends State<MethodPayment>
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
 
       print('HTTP_RESPONSE: $_map');
-
-      calculeFreightValue();
 
       return _map;
     } catch (e) {
@@ -293,90 +293,151 @@ class _MethodPayment extends State<MethodPayment>
             child: AutoScaleTabBarView(controller: _tabController, children: <
                 Widget>[
               Container(
-                height: 150,
-                child: FutureBuilder<List<Map<String, dynamic>>>(
-                    future: findAddress(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        final response = User.fromJson(snapshot.data![0]);
+                  height: 220,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 150,
+                        child: FutureBuilder<List<Map<String, dynamic>>>(
+                            future: findAddress(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                final response =
+                                    User.fromJson(snapshot.data![0]);
 
-                        if (response.rows != 0) {
-                          return Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  Dimens.minRadiusApplication),
-                            ),
-                            margin: EdgeInsets.all(Dimens.minMarginApplication),
-                            child: InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                      context, "/ui/user_addresses").then((_) => setState(() {
+                                if (response.rows != 0) {
+                                  return Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          Dimens.minRadiusApplication),
+                                    ),
+                                    margin: EdgeInsets.all(
+                                        Dimens.minMarginApplication),
+                                    child: InkWell(
+                                        onTap: () {
+                                          Navigator.pushNamed(
+                                                  context, "/ui/user_addresses")
+                                              .then((_) => setState(() {
+                                                    _idAddress = Preferences
+                                                            .getDefaultAddress()
+                                                        .toString();
+                                                  }));
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.all(
+                                              Dimens.paddingApplication),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      response.nome,
+                                                      style: TextStyle(
+                                                        fontFamily: 'Inter',
+                                                        fontSize:
+                                                            Dimens.textSize5,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                        height: Dimens
+                                                            .minMarginApplication),
+                                                    Expanded(
+                                                        child: Text(
+                                                      response
+                                                          .endereco_completo,
+                                                      style: TextStyle(
+                                                        fontFamily: 'Inter',
+                                                        fontSize:
+                                                            Dimens.textSize5,
+                                                        color: Colors.black,
+                                                      ),
+                                                    )),
+                                                    SizedBox(
+                                                        height: Dimens
+                                                            .minMarginApplication),
+                                                    Styles().div_horizontal,
+                                                    SizedBox(
+                                                        height: Dimens
+                                                            .minMarginApplication),
+                                                    Text(
+                                                      "Alterar endereço",
+                                                      style: TextStyle(
+                                                        fontFamily: 'Inter',
+                                                        fontSize:
+                                                            Dimens.textSize4,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: OwnerColors
+                                                            .colorPrimaryDark,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        )),
+                                  );
+                                }
+                              } else if (snapshot.hasError) {
+                                return Text('${snapshot.error}');
+                              }
+                              return Center(child: CircularProgressIndicator());
+                            }),
+                      ),
+                      FutureBuilder<Map<String, dynamic>>(
+                          future: calculeFreightValue(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final response = Freight.fromJson(snapshot.data!);
 
-                                      _idAddress = Preferences.getDefaultAddress().toString();
-                                  }));
-                                },
-                                child: Container(
-                                  padding:
-                                      EdgeInsets.all(Dimens.paddingApplication),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              response.nome,
-                                              style: TextStyle(
-                                                fontFamily: 'Inter',
-                                                fontSize: Dimens.textSize5,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                                height: Dimens
-                                                    .minMarginApplication),
-                                            Expanded(
-                                                child: Text(
-                                              response.endereco_completo,
-                                              style: TextStyle(
-                                                fontFamily: 'Inter',
-                                                fontSize: Dimens.textSize5,
-                                                color: Colors.black,
-                                              ),
-                                            )),
-                                            SizedBox(
-                                                height: Dimens
-                                                    .minMarginApplication),
-                                            Styles().div_horizontal,
-                                            SizedBox(
-                                                height: Dimens
-                                                    .minMarginApplication),
-                                            Text(
-                                              "Alterar endereço",
-                                              style: TextStyle(
-                                                fontFamily: 'Inter',
-                                                fontSize: Dimens.textSize4,
-                                                fontWeight: FontWeight.bold,
-                                                color: OwnerColors
-                                                    .colorPrimaryDark,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
+                              return Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        Dimens.minRadiusApplication),
                                   ),
-                                )),
-                          );
-                        }
-                      } else if (snapshot.hasError) {
-                        return Text('${snapshot.error}');
-                      }
-                      return Center(child: CircularProgressIndicator());
-                    }),
-              ),
+                                  margin: EdgeInsets.all(
+                                      Dimens.minMarginApplication),
+                                  child: Container(
+                                    padding: EdgeInsets.all(
+                                        Dimens.paddingApplication),
+                                    child: Column(children: [
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              "Valor do frete",
+                                              style: TextStyle(
+                                                fontFamily: 'Inter',
+                                                fontSize: Dimens.textSize6,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            response.valor_frete.toString(),
+                                            style: TextStyle(
+                                              fontFamily: 'Inter',
+                                              fontSize: Dimens.textSize6,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ]),
+                                  ));
+                            }
+
+                            return Center();
+                          }),
+                    ],
+                  )),
               Container(
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -551,49 +612,6 @@ class _MethodPayment extends State<MethodPayment>
               )
             ]),
           ),
-          FutureBuilder<Map<String, dynamic>>(
-              future: findWithdrawal(_idAddress.toString()),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  // final response = User.fromJson(snapshot.data![0]);
-
-                  return Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(Dimens.minRadiusApplication),
-                      ),
-                      margin: EdgeInsets.all(Dimens.minMarginApplication),
-                      child: Container(
-                        padding: EdgeInsets.all(Dimens.paddingApplication),
-                        child: Column(children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  "Valor do frete",
-                                  style: TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontSize: Dimens.textSize6,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                "",
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontSize: Dimens.textSize6,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ]),
-                      ));
-                }
-
-                return Center();
-              }),
           SizedBox(height: Dimens.minMarginApplication),
           Styles().div_horizontal,
           SizedBox(height: Dimens.minMarginApplication),
