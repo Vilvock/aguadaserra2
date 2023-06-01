@@ -5,6 +5,7 @@ import 'package:app/res/styles.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import '../../../config/application_messages.dart';
 import '../../../config/masks.dart';
 import '../../../config/preferences.dart';
@@ -119,6 +120,20 @@ class _RegisterState extends State<Register> {
     final prefs = await SharedPreferences.getInstance();
     final userData = user.toJson();
     await prefs.setString('user', jsonEncode(userData));
+  }
+
+  Future<Position?> determinePosition() async {
+    LocationPermission permission;
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.deniedForever) {
+        return Future.error('Location Not Available');
+      }
+    } else {
+      throw Exception('Error');
+    }
+    return await Geolocator.getCurrentPosition();
   }
 
   final TextEditingController emailController = TextEditingController();
@@ -570,6 +585,8 @@ class _RegisterState extends State<Register> {
                             _isLoading = true;
                           });
 
+                          var position = await determinePosition();
+
                           await registerRequest(
                               emailController.text,
                               passwordController.text,
@@ -577,8 +594,8 @@ class _RegisterState extends State<Register> {
                               socialReasonController.text,
                               cnpjController.text,
                               cellphoneController.text,
-                              "432432432",
-                              "432423423");
+                              position!.latitude.toString(),
+                              position!.longitude.toString());
 
                           setState(() {
                             _isLoading = false;

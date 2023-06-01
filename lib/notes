@@ -3,28 +3,21 @@ bug:
 add interceptor e timeout request
 confirmar notificacoes ios
 MIGRACAO bgl do android 13
-pick lat long (get location)
 
 ///////////////
 
-(list perfil, se saldo aprovado = 1 pode fazer boleto a prazo)
+(list perfil, se saldo_aprovado = 1 pode fazer boleto a prazo)
 
-cor status pedido
+-cor status pedido
+
+-colcoar spinner
 colocar pra entrar cpf no cadastro (nome)
 cnpj (nome fantasia)
 
-- depois que escolher retirada local, mostrar endereco completo e a data e o intervalo (em um card)
-- list pedidos com dados dinamicos
 - mudar cor botao favorito e carrinho (HOME) OK falta os do grid
-
-- colocar valor do frete(no method payment ao trocar endereço, colocar click " alterar endereco")
-
+- depois que escolher retirada local, mostrar endereco completo e a data e o intervalo (em um card)
 - fazer troca de enderecos dinamica no pagamento
-- terminar compra/checkout/visualizacao de itens e sucesso com todos dados dinamicos (list retirada e horarios)
-
-
-- trocar alguns icones para finos
-- add metodo de pagamento boleto
+- colocar valor do frete(no method payment ao trocar endereço, colocar click " alterar endereco")
 
 
 
