@@ -74,7 +74,7 @@ class _Checkout extends State<Checkout> {
         "id_usuario": await Preferences.getUserData()!.id,
         "id_pedido": idOrder,
         "tipo_pagamento": ApplicationConstant.CREDIT_CARD,
-        "payment_id": "",
+        "payment_id": idCreditCard,
         "valor": totalValue,
         "card": idCreditCard,
         "token": ApplicationConstant.TOKEN
