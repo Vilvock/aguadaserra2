@@ -10,9 +10,9 @@ bug location register
 (list perfil, se saldo_aprovado = 1 pode fazer boleto a prazo)
 
 -cor status pedido Pendente,Aprovado,Rejeitado,Cancelado,Devolvido
-- colocar quantiodade digitando tbm
+- colocar quantiodade produto digitando tbm
 
--colcoar spinner
+-colcoar spinner register cpf/ cnpj
 colocar pra entrar cpf no cadastro (nome)
 cnpj (nome fantasia)
 

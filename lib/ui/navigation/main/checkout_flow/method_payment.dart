@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:app/model/freight.dart';
 import 'package:app/model/order.dart';
+import 'package:app/ui/components/alert_dialog_date_picker.dart';
 import 'package:autoscale_tabbarview/autoscale_tabbarview.dart';
 import 'package:flutter/material.dart';
 
@@ -30,6 +31,10 @@ class _MethodPayment extends State<MethodPayment>
     with TickerProviderStateMixin {
   bool _isChanged = false;
 
+  var _hasSchedule = false;
+  var _schedule = "";
+  String _idSchedule = "";
+
   String _idAddress = "";
   late int _idCart;
   late String _totalValue;
@@ -38,6 +43,8 @@ class _MethodPayment extends State<MethodPayment>
 
   final postRequest = PostRequest();
   late TabController _tabController;
+
+  final TextEditingController dateController = TextEditingController();
 
   @override
   void initState() {
@@ -53,8 +60,37 @@ class _MethodPayment extends State<MethodPayment>
 
   @override
   void dispose() {
+    dateController.dispose();
     _tabController.dispose();
     super.dispose();
+  }
+
+  void goToCheckout (String typePayment) {
+    if (_tabController.index == 0) {
+      addOrder(
+          _idCart.toString(),
+          ApplicationConstant.TYPE_DELIVERY_1.toString(),
+          _idAddress.toString(),
+          null,
+          null,
+          typePayment,
+          _itensValue,
+          _freightValue,
+          _totalValue,
+          "");
+    } else {
+      addOrder(
+          _idCart.toString(),
+          ApplicationConstant.TYPE_DELIVERY_2.toString(),
+          null,
+          _idSchedule,
+          dateController.text.toString(),
+          typePayment,
+          _itensValue,
+          _freightValue,
+          _totalValue,
+          "");
+    }
   }
 
   Future<Map<String, dynamic>> loadProfileRequest() async {
@@ -96,20 +132,34 @@ class _MethodPayment extends State<MethodPayment>
 
       final json =
           await postRequest.sendPostRequest(Links.FIND_WITHDRAWAL_TIME, body);
-      final parsedResponse = jsonDecode(json);
 
-      print('HTTP_RESPONSE: $parsedResponse');
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
 
-      final response = Order.fromJson(parsedResponse);
+      print('HTTP_RESPONSE: $_map');
+
+      final response = Order.fromJson(_map[0]);
+
+      setState(() {
+        if (response.status != "02") {
+          _idSchedule = response.id;
+          _hasSchedule = true;
+          _schedule =
+              "De: " + response.horario_in + " Até: " + response.horario_out;
+        } else {
+          _hasSchedule = false;
+          ApplicationMessages(context: context).showMessage(response.msg);
+        }
+      });
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
     }
   }
 
-  Future<Map<String, dynamic>> findWithdrawal(String idAddress) async {
+  Future<Map<String, dynamic>> findWithdrawal() async {
     try {
       final body = {
-        "id_endereco": idAddress,
+        "id_endereco": _idAddress,
         "token": ApplicationConstant.TOKEN
       };
 
@@ -439,6 +489,7 @@ class _MethodPayment extends State<MethodPayment>
                     ],
                   )),
               Container(
+                height: /*_hasSchedule ? */ 360 /*: 236*/,
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -532,82 +583,127 @@ class _MethodPayment extends State<MethodPayment>
                               return Center(child: CircularProgressIndicator());
                             }),
                       ),
-                      Container(
-                          padding: EdgeInsets.all(Dimens.paddingApplication),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Escolha a data e horário para retirada",
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontSize: Dimens.textSize6,
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              SizedBox(height: Dimens.marginApplication),
-                              TextField(
-                                decoration: InputDecoration(
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: OwnerColors.colorPrimary,
-                                        width: 1.5),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.grey, width: 1.0),
-                                  ),
-                                  hintText: 'Data',
-                                  hintStyle: TextStyle(color: Colors.grey),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimens.radiusApplication),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  contentPadding: EdgeInsets.all(
-                                      Dimens.textFieldPaddingApplication),
-                                ),
-                                keyboardType: TextInputType.emailAddress,
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: Dimens.textSize5,
-                                ),
-                              ),
-                              SizedBox(height: Dimens.marginApplication),
-                              TextField(
-                                decoration: InputDecoration(
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: OwnerColors.colorPrimary,
-                                        width: 1.5),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.grey, width: 1.0),
-                                  ),
-                                  hintText: 'Horário',
-                                  hintStyle: TextStyle(color: Colors.grey),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimens.radiusApplication),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  contentPadding: EdgeInsets.all(
-                                      Dimens.textFieldPaddingApplication),
-                                ),
-                                keyboardType: TextInputType.emailAddress,
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: Dimens.textSize5,
-                                ),
-                              ),
-                            ],
-                          ))
+                      FutureBuilder<Map<String, dynamic>>(
+                          future: findWithdrawal(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final response = Order.fromJson(snapshot.data!);
+
+                              return Container(
+                                  padding: EdgeInsets.all(
+                                      Dimens.minPaddingApplication),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // Text(
+                                      //   "Escolha a data",
+                                      //   style: TextStyle(
+                                      //     fontFamily: 'Inter',
+                                      //     fontSize: Dimens.textSize6,
+                                      //     fontWeight: FontWeight.w300,
+                                      //     color: Colors.black,
+                                      //   ),
+                                      // ),
+                                      // SizedBox(height: Dimens.marginApplication),
+                                      Container(
+                                        width: double.infinity,
+                                        child: ElevatedButton(
+                                            style: Styles().styleDefaultButton,
+                                            onPressed: () {
+                                              showModalBottomSheet<dynamic>(
+                                                  isScrollControlled: true,
+                                                  context: context,
+                                                  shape: Styles()
+                                                      .styleShapeBottomSheet,
+                                                  clipBehavior: Clip
+                                                      .antiAliasWithSaveLayer,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return DatePickerAlertDialog(
+                                                        dateController:
+                                                            dateController,
+                                                        btnConfirm: Container(
+                                                            margin: EdgeInsets.only(
+                                                                top: Dimens
+                                                                    .marginApplication),
+                                                            width:
+                                                                double.infinity,
+                                                            child:
+                                                                ElevatedButton(
+                                                                    style: Styles()
+                                                                        .styleDefaultButton,
+                                                                    onPressed:
+                                                                        () {
+                                                                      findWithdrawalTime(
+                                                                          response
+                                                                              .id_ponto
+                                                                              .toString(),
+                                                                          dateController
+                                                                              .text);
+
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    child: Text(
+                                                                        "Selecionar",
+                                                                        style: Styles()
+                                                                            .styleDefaultTextButton))));
+                                                  });
+                                            },
+                                            child: Text(
+                                              "Escolher data para retirar",
+                                              style: Styles()
+                                                  .styleDefaultTextButton,
+                                            )),
+                                      ),
+
+                                      SizedBox(
+                                          height: Dimens.minMarginApplication),
+                                      Visibility(
+                                          visible: _hasSchedule,
+                                          child: Card(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(Dimens
+                                                        .minRadiusApplication),
+                                              ),
+                                              child: Container(
+                                                width: double.infinity,
+                                                padding: EdgeInsets.all(
+                                                    Dimens.paddingApplication),
+                                                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                                  Text(
+                                                      "Horários para retirada nesta data",
+                                                      style: TextStyle(
+                                                        fontFamily: 'Inter',
+                                                        fontSize:
+                                                            Dimens.textSize5,
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+
+                                                  SizedBox(
+                                                      height: Dimens.minMarginApplication),
+                                                  Text(
+                                                    _schedule + "\n\nLocal:\n" + response.nome_ponto,
+                                                    style: TextStyle(
+                                                      fontFamily: 'Inter',
+                                                      fontSize:
+                                                          Dimens.textSize4,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                ]),
+                                              )))
+                                    ],
+                                  ));
+                            } else if (snapshot.hasError) {
+                              return Text('${snapshot.error}');
+                            }
+                            return Center(child: CircularProgressIndicator());
+                          })
                     ]),
               )
             ]),
@@ -617,31 +713,7 @@ class _MethodPayment extends State<MethodPayment>
           SizedBox(height: Dimens.minMarginApplication),
           InkWell(
               onTap: () {
-                if (_tabController.index == 0) {
-                  addOrder(
-                      _idCart.toString(),
-                      ApplicationConstant.TYPE_DELIVERY_1.toString(),
-                      _idAddress.toString(),
-                      null,
-                      null,
-                      ApplicationConstant.PIX.toString(),
-                      _itensValue,
-                      _freightValue,
-                      _totalValue,
-                      "");
-                } else {
-                  addOrder(
-                      _idCart.toString(),
-                      ApplicationConstant.TYPE_DELIVERY_2.toString(),
-                      null,
-                      "",
-                      "",
-                      ApplicationConstant.PIX.toString(),
-                      _itensValue,
-                      _freightValue,
-                      _totalValue,
-                      "");
-                }
+                goToCheckout(ApplicationConstant.PIX.toString());
               },
               child: Card(
                   shape: RoundedRectangleBorder(
@@ -699,7 +771,11 @@ class _MethodPayment extends State<MethodPayment>
                     ),
                   ))),
           InkWell(
-              onTap: () {},
+              onTap: () {
+
+                goToCheckout(ApplicationConstant.CREDIT_CARD.toString());
+
+              },
               child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius:
@@ -756,7 +832,10 @@ class _MethodPayment extends State<MethodPayment>
                     ),
                   ))),
           InkWell(
-              onTap: () {},
+              onTap: () {
+
+                goToCheckout(ApplicationConstant.TICKET.toString());
+              },
               child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius:
@@ -813,7 +892,11 @@ class _MethodPayment extends State<MethodPayment>
                     ),
                   ))),
           InkWell(
-              onTap: () {},
+              onTap: () {
+
+                goToCheckout(ApplicationConstant.TICKET_IN_TERM.toString());
+
+              },
               child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius:

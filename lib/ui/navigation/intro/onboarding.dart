@@ -102,7 +102,6 @@ class _OnboardingState extends State<Onboarding> {
                       Container(
                         margin: EdgeInsets.all(Dimens.marginApplication),
                         width: double.infinity,
-                        height: 50,
                         child: ElevatedButton(
                             style: Styles().styleDefaultButton,
                             onPressed: () {
