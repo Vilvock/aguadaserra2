@@ -142,7 +142,7 @@ class _MethodPayment extends State<MethodPayment>
 
       setState(() {
         if (response.status != "02") {
-          _idSchedule = response.id;
+          _idSchedule = response.id.toString();
           _hasSchedule = true;
           _schedule =
               "De: " + response.horario_in + " Até: " + response.horario_out;
@@ -222,6 +222,7 @@ class _MethodPayment extends State<MethodPayment>
           "id_cart": _idCart,
           "total_value": _totalValue,
           "id_order": response.id.toString(),
+          "type_payment": typePayment,
         });
       } else {}
       // ApplicationMessages(context: context).showMessage(response.msg);

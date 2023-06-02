@@ -31,6 +31,7 @@ class _Checkout extends State<Checkout> {
   late int _idCart;
   late String _totalValue;
   late String _idOrder;
+  late String _typePayment;
 
   final postRequest = PostRequest();
 
@@ -210,6 +211,7 @@ class _Checkout extends State<Checkout> {
     _idCart = data['id_cart'];
     _totalValue = data['total_value'];
     _idOrder = data['id_order'];
+    _typePayment = data['type_payment'];
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -423,7 +425,15 @@ class _Checkout extends State<Checkout> {
                           _isLoading = true;
                         });
 
-                        await payWithPIX(_idOrder.toString(), _totalValue);
+                        if (_typePayment == ApplicationConstant.PIX.toString()) {
+                          await payWithPIX(_idOrder.toString(), _totalValue);
+                        } else if (_typePayment == ApplicationConstant.CREDIT_CARD.toString()) {
+                          await payWithCreditCard(_idOrder.toString(), _totalValue, "id");
+                        } else if (_typePayment == ApplicationConstant.TICKET.toString()) {
+                          await payWithTicket(_idOrder.toString(), _totalValue);
+                        } else {
+                          await payWithTicketWithOutAddress(_idOrder.toString(), _totalValue);
+                        }
 
                         setState(() {
                           _isLoading = false;
