@@ -428,7 +428,7 @@ class _Checkout extends State<Checkout> {
                         if (_typePayment == ApplicationConstant.PIX.toString()) {
                           await payWithPIX(_idOrder.toString(), _totalValue);
                         } else if (_typePayment == ApplicationConstant.CREDIT_CARD.toString()) {
-                          await payWithCreditCard(_idOrder.toString(), _totalValue, "id");
+                          await payWithCreditCard(_idOrder.toString(), _totalValue, "b54a0c03be40b21e9e40635de82bb8d1");
                         } else if (_typePayment == ApplicationConstant.TICKET.toString()) {
                           await payWithTicket(_idOrder.toString(), _totalValue);
                         } else {
