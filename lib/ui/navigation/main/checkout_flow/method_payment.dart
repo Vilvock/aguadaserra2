@@ -443,6 +443,26 @@ class _MethodPayment extends State<MethodPayment>
                                           ),
                                         )),
                                   );
+                                } else {
+                                    return Center(child: GestureDetector(onTap: () {
+                                      Navigator.pushNamed(
+                                          context, "/ui/user_addresses")
+                                          .then((_) => setState(() {
+                                        _idAddress = Preferences
+                                            .getDefaultAddress()
+                                            .toString();
+                                      }));
+                                    },child: Text(
+                                        "Selecionar endereço",
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontSize:
+                                          Dimens.textSize6,
+                                          fontWeight:
+                                          FontWeight.bold,
+                                          color: OwnerColors
+                                              .colorPrimaryDark,
+                                        ),)));
                                 }
                               } else if (snapshot.hasError) {
                                 return Text('${snapshot.error}');
