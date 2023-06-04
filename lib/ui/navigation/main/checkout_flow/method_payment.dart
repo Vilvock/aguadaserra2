@@ -46,6 +46,7 @@ class _MethodPayment extends State<MethodPayment>
 
 
   User? _profileResponse;
+  User? _addressResponse;
 
   final TextEditingController dateController = TextEditingController();
 
@@ -230,9 +231,18 @@ class _MethodPayment extends State<MethodPayment>
           "total_value": _totalValue,
           "id_order": response.id.toString(),
           "type_payment": typePayment,
+          "cep": _addressResponse?.cep.toString(),
+          "estado": _addressResponse?.estado.toString(),
+          "cidade":_addressResponse?.cidade.toString(),
+          "endereco": _addressResponse?.endereco.toString(),
+          "bairro": _addressResponse?.bairro.toString(),
+          "numero": _addressResponse?.numero.toString(),
+          "complemento": _addressResponse?.complemento.toString(),
         });
-      } else {}
-      // ApplicationMessages(context: context).showMessage(response.msg);
+      } else {
+
+        ApplicationMessages(context: context).showMessage(response.msg);
+      }
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
     }
@@ -281,6 +291,14 @@ class _MethodPayment extends State<MethodPayment>
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
 
       print('HTTP_RESPONSE: $_map');
+
+      final response = User.fromJson(_map[0]);
+
+      // setState(() {
+
+        _addressResponse = response;
+
+      // });
 
       return _map;
     } catch (e) {

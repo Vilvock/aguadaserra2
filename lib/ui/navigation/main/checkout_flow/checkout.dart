@@ -33,6 +33,14 @@ class _Checkout extends State<Checkout> {
   late String _idOrder;
   late String _typePayment;
 
+  late String _cep;
+  late String _city;
+  late String _state;
+  late String _nbh;
+  late String _address;
+  late String _number;
+  late String _complement;
+
   final postRequest = PostRequest();
 
   @override
@@ -45,21 +53,22 @@ class _Checkout extends State<Checkout> {
     super.dispose();
   }
 
-  Future<void> createTokenCreditCard() async {
+  Future<void> createTokenCreditCard(String cardNumber, String expirationMonth, String expirationYear, String securityCode, String name, String document) async {
     try {
       final body = {
-        "card_number": "4235647728025682",
-        "expiration_month": "11",
-        "expiration_year": "2025",
-        "security_code": "123",
-        "nome": "Guilherme Orestes",
-        "cpf": "85570826068",
+        "card_number": cardNumber,
+        "expiration_month": expirationMonth,
+        "expiration_year": expirationYear,
+        "security_code": securityCode,
+        "nome": name,
+        "cpf": document,
         "token": ApplicationConstant.TOKEN
       };
 
       print('HTTP_BODY: $body');
 
-      final json = await postRequest.sendPostRequest(Links.CREATE_TOKEN_CARD, body);
+      final json =
+          await postRequest.sendPostRequest(Links.CREATE_TOKEN_CARD, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -163,19 +172,27 @@ class _Checkout extends State<Checkout> {
     }
   }
 
-  Future<void> payWithTicket(String idOrder, String totalValue) async {
+  Future<void> payWithTicket(
+      String idOrder,
+      String totalValue,
+      String cep,
+      String state,
+      String city,
+      String address,
+      String nbh,
+      String number) async {
     try {
       final body = {
         "id_pedido": idOrder,
         "id_usuario": await Preferences.getUserData()!.id,
         "tipo_pagamento": ApplicationConstant.TICKET,
         "valor": totalValue,
-        "cep": "90690-040",
-        "estado": "RS",
-        "cidade": "Porto Alegre",
-        "endereco": "Rua Antonio carlos tibiricça",
-        "bairro": "Petroópolis",
-        "numero": "7464",
+        "cep": cep,
+        "estado": state,
+        "cidade": city,
+        "endereco": address,
+        "bairro": nbh,
+        "numero": number,
         "token": ApplicationConstant.TOKEN
       };
 
@@ -245,6 +262,15 @@ class _Checkout extends State<Checkout> {
     _idOrder = data['id_order'];
     _typePayment = data['type_payment'];
 
+
+    _cep = data['cep'];
+    _city = data['cidade'];
+    _state = data['estado'];
+    _nbh = data['bairro'];
+    _address = data['endereco'];
+    _number = data['numero'];
+    _complement = data['complemento'];
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(
@@ -293,11 +319,11 @@ class _Checkout extends State<Checkout> {
                             ),
                             SizedBox(height: Dimens.minMarginApplication),
                             Text(
-                              "Cidade - estado" +
+                              "$_city - $_state" +
                                   "\n" +
-                                  "Endereço e numero 000" +
+                                  "$_nbh, $_address $_number" +
                                   "\n\n" +
-                                  "Complemento: lorem ipsum",
+                                  "$_complement",
                               style: TextStyle(
                                 fontFamily: 'Inter',
                                 fontSize: Dimens.textSize5,
@@ -457,14 +483,19 @@ class _Checkout extends State<Checkout> {
                           _isLoading = true;
                         });
 
-                        if (_typePayment == ApplicationConstant.PIX.toString()) {
+                        if (_typePayment ==
+                            ApplicationConstant.PIX.toString()) {
                           await payWithPIX(_idOrder.toString(), _totalValue);
-                        } else if (_typePayment == ApplicationConstant.CREDIT_CARD.toString()) {
-                          await payWithCreditCard(_idOrder.toString(), _totalValue, "b54a0c03be40b21e9e40635de82bb8d1");
-                        } else if (_typePayment == ApplicationConstant.TICKET.toString()) {
-                          await payWithTicket(_idOrder.toString(), _totalValue);
+                        } else if (_typePayment ==
+                            ApplicationConstant.CREDIT_CARD.toString()) {
+                          await payWithCreditCard(_idOrder.toString(),
+                              _totalValue, "");
+                        } else if (_typePayment ==
+                            ApplicationConstant.TICKET.toString()) {
+                          await payWithTicket(_idOrder.toString(), _totalValue, _cep, _state, _city, _address, _nbh, _number);
                         } else {
-                          await payWithTicketWithOutAddress(_idOrder.toString(), _totalValue);
+                          await payWithTicketWithOutAddress(
+                              _idOrder.toString(), _totalValue);
                         }
 
                         setState(() {

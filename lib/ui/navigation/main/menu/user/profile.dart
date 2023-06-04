@@ -120,7 +120,7 @@ class _ProfileState extends State<Profile> {
 
       fantasyNameController.text = _profileResponse!.nome.toString();
       emailController.text = _profileResponse!.email.toString();
-      cnpjController.text = _profileResponse!.documento.toString();
+      documentController.text = _profileResponse!.documento.toString();
       cellphoneController.text = _profileResponse!.celular.toString();
       // });
       // } else {}
@@ -206,7 +206,7 @@ class _ProfileState extends State<Profile> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController coPasswordController = TextEditingController();
   final TextEditingController socialReasonController = TextEditingController();
-  final TextEditingController cnpjController = TextEditingController();
+  final TextEditingController documentController = TextEditingController();
   final TextEditingController cellphoneController = TextEditingController();
   final TextEditingController fantasyNameController = TextEditingController();
 
@@ -216,7 +216,7 @@ class _ProfileState extends State<Profile> {
     passwordController.dispose();
     coPasswordController.dispose();
     socialReasonController.dispose();
-    cnpjController.dispose();
+    documentController.dispose();
     cellphoneController.dispose();
     fantasyNameController.dispose();
     super.dispose();
@@ -338,6 +338,7 @@ class _ProfileState extends State<Profile> {
                     ),
                     SizedBox(height: Dimens.marginApplication),
                     TextField(
+                      readOnly: true,
                       controller: emailController,
                       decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
@@ -368,8 +369,9 @@ class _ProfileState extends State<Profile> {
                     ),
                     SizedBox(height: Dimens.marginApplication),
                     TextField(
-                      controller: cnpjController,
-                      inputFormatters: [Masks().cnpjMask()],
+                      readOnly: true,
+                      controller: documentController,
+                      // inputFormatters: [Masks().cnpjMask()],
                       decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -442,7 +444,7 @@ class _ProfileState extends State<Profile> {
                             return;
                           if (!validator.validateEmail(emailController.text))
                             return;
-                          if (!validator.validateCNPJ(cnpjController.text))
+                          if (!validator.validateCNPJ(documentController.text))
                             return;
                           if (!validator.validateCellphone(
                               cellphoneController.text)) return;
@@ -453,7 +455,7 @@ class _ProfileState extends State<Profile> {
 
                           await updateUserDataRequest(
                               fantasyNameController.text,
-                              cnpjController.text,
+                              documentController.text,
                               cellphoneController.text,
                               emailController.text);
 
