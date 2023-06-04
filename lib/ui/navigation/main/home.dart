@@ -890,7 +890,9 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                       image: response.url_foto,
                                                       name: response.nome,
                                                       value: response.valor,
-                                                      id: response.id));
+                                                      id: response.id,
+                                                      responseFavoriteList: responseFavoriteList,
+                                                      responseCartList: responseCartList,));
                                                 }
 
                                                 return Container(
@@ -978,6 +980,8 @@ class GridItemBuilder extends StatelessWidget {
   final String name;
   final String value;
   final String category;
+  final List<Map<String, dynamic>> responseFavoriteList;
+  final List<dynamic> responseCartList;
 
   GridItemBuilder(
       {Key? key,
@@ -985,7 +989,7 @@ class GridItemBuilder extends StatelessWidget {
       required this.image,
       required this.name,
       required this.value,
-      required this.id});
+      required this.id, required this.responseCartList, required this.responseFavoriteList});
 
   final TextEditingController quantityController = TextEditingController();
 
@@ -1084,6 +1088,43 @@ class GridItemBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    var _isFavorite = false;
+
+    for (var i = 0;
+    i <
+        responseFavoriteList
+            .length;
+    i++) {
+      final favorite =
+      Favorite.fromJson(
+          responseFavoriteList[
+          i]);
+
+      if (favorite.id_produto ==
+          id) {
+        _isFavorite = true;
+      }
+    }
+
+    var _isCart = false;
+
+    for (var i = 0;
+    i <
+        responseCartList
+            .length;
+    i++) {
+      final item =
+      Item.fromJson(
+          responseCartList[
+          i]);
+
+      if (item.id_produto ==
+          id) {
+        _isCart = true;
+      }
+    }
+
     return Scaffold(
       body: Card(
         elevation: 0,
@@ -1129,15 +1170,34 @@ class GridItemBuilder extends StatelessWidget {
                     Column(
                       children: [
                         IconButton(
-                          icon:
-                              Icon(Icons.favorite, color: OwnerColors.darkGrey),
+                          icon: Icon(
+                            _isFavorite
+                                ? Icons
+                                .favorite
+                                : Icons
+                                .favorite,
+                            color: _isFavorite
+                                ? Colors
+                                .red
+                                : OwnerColors
+                                .darkGrey,
+                          ),
                           onPressed: () {
                             addItemToFavorite(id.toString(), context);
                           },
                         ),
                         IconButton(
-                            icon: Icon(Icons.shopping_cart,
-                                color: OwnerColors.darkGrey),
+                            icon: Icon(
+                              _isCart
+                                  ? Icons
+                                  .shopping_cart
+                                  : Icons
+                                  .shopping_cart,
+                              color: _isCart
+                                  ? OwnerColors.colorPrimary
+                                  : OwnerColors
+                                  .darkGrey,
+                            ),
                             onPressed: () => {
                                   showModalBottomSheet<dynamic>(
                                       isScrollControlled: true,

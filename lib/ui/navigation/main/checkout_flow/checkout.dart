@@ -45,6 +45,38 @@ class _Checkout extends State<Checkout> {
     super.dispose();
   }
 
+  Future<void> createTokenCreditCard() async {
+    try {
+      final body = {
+        "card_number": "4235647728025682",
+        "expiration_month": "11",
+        "expiration_year": "2025",
+        "security_code": "123",
+        "nome": "Guilherme Orestes",
+        "cpf": "85570826068",
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json = await postRequest.sendPostRequest(Links.CREATE_TOKEN_CARD, body);
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      final response = Payment.fromJson(_map[0]);
+
+      if (response.status == "01") {
+        setState(() {});
+      } else {}
+      ApplicationMessages(context: context).showMessage(response.msg);
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
   Future<Cart> listCartItems(String idCart) async {
     try {
       final body = {"id_carrinho": idCart, "token": ApplicationConstant.TOKEN};
@@ -89,7 +121,7 @@ class _Checkout extends State<Checkout> {
 
       print('HTTP_RESPONSE: $_map');
 
-      final response = User.fromJson(_map[0]);
+      final response = Payment.fromJson(_map[0]);
 
       if (response.status == "01") {
         setState(() {});
@@ -120,7 +152,7 @@ class _Checkout extends State<Checkout> {
 
       print('HTTP_RESPONSE: $_map');
 
-      final response = User.fromJson(_map[0]);
+      final response = Payment.fromJson(_map[0]);
 
       if (response.status == "01") {
         setState(() {});
@@ -156,7 +188,7 @@ class _Checkout extends State<Checkout> {
 
       print('HTTP_RESPONSE: $_map');
 
-      final response = User.fromJson(_map[0]);
+      final response = Payment.fromJson(_map[0]);
 
       if (response.status == "01") {
         setState(() {});
