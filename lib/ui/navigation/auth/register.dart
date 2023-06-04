@@ -638,12 +638,7 @@ class _RegisterState extends State<Register> {
                       child: ElevatedButton(
                         style: Styles().styleDefaultButton,
                         onPressed: () async {
-                          if (!validator.validateGenericTextField(
-                              socialReasonController.text, "Razão social"))
-                            return;
-                          if (!validator.validateGenericTextField(
-                              fantasyNameController.text, "Nome fantasia"))
-                            return;
+
 
                           var _document = "";
                           var _typePerson = "";
@@ -663,6 +658,13 @@ class _RegisterState extends State<Register> {
                             _document = cnpjController.text.toString();
                             _typePerson = 2.toString();
                           }
+
+                          if (!validator.validateGenericTextField(
+                              socialReasonController.text, "Razão social"))
+                            return;
+                          if (!validator.validateGenericTextField(
+                              fantasyNameController.text, "Nome fantasia"))
+                            return;
 
                           if (!validator.validateCellphone(
                               cellphoneController.text)) return;

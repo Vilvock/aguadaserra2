@@ -12,12 +12,9 @@ passar endereco pra quando for boleto ou fazer uma dialog la dentro e pegar
 
 - colocar quantidade produto digitando tbm
 
-1 cpf 2 cnpj
--colcoar spinner register cpf/ cnpj
-colocar pra entrar cpf no cadastro (nome)
-cnpj (nome fantasia)
-
 validacao ter que colocar pra sleecionar um endereco quando o id endereco estiver null no method payment
+
+testar register location
 
 
 

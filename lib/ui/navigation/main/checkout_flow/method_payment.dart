@@ -44,6 +44,9 @@ class _MethodPayment extends State<MethodPayment>
   final postRequest = PostRequest();
   late TabController _tabController;
 
+
+  User? _profileResponse;
+
   final TextEditingController dateController = TextEditingController();
 
   @override
@@ -55,6 +58,9 @@ class _MethodPayment extends State<MethodPayment>
     );
     Preferences.init();
     _idAddress = Preferences.getDefaultAddress().toString();
+
+
+    loadProfileRequest();
     super.initState();
   }
 
@@ -108,11 +114,12 @@ class _MethodPayment extends State<MethodPayment>
       print('HTTP_RESPONSE: $parsedResponse');
 
       final response = User.fromJson(parsedResponse);
-      //
-      // if (response.status == "01") {
-      // setState(() {
-      // });
-      // } else {}
+
+      setState(() {
+
+        _profileResponse = response;
+
+      });
 
       return parsedResponse;
     } catch (e) {
@@ -287,6 +294,7 @@ class _MethodPayment extends State<MethodPayment>
     data = ModalRoute.of(context)!.settings.arguments as Map;
 
     _idCart = data['id_cart'];
+
 
     return Scaffold(
         resizeToAvoidBottomInset: true,
@@ -892,6 +900,8 @@ class _MethodPayment extends State<MethodPayment>
                       ],
                     ),
                   ))),
+
+          Visibility(visible: _profileResponse?.saldo_aprovado == 1, child:
           InkWell(
               onTap: () {
 
@@ -952,7 +962,7 @@ class _MethodPayment extends State<MethodPayment>
                         )
                       ],
                     ),
-                  )))
+                  ))))
         ]))));
   }
 }
