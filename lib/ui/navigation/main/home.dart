@@ -444,7 +444,6 @@ class _ContainerHomeState extends State<ContainerHome> {
                             listCartItems(response.carrinho_aberto.toString()),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-
                             final responseCartList = snapshot.data!.itens;
 
                             return FutureBuilder<List<Map<String, dynamic>>>(
@@ -528,24 +527,28 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                                 },
                                                             child: Column(
                                                                 children: [
-                                                            Container(
-                                                            margin:  EdgeInsets.all(
-                                                                Dimens
-                                                                    .minMarginApplication),
-                                                          child: ClipOval(
-                                                            child: SizedBox.fromSize(
-                                                              size: Size.fromRadius(38), // Image radius
-                                                              child: Image.network(
-
-                                                                ApplicationConstant.URL_CATEGORIES + response.url.toString(),
-                                                                fit: BoxFit.cover,
-                                                                  errorBuilder: (context, exception, stackTrack) => Image.asset(
-                                                                    'images/default.png',
-                                                                  )/*fit: BoxFit.cover*/
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
+                                                                  Container(
+                                                                    margin: EdgeInsets
+                                                                        .all(Dimens
+                                                                            .minMarginApplication),
+                                                                    child:
+                                                                        ClipOval(
+                                                                      child: SizedBox
+                                                                          .fromSize(
+                                                                        size: Size.fromRadius(
+                                                                            38),
+                                                                        // Image radius
+                                                                        child: Image.network(
+                                                                            ApplicationConstant.URL_CATEGORIES +
+                                                                                response.url.toString(),
+                                                                            fit: BoxFit.cover,
+                                                                            errorBuilder: (context, exception, stackTrack) => Image.asset(
+                                                                                  'images/default.png',
+                                                                                ) /*fit: BoxFit.cover*/
+                                                                            ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
                                                                   Text(
                                                                     response
                                                                         .nome,
@@ -639,14 +642,12 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                   var _isCart = false;
 
                                                   for (var i = 0;
-                                                  i <
-                                                      responseCartList
-                                                          .length;
-                                                  i++) {
-                                                    final item =
-                                                    Item.fromJson(
-                                                        responseCartList[
-                                                        i]);
+                                                      i <
+                                                          responseCartList
+                                                              .length;
+                                                      i++) {
+                                                    final item = Item.fromJson(
+                                                        responseCartList[i]);
 
                                                     if (item.id_produto ==
                                                         response.id) {
@@ -801,16 +802,14 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                                     },
                                                                   ),
                                                                   IconButton(
-                                                                      icon: Icon(
+                                                                      icon:
+                                                                          Icon(
                                                                         _isCart
-                                                                            ? Icons
-                                                                            .shopping_cart
-                                                                            : Icons
-                                                                            .shopping_cart,
+                                                                            ? Icons.shopping_cart
+                                                                            : Icons.shopping_cart,
                                                                         color: _isCart
                                                                             ? OwnerColors.colorPrimary
-                                                                            : OwnerColors
-                                                                            .darkGrey,
+                                                                            : OwnerColors.darkGrey,
                                                                       ),
                                                                       onPressed:
                                                                           () =>
@@ -884,15 +883,217 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                   final response =
                                                       Product.fromJson(
                                                           snapshot.data![i]);
-                                                  gridItems.add(GridItemBuilder(
-                                                      category: response
-                                                          .nome_categoria,
-                                                      image: response.url_foto,
-                                                      name: response.nome,
-                                                      value: response.valor,
-                                                      id: response.id,
-                                                      responseFavoriteList: responseFavoriteList,
-                                                      responseCartList: responseCartList,));
+
+                                                  var _isFavorite = false;
+
+                                                  for (var i = 0; i < responseFavoriteList.length; i++) {
+                                                    final favorite = Favorite.fromJson(responseFavoriteList[i]);
+
+                                                    if (favorite.id_produto == response.id) {
+                                                      _isFavorite = true;
+                                                    }
+                                                  }
+
+                                                  var _isCart = false;
+
+                                                  for (var i = 0; i < responseCartList.length; i++) {
+                                                    final item = Item.fromJson(responseCartList[i]);
+
+                                                    if (item.id_produto == response.id) {
+                                                      _isCart = true;
+                                                    }
+                                                  }
+
+                                                  gridItems.add(Scaffold(
+                                                    body: Card(
+                                                      elevation: 0,
+                                                      color: OwnerColors
+                                                          .categoryLightGrey,
+                                                      margin: EdgeInsets.all(Dimens
+                                                          .minMarginApplication),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius
+                                                            .circular(Dimens
+                                                                .minRadiusApplication),
+                                                      ),
+                                                      child: InkWell(
+                                                          onTap: () => {
+                                                                Navigator.pushNamed(
+                                                                    context,
+                                                                    "/ui/product_detail",
+                                                                    arguments: {
+                                                                      "id_product":
+                                                                          response
+                                                                              .id,
+                                                                    })
+                                                              },
+                                                          child: Container(
+                                                              child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Stack(
+                                                                alignment:
+                                                                    AlignmentDirectional
+                                                                        .centerEnd,
+                                                                children: [
+                                                                  Container(
+                                                                      width: double
+                                                                          .infinity,
+                                                                      child: ClipRRect(
+                                                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(Dimens.minRadiusApplication), topRight: Radius.circular(Dimens.minRadiusApplication)),
+                                                                          child: Image.network(
+                                                                            ApplicationConstant.URL_PRODUCT_PHOTO +
+                                                                                response.url_foto.toString(),
+                                                                            fit:
+                                                                                BoxFit.fitWidth,
+                                                                            height:
+                                                                                140,
+                                                                            errorBuilder: (context, exception, stackTrack) =>
+                                                                                Image.asset(
+                                                                              'images/default.png',
+                                                                              height: 140,
+                                                                              width: 140,
+                                                                            ),
+                                                                          ))),
+                                                                  Column(
+                                                                    children: [
+                                                                      IconButton(
+                                                                        icon:
+                                                                            Icon(
+                                                                          _isFavorite
+                                                                              ? Icons.favorite
+                                                                              : Icons.favorite,
+                                                                          color: _isFavorite
+                                                                              ? Colors.red
+                                                                              : OwnerColors.darkGrey,
+                                                                        ),
+                                                                        onPressed:
+                                                                            () {
+                                                                          addItemToFavorite(
+                                                                              response.id.toString());
+                                                                        },
+                                                                      ),
+                                                                      IconButton(
+                                                                          icon:
+                                                                              Icon(
+                                                                            _isCart
+                                                                                ? Icons.shopping_cart
+                                                                                : Icons.shopping_cart,
+                                                                            color: _isCart
+                                                                                ? OwnerColors.colorPrimary
+                                                                                : OwnerColors.darkGrey,
+                                                                          ),
+                                                                          onPressed: () =>
+                                                                              {
+                                                                                showModalBottomSheet<dynamic>(
+                                                                                    isScrollControlled: true,
+                                                                                    context: context,
+                                                                                    shape: Styles().styleShapeBottomSheet,
+                                                                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                                                                    builder: (BuildContext context) {
+                                                                                      return AddItemAlertDialog(
+                                                                                          quantityController: quantityController,
+                                                                                          btnConfirm: Container(
+                                                                                              margin: EdgeInsets.only(top: Dimens.marginApplication),
+                                                                                              width: double.infinity,
+                                                                                              child: ElevatedButton(
+                                                                                                  style: Styles().styleDefaultButton,
+                                                                                                  onPressed: () {
+                                                                                                    openCart(response.id.toString(), response.valor, quantityController.text);
+                                                                                                    Navigator.of(context).pop();
+                                                                                                  },
+                                                                                                  child: Text("Adicionar ao carrinho", style: Styles().styleDefaultTextButton))));
+                                                                                    })
+                                                                              }),
+                                                                    ],
+                                                                  )
+                                                                ],
+                                                              ),
+                                                              SizedBox(
+                                                                  height: Dimens
+                                                                      .minMarginApplication),
+                                                              Container(
+                                                                padding: EdgeInsets
+                                                                    .all(Dimens
+                                                                        .minPaddingApplication),
+                                                                child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    // SmoothStarRating(
+                                                                    //     allowHalfRating: true,
+                                                                    //     onRated: (v) {},
+                                                                    //     starCount: 5,
+                                                                    //     rating: 2,
+                                                                    //     size: 16.0,
+                                                                    //     isReadOnly: true,
+                                                                    //     color: Colors.amber,
+                                                                    //     borderColor: Colors.amber,
+                                                                    //     spacing: 0.0),
+                                                                    // SizedBox(height: Dimens.minMarginApplication),
+                                                                    Text(
+                                                                      response
+                                                                          .nome,
+                                                                      maxLines:
+                                                                          1,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontFamily:
+                                                                            'Inter',
+                                                                        fontSize:
+                                                                            Dimens.textSize6,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        color: Colors
+                                                                            .black,
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(
+                                                                        height:
+                                                                            Dimens.minMarginApplication),
+                                                                    Text(
+                                                                      response
+                                                                          .nome_categoria,
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontFamily:
+                                                                            'Inter',
+                                                                        fontSize:
+                                                                            Dimens.textSize5,
+                                                                        color: Colors
+                                                                            .black,
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(
+                                                                        height:
+                                                                            Dimens.marginApplication),
+                                                                    Text(
+                                                                      response
+                                                                          .valor,
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontFamily:
+                                                                            'Inter',
+                                                                        fontSize:
+                                                                            Dimens.textSize6,
+                                                                        color: OwnerColors
+                                                                            .darkGreen,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ))),
+                                                    ),
+                                                  ));
                                                 }
 
                                                 return Container(
@@ -909,7 +1110,8 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                     '${snapshot.error}');
                                               }
                                               return Center(
-                                                  /*child: CircularProgressIndicator()*/);
+                                                  /*child: CircularProgressIndicator()*/
+                                                  );
                                             })
                                       ],
                                     ),
@@ -969,324 +1171,6 @@ class CarouselItemBuilder extends StatelessWidget {
             fit: BoxFit.fitHeight,
           ),
         ),
-      ),
-    );
-  }
-}
-
-class GridItemBuilder extends StatelessWidget {
-  final int id;
-  final String image;
-  final String name;
-  final String value;
-  final String category;
-  final List<Map<String, dynamic>> responseFavoriteList;
-  final List<dynamic> responseCartList;
-
-  GridItemBuilder(
-      {Key? key,
-      required this.category,
-      required this.image,
-      required this.name,
-      required this.value,
-      required this.id, required this.responseCartList, required this.responseFavoriteList});
-
-  final TextEditingController quantityController = TextEditingController();
-
-  final postRequest = PostRequest();
-
-  Future<void> addItemToFavorite(String idProduct, BuildContext context) async {
-    try {
-      final body = {
-        "id_user": await Preferences.getUserData()!.id,
-        "id_produto": idProduct,
-        "token": ApplicationConstant.TOKEN
-      };
-
-      print('HTTP_BODY: $body');
-
-      final json = await postRequest.sendPostRequest(Links.ADD_FAVORITE, body);
-
-      List<Map<String, dynamic>> _map = [];
-      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
-
-      print('HTTP_RESPONSE: $_map');
-
-      final response = Cart.fromJson(_map[0]);
-
-      if (response.status == "01") {
-        // setState(() {});
-      } else {}
-      ApplicationMessages(context: context).showMessage(response.msg);
-    } catch (e) {
-      throw Exception('HTTP_ERROR: $e');
-    }
-  }
-
-  Future<void> openCart(String idProduct, String unityItemValue,
-      String quantity, BuildContext context) async {
-    try {
-      final body = {
-        "id_user": await Preferences.getUserData()!.id,
-        "token": ApplicationConstant.TOKEN
-      };
-
-      print('HTTP_BODY: $body');
-
-      final json = await postRequest.sendPostRequest(Links.OPENED_CART, body);
-
-      List<Map<String, dynamic>> _map = [];
-      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
-
-      print('HTTP_RESPONSE: $_map');
-
-      final response = Cart.fromJson(_map[0]);
-
-      if (response.carrinho_aberto.toString().isNotEmpty) {
-        // setState(() {
-
-        addItemToCart(idProduct, unityItemValue, quantity,
-            response.carrinho_aberto.toString(), context);
-
-        // });
-      }
-    } catch (e) {
-      throw Exception('HTTP_ERROR: $e');
-    }
-  }
-
-  Future<void> addItemToCart(String idProduct, String unityItemValue,
-      String quantity, String idCart, BuildContext context) async {
-    try {
-      final body = {
-        "id_carrinho": idCart,
-        "id_produto": idProduct,
-        "valor_uni": unityItemValue,
-        "qtd": quantity,
-        "token": ApplicationConstant.TOKEN
-      };
-
-      print('HTTP_BODY: $body');
-
-      final json = await postRequest.sendPostRequest(Links.ADD_ITEM_CART, body);
-
-      List<Map<String, dynamic>> _map = [];
-      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
-
-      print('HTTP_RESPONSE: $_map');
-
-      final response = Cart.fromJson(_map[0]);
-
-      if (response.status == "01") {
-        // setState(() {});
-      } else {}
-      ApplicationMessages(context: context).showMessage(response.msg);
-    } catch (e) {
-      throw Exception('HTTP_ERROR: $e');
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    var _isFavorite = false;
-
-    for (var i = 0;
-    i <
-        responseFavoriteList
-            .length;
-    i++) {
-      final favorite =
-      Favorite.fromJson(
-          responseFavoriteList[
-          i]);
-
-      if (favorite.id_produto ==
-          id) {
-        _isFavorite = true;
-      }
-    }
-
-    var _isCart = false;
-
-    for (var i = 0;
-    i <
-        responseCartList
-            .length;
-    i++) {
-      final item =
-      Item.fromJson(
-          responseCartList[
-          i]);
-
-      if (item.id_produto ==
-          id) {
-        _isCart = true;
-      }
-    }
-
-    return Scaffold(
-      body: Card(
-        elevation: 0,
-        color: OwnerColors.categoryLightGrey,
-        margin: EdgeInsets.all(Dimens.minMarginApplication),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Dimens.minRadiusApplication),
-        ),
-        child: InkWell(
-            onTap: () => {
-                  Navigator.pushNamed(context, "/ui/product_detail",
-                      arguments: {
-                        "id_product": id,
-                      })
-                },
-            child: Container(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Stack(
-                  alignment: AlignmentDirectional.centerEnd,
-                  children: [
-                    Container(
-                        width: double.infinity,
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(
-                                    Dimens.minRadiusApplication),
-                                topRight: Radius.circular(
-                                    Dimens.minRadiusApplication)),
-                            child: Image.network(
-                              ApplicationConstant.URL_PRODUCT_PHOTO +
-                                  image.toString(),
-                              fit: BoxFit.fitWidth,
-                              height: 140,
-                              errorBuilder: (context, exception, stackTrack) =>
-                                  Image.asset(
-                                'images/default.png',
-                                height: 140,
-                                width: 140,
-                              ),
-                            ))),
-                    Column(
-                      children: [
-                        IconButton(
-                          icon: Icon(
-                            _isFavorite
-                                ? Icons
-                                .favorite
-                                : Icons
-                                .favorite,
-                            color: _isFavorite
-                                ? Colors
-                                .red
-                                : OwnerColors
-                                .darkGrey,
-                          ),
-                          onPressed: () {
-                            addItemToFavorite(id.toString(), context);
-                          },
-                        ),
-                        IconButton(
-                            icon: Icon(
-                              _isCart
-                                  ? Icons
-                                  .shopping_cart
-                                  : Icons
-                                  .shopping_cart,
-                              color: _isCart
-                                  ? OwnerColors.colorPrimary
-                                  : OwnerColors
-                                  .darkGrey,
-                            ),
-                            onPressed: () => {
-                                  showModalBottomSheet<dynamic>(
-                                      isScrollControlled: true,
-                                      context: context,
-                                      shape: Styles().styleShapeBottomSheet,
-                                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                                      builder: (BuildContext context) {
-                                        return AddItemAlertDialog(
-                                            quantityController:
-                                                quantityController,
-                                            btnConfirm: Container(
-                                                margin: EdgeInsets.only(
-                                                    top: Dimens
-                                                        .marginApplication),
-                                                width: double.infinity,
-                                                child: ElevatedButton(
-                                                    style: Styles()
-                                                        .styleDefaultButton,
-                                                    onPressed: () {
-                                                      openCart(
-                                                          id.toString(),
-                                                          value,
-                                                          quantityController
-                                                              .text,
-                                                          context);
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    child: Text(
-                                                        "Adicionar ao carrinho",
-                                                        style: Styles()
-                                                            .styleDefaultTextButton))));
-                                      })
-                                }),
-                      ],
-                    )
-                  ],
-                ),
-                SizedBox(height: Dimens.minMarginApplication),
-                Container(
-                  padding: EdgeInsets.all(Dimens.minPaddingApplication),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // SmoothStarRating(
-                      //     allowHalfRating: true,
-                      //     onRated: (v) {},
-                      //     starCount: 5,
-                      //     rating: 2,
-                      //     size: 16.0,
-                      //     isReadOnly: true,
-                      //     color: Colors.amber,
-                      //     borderColor: Colors.amber,
-                      //     spacing: 0.0),
-                      // SizedBox(height: Dimens.minMarginApplication),
-                      Text(
-                        name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: Dimens.textSize6,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(height: Dimens.minMarginApplication),
-                      Text(
-                        category,
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: Dimens.textSize5,
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(height: Dimens.marginApplication),
-                      Text(
-                        value,
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: Dimens.textSize6,
-                          color: OwnerColors.darkGreen,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ))),
       ),
     );
   }

@@ -17,7 +17,7 @@ passar endereco pra quando for boleto ou fazer uma dialog la dentro e pegar
 colocar pra entrar cpf no cadastro (nome)
 cnpj (nome fantasia)
 
-- mudar cor botao favorito e carrinho (HOME) OK falta os do grid
+- mudar cor botao favorito e carrinho (HOME) OK falta os do grid (falta setstate)
 
 validacao ter que colocar pra sleecionar um endereco quando o id endereco estiver null no method payment
 
