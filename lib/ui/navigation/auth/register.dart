@@ -57,15 +57,17 @@ class _RegisterState extends State<Register> {
       String password,
       String fantasyName,
       String socialReason,
-      String cnpj,
+      String document,
       String cellphone,
       String latitude,
-      String longitude) async {
+      String longitude,
+      String typePerson) async {
     try {
       final body = {
         "razao_social": socialReason,
         "nome_fantasia": fantasyName,
-        "cnpj": cnpj,
+        "documento": document,
+        "tipo_pessoa": 1,
         "email": email,
         "celular": cellphone,
         "password": password,
@@ -196,6 +198,68 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
                     SizedBox(height: 32),
+                    Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              Dimens.minRadiusApplication),
+                        ),
+                        child: Container(
+                            padding: EdgeInsets.all(Dimens.paddingApplication),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                value: "Pessoa Física",
+                                isDense: true,
+                                onChanged: (newValue) {
+                                  setState(() {});
+                                },
+                                items: <String>[
+                                  'Pessoa Física',
+                                  'Pessoa Jurídica'
+                                ].map((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value,
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          color: OwnerColors.colorPrimary,
+                                        )),
+                                  );
+                                }).toList(),
+                              ),
+                            ))),
+                    SizedBox(height: Dimens.marginApplication),
+                    TextField(
+                      controller: cnpjController,
+                      inputFormatters: [Masks().cnpjMask()],
+                      decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: OwnerColors.colorPrimary, width: 1.5),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 1.0),
+                        ),
+                        hintText: 'CNPJ',
+                        hintStyle: TextStyle(color: Colors.grey),
+                        border: OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.circular(Dimens.radiusApplication),
+                          borderSide: BorderSide.none,
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                        contentPadding:
+                            EdgeInsets.all(Dimens.textFieldPaddingApplication),
+                      ),
+                      keyboardType: TextInputType.number,
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: Dimens.textSize5,
+                      ),
+                    ),
+                    SizedBox(height: Dimens.marginApplication),
                     TextField(
                       controller: socialReasonController,
                       decoration: InputDecoration(
@@ -250,37 +314,6 @@ class _RegisterState extends State<Register> {
                             EdgeInsets.all(Dimens.textFieldPaddingApplication),
                       ),
                       keyboardType: TextInputType.text,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: Dimens.textSize5,
-                      ),
-                    ),
-                    SizedBox(height: Dimens.marginApplication),
-                    TextField(
-                      controller: cnpjController,
-                      inputFormatters: [Masks().cnpjMask()],
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: OwnerColors.colorPrimary, width: 1.5),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 1.0),
-                        ),
-                        hintText: 'CNPJ',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(Dimens.radiusApplication),
-                          borderSide: BorderSide.none,
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding:
-                            EdgeInsets.all(Dimens.textFieldPaddingApplication),
-                      ),
-                      keyboardType: TextInputType.number,
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: Dimens.textSize5,
@@ -527,7 +560,9 @@ class _RegisterState extends State<Register> {
                         ],
                       ),
                     ),
-                    SizedBox(height: Dimens.marginApplication,),
+                    SizedBox(
+                      height: Dimens.marginApplication,
+                    ),
                     RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
@@ -537,23 +572,22 @@ class _RegisterState extends State<Register> {
                           fontFamily: 'Inter',
                         ),
                         children: <TextSpan>[
-                          TextSpan(text: 'Ao clicar no botão Criar conta, você aceita os'),
+                          TextSpan(
+                              text:
+                                  'Ao clicar no botão Criar conta, você aceita os'),
                           TextSpan(
                               text: ' Termos de uso',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: Dimens.textSize5,
                                   fontFamily: 'Inter',
-                                  fontWeight: FontWeight.bold
-                              ),
+                                  fontWeight: FontWeight.bold),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-
-                                  Navigator.pushNamed(context, "/ui/pdf_viewer");
+                                  Navigator.pushNamed(
+                                      context, "/ui/pdf_viewer");
                                 }),
-
                           TextSpan(text: ' do aplicativo.'),
-
                         ],
                       ),
                     ),
@@ -595,7 +629,8 @@ class _RegisterState extends State<Register> {
                               cnpjController.text,
                               cellphoneController.text,
                               position!.latitude.toString(),
-                              position!.longitude.toString());
+                              position!.longitude.toString(),
+                              "");
 
                           setState(() {
                             _isLoading = false;
@@ -603,44 +638,40 @@ class _RegisterState extends State<Register> {
                         },
                         child: (_isLoading)
                             ? const SizedBox(
-                            width: Dimens.buttonIndicatorWidth,
-                            height: Dimens.buttonIndicatorHeight,
-                            child: CircularProgressIndicator(
-                              color: OwnerColors.colorAccent,
-                              strokeWidth: Dimens.buttonIndicatorStrokes,
-                            ))
+                                width: Dimens.buttonIndicatorWidth,
+                                height: Dimens.buttonIndicatorHeight,
+                                child: CircularProgressIndicator(
+                                  color: OwnerColors.colorAccent,
+                                  strokeWidth: Dimens.buttonIndicatorStrokes,
+                                ))
                             : Text("Criar conta",
-                            style: Styles().styleDefaultTextButton),
+                                style: Styles().styleDefaultTextButton),
                       ),
                     ),
                     SizedBox(height: Dimens.marginApplication),
-
-                  RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: Dimens.textSize5,
-                        fontFamily: 'Inter',
+                    RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: Dimens.textSize5,
+                          fontFamily: 'Inter',
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(text: 'Já possui uma conta? '),
+                          TextSpan(
+                              text: 'Entre aqui',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: Dimens.textSize5,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.bold),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.of(context).pop();
+                                }),
+                        ],
                       ),
-                      children: <TextSpan>[
-                        TextSpan(text: 'Já possui uma conta? '),
-                        TextSpan(
-                            text: 'Entre aqui',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: Dimens.textSize5,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.bold
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-
-                                Navigator.of(context).pop();
-                              }),
-
-                      ],
-                    ),
-                  )
+                    )
                   ],
                 ),
               ),

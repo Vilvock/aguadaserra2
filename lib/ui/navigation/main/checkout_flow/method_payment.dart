@@ -50,7 +50,7 @@ class _MethodPayment extends State<MethodPayment>
   void initState() {
     _tabController = TabController(
       initialIndex: 0,
-      length: 2,
+      length: 1,
       vsync: this,
     );
     Preferences.init();
@@ -309,15 +309,15 @@ class _MethodPayment extends State<MethodPayment>
                     ),
                   ),
                 ),
-                Container(
-                    child: Text(
-                  "Retirada no local",
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: Dimens.textSize6,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ))
+                // Container(
+                //     child: Text(
+                //   "Retirada no local",
+                //   style: TextStyle(
+                //     fontFamily: 'Inter',
+                //     fontSize: Dimens.textSize6,
+                //     fontWeight: FontWeight.bold,
+                //   ),
+                // ))
               ],
               unselectedLabelColor: Colors.grey,
               indicatorColor: OwnerColors.colorPrimaryDark,
@@ -489,224 +489,224 @@ class _MethodPayment extends State<MethodPayment>
                           }),
                     ],
                   )),
-              Container(
-                height: /*_hasSchedule ? */ 360 /*: 236*/,
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 150,
-                        child: FutureBuilder<List<Map<String, dynamic>>>(
-                            future: findAddress(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                final response =
-                                    User.fromJson(snapshot.data![0]);
-
-                                if (response.rows != 0) {
-                                  return Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          Dimens.minRadiusApplication),
-                                    ),
-                                    margin: EdgeInsets.all(
-                                        Dimens.minMarginApplication),
-                                    child: InkWell(
-                                        onTap: () {
-                                          Navigator.pushNamed(
-                                              context, "/ui/user_addresses");
-                                        },
-                                        child: Container(
-                                          padding: EdgeInsets.all(
-                                              Dimens.paddingApplication),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      response.nome,
-                                                      style: TextStyle(
-                                                        fontFamily: 'Inter',
-                                                        fontSize:
-                                                            Dimens.textSize5,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.black,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                        height: Dimens
-                                                            .minMarginApplication),
-                                                    Expanded(
-                                                        child: Text(
-                                                      response
-                                                          .endereco_completo,
-                                                      style: TextStyle(
-                                                        fontFamily: 'Inter',
-                                                        fontSize:
-                                                            Dimens.textSize5,
-                                                        color: Colors.black,
-                                                      ),
-                                                    )),
-                                                    SizedBox(
-                                                        height: Dimens
-                                                            .minMarginApplication),
-                                                    Styles().div_horizontal,
-                                                    SizedBox(
-                                                        height: Dimens
-                                                            .minMarginApplication),
-                                                    Text(
-                                                      "Alterar endereço",
-                                                      style: TextStyle(
-                                                        fontFamily: 'Inter',
-                                                        fontSize:
-                                                            Dimens.textSize4,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: OwnerColors
-                                                            .colorPrimaryDark,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        )),
-                                  );
-                                }
-                              } else if (snapshot.hasError) {
-                                return Text('${snapshot.error}');
-                              }
-                              return Center(child: CircularProgressIndicator());
-                            }),
-                      ),
-                      FutureBuilder<Map<String, dynamic>>(
-                          future: findWithdrawal(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              final response = Order.fromJson(snapshot.data!);
-
-                              return Container(
-                                  padding: EdgeInsets.all(
-                                      Dimens.minPaddingApplication),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      // Text(
-                                      //   "Escolha a data",
-                                      //   style: TextStyle(
-                                      //     fontFamily: 'Inter',
-                                      //     fontSize: Dimens.textSize6,
-                                      //     fontWeight: FontWeight.w300,
-                                      //     color: Colors.black,
-                                      //   ),
-                                      // ),
-                                      // SizedBox(height: Dimens.marginApplication),
-                                      Container(
-                                        width: double.infinity,
-                                        child: ElevatedButton(
-                                            style: Styles().styleDefaultButton,
-                                            onPressed: () {
-                                              showModalBottomSheet<dynamic>(
-                                                  isScrollControlled: true,
-                                                  context: context,
-                                                  shape: Styles()
-                                                      .styleShapeBottomSheet,
-                                                  clipBehavior: Clip
-                                                      .antiAliasWithSaveLayer,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return DatePickerAlertDialog(
-                                                        dateController:
-                                                            dateController,
-                                                        btnConfirm: Container(
-                                                            margin: EdgeInsets.only(
-                                                                top: Dimens
-                                                                    .marginApplication),
-                                                            width:
-                                                                double.infinity,
-                                                            child:
-                                                                ElevatedButton(
-                                                                    style: Styles()
-                                                                        .styleDefaultButton,
-                                                                    onPressed:
-                                                                        () {
-                                                                      findWithdrawalTime(
-                                                                          response
-                                                                              .id_ponto
-                                                                              .toString(),
-                                                                          dateController
-                                                                              .text);
-
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop();
-                                                                    },
-                                                                    child: Text(
-                                                                        "Selecionar",
-                                                                        style: Styles()
-                                                                            .styleDefaultTextButton))));
-                                                  });
-                                            },
-                                            child: Text(
-                                              "Escolher data para retirar",
-                                              style: Styles()
-                                                  .styleDefaultTextButton,
-                                            )),
-                                      ),
-
-                                      SizedBox(
-                                          height: Dimens.minMarginApplication),
-                                      Visibility(
-                                          visible: _hasSchedule,
-                                          child: Card(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(Dimens
-                                                        .minRadiusApplication),
-                                              ),
-                                              child: Container(
-                                                width: double.infinity,
-                                                padding: EdgeInsets.all(
-                                                    Dimens.paddingApplication),
-                                                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                                  Text(
-                                                      "Horários para retirada nesta data",
-                                                      style: TextStyle(
-                                                        fontFamily: 'Inter',
-                                                        fontSize:
-                                                            Dimens.textSize5,
-                                                        color: Colors.black,
-                                                      ),
-                                                    ),
-
-                                                  SizedBox(
-                                                      height: Dimens.minMarginApplication),
-                                                  Text(
-                                                    _schedule + "\n\nLocal:\n" + response.nome_ponto,
-                                                    style: TextStyle(
-                                                      fontFamily: 'Inter',
-                                                      fontSize:
-                                                          Dimens.textSize4,
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-                                                ]),
-                                              )))
-                                    ],
-                                  ));
-                            } else if (snapshot.hasError) {
-                              return Text('${snapshot.error}');
-                            }
-                            return Center(child: CircularProgressIndicator());
-                          })
-                    ]),
-              )
+              // Container(
+              //   height: /*_hasSchedule ? */ 360 /*: 236*/,
+              //   child: Column(
+              //       crossAxisAlignment: CrossAxisAlignment.start,
+              //       children: [
+              //         Container(
+              //           height: 150,
+              //           child: FutureBuilder<List<Map<String, dynamic>>>(
+              //               future: findAddress(),
+              //               builder: (context, snapshot) {
+              //                 if (snapshot.hasData) {
+              //                   final response =
+              //                       User.fromJson(snapshot.data![0]);
+              //
+              //                   if (response.rows != 0) {
+              //                     return Card(
+              //                       shape: RoundedRectangleBorder(
+              //                         borderRadius: BorderRadius.circular(
+              //                             Dimens.minRadiusApplication),
+              //                       ),
+              //                       margin: EdgeInsets.all(
+              //                           Dimens.minMarginApplication),
+              //                       child: InkWell(
+              //                           onTap: () {
+              //                             Navigator.pushNamed(
+              //                                 context, "/ui/user_addresses");
+              //                           },
+              //                           child: Container(
+              //                             padding: EdgeInsets.all(
+              //                                 Dimens.paddingApplication),
+              //                             child: Row(
+              //                               children: [
+              //                                 Expanded(
+              //                                   child: Column(
+              //                                     crossAxisAlignment:
+              //                                         CrossAxisAlignment.start,
+              //                                     children: [
+              //                                       Text(
+              //                                         response.nome,
+              //                                         style: TextStyle(
+              //                                           fontFamily: 'Inter',
+              //                                           fontSize:
+              //                                               Dimens.textSize5,
+              //                                           fontWeight:
+              //                                               FontWeight.bold,
+              //                                           color: Colors.black,
+              //                                         ),
+              //                                       ),
+              //                                       SizedBox(
+              //                                           height: Dimens
+              //                                               .minMarginApplication),
+              //                                       Expanded(
+              //                                           child: Text(
+              //                                         response
+              //                                             .endereco_completo,
+              //                                         style: TextStyle(
+              //                                           fontFamily: 'Inter',
+              //                                           fontSize:
+              //                                               Dimens.textSize5,
+              //                                           color: Colors.black,
+              //                                         ),
+              //                                       )),
+              //                                       SizedBox(
+              //                                           height: Dimens
+              //                                               .minMarginApplication),
+              //                                       Styles().div_horizontal,
+              //                                       SizedBox(
+              //                                           height: Dimens
+              //                                               .minMarginApplication),
+              //                                       Text(
+              //                                         "Alterar endereço",
+              //                                         style: TextStyle(
+              //                                           fontFamily: 'Inter',
+              //                                           fontSize:
+              //                                               Dimens.textSize4,
+              //                                           fontWeight:
+              //                                               FontWeight.bold,
+              //                                           color: OwnerColors
+              //                                               .colorPrimaryDark,
+              //                                         ),
+              //                                       ),
+              //                                     ],
+              //                                   ),
+              //                                 )
+              //                               ],
+              //                             ),
+              //                           )),
+              //                     );
+              //                   }
+              //                 } else if (snapshot.hasError) {
+              //                   return Text('${snapshot.error}');
+              //                 }
+              //                 return Center(child: CircularProgressIndicator());
+              //               }),
+              //         ),
+              //         FutureBuilder<Map<String, dynamic>>(
+              //             future: findWithdrawal(),
+              //             builder: (context, snapshot) {
+              //               if (snapshot.hasData) {
+              //                 final response = Order.fromJson(snapshot.data!);
+              //
+              //                 return Container(
+              //                     padding: EdgeInsets.all(
+              //                         Dimens.minPaddingApplication),
+              //                     child: Column(
+              //                       crossAxisAlignment:
+              //                           CrossAxisAlignment.start,
+              //                       children: [
+              //                         // Text(
+              //                         //   "Escolha a data",
+              //                         //   style: TextStyle(
+              //                         //     fontFamily: 'Inter',
+              //                         //     fontSize: Dimens.textSize6,
+              //                         //     fontWeight: FontWeight.w300,
+              //                         //     color: Colors.black,
+              //                         //   ),
+              //                         // ),
+              //                         // SizedBox(height: Dimens.marginApplication),
+              //                         Container(
+              //                           width: double.infinity,
+              //                           child: ElevatedButton(
+              //                               style: Styles().styleDefaultButton,
+              //                               onPressed: () {
+              //                                 showModalBottomSheet<dynamic>(
+              //                                     isScrollControlled: true,
+              //                                     context: context,
+              //                                     shape: Styles()
+              //                                         .styleShapeBottomSheet,
+              //                                     clipBehavior: Clip
+              //                                         .antiAliasWithSaveLayer,
+              //                                     builder:
+              //                                         (BuildContext context) {
+              //                                       return DatePickerAlertDialog(
+              //                                           dateController:
+              //                                               dateController,
+              //                                           btnConfirm: Container(
+              //                                               margin: EdgeInsets.only(
+              //                                                   top: Dimens
+              //                                                       .marginApplication),
+              //                                               width:
+              //                                                   double.infinity,
+              //                                               child:
+              //                                                   ElevatedButton(
+              //                                                       style: Styles()
+              //                                                           .styleDefaultButton,
+              //                                                       onPressed:
+              //                                                           () {
+              //                                                         findWithdrawalTime(
+              //                                                             response
+              //                                                                 .id_ponto
+              //                                                                 .toString(),
+              //                                                             dateController
+              //                                                                 .text);
+              //
+              //                                                         Navigator.of(
+              //                                                                 context)
+              //                                                             .pop();
+              //                                                       },
+              //                                                       child: Text(
+              //                                                           "Selecionar",
+              //                                                           style: Styles()
+              //                                                               .styleDefaultTextButton))));
+              //                                     });
+              //                               },
+              //                               child: Text(
+              //                                 "Escolher data para retirar",
+              //                                 style: Styles()
+              //                                     .styleDefaultTextButton,
+              //                               )),
+              //                         ),
+              //
+              //                         SizedBox(
+              //                             height: Dimens.minMarginApplication),
+              //                         Visibility(
+              //                             visible: _hasSchedule,
+              //                             child: Card(
+              //                                 shape: RoundedRectangleBorder(
+              //                                   borderRadius:
+              //                                       BorderRadius.circular(Dimens
+              //                                           .minRadiusApplication),
+              //                                 ),
+              //                                 child: Container(
+              //                                   width: double.infinity,
+              //                                   padding: EdgeInsets.all(
+              //                                       Dimens.paddingApplication),
+              //                                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              //                                     Text(
+              //                                         "Horários para retirada nesta data",
+              //                                         style: TextStyle(
+              //                                           fontFamily: 'Inter',
+              //                                           fontSize:
+              //                                               Dimens.textSize5,
+              //                                           color: Colors.black,
+              //                                         ),
+              //                                       ),
+              //
+              //                                     SizedBox(
+              //                                         height: Dimens.minMarginApplication),
+              //                                     Text(
+              //                                       _schedule + "\n\nLocal:\n" + response.nome_ponto,
+              //                                       style: TextStyle(
+              //                                         fontFamily: 'Inter',
+              //                                         fontSize:
+              //                                             Dimens.textSize4,
+              //                                         color: Colors.black,
+              //                                       ),
+              //                                     ),
+              //                                   ]),
+              //                                 )))
+              //                       ],
+              //                     ));
+              //               } else if (snapshot.hasError) {
+              //                 return Text('${snapshot.error}');
+              //               }
+              //               return Center(child: CircularProgressIndicator());
+              //             })
+              //       ]),
+              // )
             ]),
           ),
           SizedBox(height: Dimens.minMarginApplication),

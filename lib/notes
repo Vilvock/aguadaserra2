@@ -6,18 +6,20 @@ MIGRACAO bgl do android 13
 
 ///////////////
 
-bug location register
+passar endereco pra quando for boleto ou fazer uma dialog la dentro e pegar
+
 (list perfil, se saldo_aprovado = 1 pode fazer boleto a prazo)
 
--cor status pedido Pendente,Aprovado,Rejeitado,Cancelado,Devolvido
-- colocar quantiodade produto digitando tbm
+- colocar quantidade produto digitando tbm
 
+1 cpf 2 cnpj
 -colcoar spinner register cpf/ cnpj
 colocar pra entrar cpf no cadastro (nome)
 cnpj (nome fantasia)
 
 - mudar cor botao favorito e carrinho (HOME) OK falta os do grid
-- depois que escolher retirada local, mostrar endereco completo e a data e o intervalo (em um card)
+
+validacao ter que colocar pra sleecionar um endereco quando o id endereco estiver null no method payment
 
 
 

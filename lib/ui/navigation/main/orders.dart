@@ -78,6 +78,33 @@ class _Orders extends State<Orders> {
                       itemBuilder: (context, index) {
                         final response = Order.fromJson(snapshot.data![index]);
 
+                        // Pendente,Aprovado,Rejeitado,Cancelado,Devolvido
+
+                        var _statusColor;
+
+                        switch (response.status_pagamento) {
+                          case "Pendente":
+                            _statusColor = OwnerColors.darkGrey;
+                            break;
+                          case "Aprovado":
+
+                            _statusColor = OwnerColors.colorPrimaryDark;
+                            break;
+                          case "Rejeitado":
+
+                            _statusColor = Colors.yellow[700];
+                            break;
+                          case "Cancelado":
+
+                            _statusColor = Colors.red;
+                            break;
+                          case "Devolvido":
+
+                            _statusColor = OwnerColors.darkGrey;
+                            break;
+                        }
+
+
                         return InkWell(
                             onTap: () => {
                                   Navigator.pushNamed(
@@ -163,7 +190,7 @@ class _Orders extends State<Orders> {
                                                   Dimens.minMarginApplication),
                                           Align(alignment: AlignmentDirectional.bottomEnd, child:
                                           Card(
-                                            color: OwnerColors.colorPrimaryDark,
+                                            color: _statusColor,
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(Dimens
