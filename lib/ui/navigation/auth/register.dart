@@ -41,6 +41,8 @@ class _RegisterState extends State<Register> {
 
   late bool _isLoading = false;
 
+  String currentSelectedValue = "Pessoa Física";
+
   @override
   void initState() {
     super.initState();
@@ -67,7 +69,7 @@ class _RegisterState extends State<Register> {
         "razao_social": socialReason,
         "nome_fantasia": fantasyName,
         "documento": document,
-        "tipo_pessoa": 1,
+        "tipo_pessoa": typePerson,
         "email": email,
         "celular": cellphone,
         "password": password,
@@ -143,6 +145,7 @@ class _RegisterState extends State<Register> {
   final TextEditingController coPasswordController = TextEditingController();
   final TextEditingController socialReasonController = TextEditingController();
   final TextEditingController cnpjController = TextEditingController();
+  final TextEditingController cpfController = TextEditingController();
   final TextEditingController cellphoneController = TextEditingController();
   final TextEditingController fantasyNameController = TextEditingController();
 
@@ -153,6 +156,7 @@ class _RegisterState extends State<Register> {
     coPasswordController.dispose();
     socialReasonController.dispose();
     cnpjController.dispose();
+    cpfController.dispose();
     cellphoneController.dispose();
     fantasyNameController.dispose();
     super.dispose();
@@ -208,10 +212,12 @@ class _RegisterState extends State<Register> {
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
                                 isExpanded: true,
-                                value: "Pessoa Física",
+                                value: currentSelectedValue,
                                 isDense: true,
                                 onChanged: (newValue) {
-                                  setState(() {});
+                                  setState(() {
+                                    currentSelectedValue = newValue!;
+                                  });
                                 },
                                 items: <String>[
                                   'Pessoa Física',
@@ -229,34 +235,69 @@ class _RegisterState extends State<Register> {
                               ),
                             ))),
                     SizedBox(height: Dimens.marginApplication),
-                    TextField(
-                      controller: cnpjController,
-                      inputFormatters: [Masks().cnpjMask()],
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: OwnerColors.colorPrimary, width: 1.5),
+                    Visibility(
+                        visible: currentSelectedValue == "Pessoa Jurídica",
+                        child: TextField(
+                          controller: cnpjController,
+                          inputFormatters: [Masks().cnpjMask()],
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: OwnerColors.colorPrimary, width: 1.5),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.grey, width: 1.0),
+                            ),
+                            hintText: 'CNPJ',
+                            hintStyle: TextStyle(color: Colors.grey),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  Dimens.radiusApplication),
+                              borderSide: BorderSide.none,
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                            contentPadding: EdgeInsets.all(
+                                Dimens.textFieldPaddingApplication),
+                          ),
+                          keyboardType: TextInputType.number,
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: Dimens.textSize5,
+                          ),
+                        )),
+                    Visibility(
+                      visible: currentSelectedValue == "Pessoa Física",
+                      child: TextField(
+                        controller: cpfController,
+                        inputFormatters: [Masks().cpfMask()],
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: OwnerColors.colorPrimary, width: 1.5),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 1.0),
+                          ),
+                          hintText: 'CPF',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.circular(Dimens.radiusApplication),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding: EdgeInsets.all(
+                              Dimens.textFieldPaddingApplication),
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 1.0),
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: Dimens.textSize5,
                         ),
-                        hintText: 'CNPJ',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(Dimens.radiusApplication),
-                          borderSide: BorderSide.none,
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding:
-                            EdgeInsets.all(Dimens.textFieldPaddingApplication),
-                      ),
-                      keyboardType: TextInputType.number,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: Dimens.textSize5,
                       ),
                     ),
                     SizedBox(height: Dimens.marginApplication),
@@ -603,8 +644,26 @@ class _RegisterState extends State<Register> {
                           if (!validator.validateGenericTextField(
                               fantasyNameController.text, "Nome fantasia"))
                             return;
-                          if (!validator.validateCNPJ(cnpjController.text))
-                            return;
+
+                          var _document = "";
+                          var _typePerson = "";
+
+                          if (currentSelectedValue == "Pessoa Física") {
+                            if (!validator.validateCPF(cpfController.text))
+                              return;
+
+                            _document = cpfController.text.toString();
+                            _typePerson = 1.toString();
+
+                          } else {
+                            if (!validator.validateCNPJ(cnpjController.text))
+                              return;
+
+
+                            _document = cnpjController.text.toString();
+                            _typePerson = 2.toString();
+                          }
+
                           if (!validator.validateCellphone(
                               cellphoneController.text)) return;
                           if (!validator.validateEmail(emailController.text))
@@ -626,11 +685,11 @@ class _RegisterState extends State<Register> {
                               passwordController.text,
                               fantasyNameController.text,
                               socialReasonController.text,
-                              cnpjController.text,
+                              _document,
                               cellphoneController.text,
                               position!.latitude.toString(),
                               position!.longitude.toString(),
-                              "");
+                              _typePerson);
 
                           setState(() {
                             _isLoading = false;
