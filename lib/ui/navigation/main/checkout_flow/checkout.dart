@@ -611,7 +611,7 @@ class _Checkout extends State<Checkout> {
                                             ApplicationConstant.CREDIT_CARD
                                                 .toString()) {
 
-                                          final result = await showModalBottomSheet<dynamic>(
+                                          /*final result = */await showModalBottomSheet<dynamic>(
                                               isScrollControlled: true,
                                               context: context,
                                               shape: Styles().styleShapeBottomSheet,
