@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:another_stepper/dto/stepper_data.dart';
+import 'package:another_stepper/widgets/another_stepper.dart';
 import 'package:app/model/favorite.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -326,6 +328,79 @@ class _OrderDetail extends State<OrderDetail> {
                                   ),
                                 ],
                               )),
+                          SizedBox(height: Dimens.minMarginApplication),
+                          Styles().div_horizontal,
+                          SizedBox(height: Dimens.minMarginApplication),
+                          Text(
+                            "Status da entrega:",
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: Dimens.textSize5,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          SizedBox(height: 40),
+                          AnotherStepper(
+                              stepperDirection: Axis.horizontal,
+                              iconWidth: 40,
+                              iconHeight: 40,
+                              activeBarColor: Colors.green,
+                              inActiveBarColor: Colors.grey,
+                              inverted: true,
+                              verticalGap: 30,
+                              activeIndex: 1,
+                              barThickness: 8,
+                              stepperList: [
+                                StepperData(
+                                    title: StepperText("Delivered",
+                                        textStyle: const TextStyle(color: Colors.grey)),
+                                    iconWidget: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: const BoxDecoration(
+                                          color: Colors.redAccent,
+                                          borderRadius: BorderRadius.all(Radius.circular(30))),
+                                    )),
+                                StepperData(
+                                    title: StepperText("Delivered",
+                                        textStyle: const TextStyle(color: Colors.grey)),
+                                    iconWidget: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: const BoxDecoration(
+                                          color: Colors.redAccent,
+                                          borderRadius: BorderRadius.all(Radius.circular(30))),
+                                    )),
+                                StepperData(
+                                    title: StepperText("Delivered",
+                                        textStyle: const TextStyle(color: Colors.grey)),
+                                    iconWidget: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: const BoxDecoration(
+                                          color: Colors.redAccent,
+                                          borderRadius: BorderRadius.all(Radius.circular(30))),
+                                    )),
+                                StepperData(
+                                    title: StepperText("Delivered",
+                                        textStyle: const TextStyle(color: Colors.grey)),
+                                    iconWidget: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: const BoxDecoration(
+                                          color: Colors.redAccent,
+                                          borderRadius: BorderRadius.all(Radius.circular(30))),
+                                    )),
+                                StepperData(
+                                    title: StepperText("Delivered",
+                                        textStyle: const TextStyle(color: Colors.grey)),
+                                    iconWidget: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: const BoxDecoration(
+                                          color: Colors.redAccent,
+                                          borderRadius: BorderRadius.all(Radius.circular(30))),
+                                    )),
+
+                              ],
+                            ),
+
                         ],
                       ),
                     )),

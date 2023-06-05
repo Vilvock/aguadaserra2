@@ -2,21 +2,19 @@ bug:
 
 add interceptor e timeout request
 confirmar notificacoes ios
+testar register location
 MIGRACAO bgl do android 13
 
 ///////////////
 
-colocar quantidade produto digitando tbm
+- colocar quantidade produto digitando tbm
+- validacao ter que colocar pra sleecionar um endereco quando o id endereco estiver null no method payment
+- terminar status entrega
+- fazer barcode boleto bancario tela sucesso
 
-fazer barcode boleto bancario tela sucesso
+- ver que retorno vem no nome do find pedido tipo pagamento boleto bancario
 
-validacao ter que colocar pra sleecionar um endereco quando o id endereco estiver null no method payment
-
-testar register location
-
-
-ver que retorno vem no nome do find pedido tipo pagamento
-///////////////pedir pra trazer bairro no findendereco
+- pedir pra trazer bairro no findendereco
 
 
 
