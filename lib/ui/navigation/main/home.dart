@@ -746,7 +746,7 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                                       response
                                                                           .nome,
                                                                       maxLines:
-                                                                          1,
+                                                                          2,
                                                                       overflow:
                                                                           TextOverflow
                                                                               .ellipsis,
@@ -755,7 +755,7 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                                         fontFamily:
                                                                             'Inter',
                                                                         fontSize:
-                                                                            Dimens.textSize6,
+                                                                            Dimens.textSize5,
                                                                         fontWeight:
                                                                             FontWeight.bold,
                                                                         color: Colors
@@ -778,7 +778,7 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                                         fontFamily:
                                                                             'Inter',
                                                                         fontSize:
-                                                                            Dimens.textSize5,
+                                                                            Dimens.textSize4,
                                                                         color: Colors
                                                                             .black,
                                                                       ),

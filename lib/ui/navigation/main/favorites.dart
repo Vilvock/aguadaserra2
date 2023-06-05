@@ -219,11 +219,11 @@ class _Favorites extends State<Favorites> {
                                       children: [
                                         Text(
                                           response.nome,
-                                          maxLines: 1,
+                                          maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                             fontFamily: 'Inter',
-                                            fontSize: Dimens.textSize6,
+                                            fontSize: Dimens.textSize5,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.black,
                                           ),
@@ -232,12 +232,12 @@ class _Favorites extends State<Favorites> {
                                             height:
                                                 Dimens.minMarginApplication),
                                         Text(
-                                          "response.categoria",
+                                          response.categoria,
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                             fontFamily: 'Inter',
-                                            fontSize: Dimens.textSize5,
+                                            fontSize: Dimens.textSize4,
                                             color: Colors.black,
                                           ),
                                         ),

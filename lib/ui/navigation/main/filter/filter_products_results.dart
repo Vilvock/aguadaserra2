@@ -101,11 +101,11 @@ class _FilterProductsResults extends State<FilterProductsResults> {
                                 children: [
                                   Text(
                                     response.nome,
-                                    maxLines: 1,
+                                    maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontFamily: 'Inter',
-                                      fontSize: Dimens.textSize6,
+                                      fontSize: Dimens.textSize5,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,
                                     ),
@@ -119,7 +119,7 @@ class _FilterProductsResults extends State<FilterProductsResults> {
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontFamily: 'Inter',
-                                      fontSize: Dimens.textSize5,
+                                      fontSize: Dimens.textSize4,
                                       color: Colors.black,
                                     ),
                                   ),

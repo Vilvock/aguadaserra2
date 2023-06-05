@@ -272,13 +272,13 @@ class _CartShopping extends State<CartShopping> {
                                                         Text(
                                                           responseList
                                                               .nome_produto,
-                                                          maxLines: 1,
+                                                          maxLines: 2,
                                                           overflow: TextOverflow
                                                               .ellipsis,
                                                           style: TextStyle(
                                                             fontFamily: 'Inter',
                                                             fontSize: Dimens
-                                                                .textSize6,
+                                                                .textSize5,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             color: Colors.black,
@@ -307,7 +307,7 @@ class _CartShopping extends State<CartShopping> {
                                                           style: TextStyle(
                                                             fontFamily: 'Inter',
                                                             fontSize: Dimens
-                                                                .textSize5,
+                                                                .textSize4,
                                                             color: Colors.black,
                                                           ),
                                                         ),
@@ -373,7 +373,7 @@ class _CartShopping extends State<CartShopping> {
                                                                       SizedBox(
                                                                           width:
                                                                               Dimens.minMarginApplication),
-                                                                      GestureDetector(onTap: () {
+                                                                      GestureDetector(onTap: () {/*
                                                                         showModalBottomSheet<dynamic>(
                                                                             isScrollControlled: true,
                                                                             context: context,
@@ -394,7 +394,7 @@ class _CartShopping extends State<CartShopping> {
                                                                                           },
                                                                                           child: Text("Alterar quantidade", style: Styles().styleDefaultTextButton))));
                                                                             });
-                                                                      }, child:
+                                                                     */ }, child:
                                                                       Text(
                                                                         _quantity
                                                                             .toString(),

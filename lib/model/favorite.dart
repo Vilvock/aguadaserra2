@@ -9,6 +9,7 @@ class Favorite extends GlobalWSModel{
   final String descricao;
   final String valor;
   final int id_produto;
+  final String categoria;
 
   Favorite({
     required this.nome,
@@ -16,7 +17,8 @@ class Favorite extends GlobalWSModel{
     required this.url_foto,
     required this.descricao,
     required this.valor,
-    required this.id_produto, required super.status, required super.msg, required super.id, required super.rows,
+    required this.id_produto,
+    required this.categoria, required super.status, required super.msg, required super.id, required super.rows,
   });
 
   factory Favorite.fromJson(Map<String, dynamic> json) {
@@ -27,6 +29,7 @@ class Favorite extends GlobalWSModel{
       descricao: json['descricao'],
       valor: json['valor'],
       id_produto: json['id_produto'],
+      categoria: json['categoria'],
       status: json['status'],
       msg: json['msg'],
       id: json['id'],
