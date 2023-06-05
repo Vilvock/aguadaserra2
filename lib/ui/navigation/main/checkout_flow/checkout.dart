@@ -181,6 +181,7 @@ class _Checkout extends State<Checkout> {
                 "complemento": _complement.toString(),
                 "total_items": _cartValue,
                 "freight_value": _freightValue,
+                "total_value": _totalValue,
               });
 
         });
@@ -230,6 +231,7 @@ class _Checkout extends State<Checkout> {
                 "complemento": _complement.toString(),
                 "total_items": _cartValue,
                 "freight_value": _freightValue,
+                "total_value": _totalValue,
               });
 
         });
@@ -292,6 +294,7 @@ class _Checkout extends State<Checkout> {
                 "complemento": _complement.toString(),
                 "total_items": _cartValue,
                 "freight_value": _freightValue,
+                "total_value": _totalValue,
               });
 
         });
@@ -341,6 +344,7 @@ class _Checkout extends State<Checkout> {
               "complemento": _complement.toString(),
               "total_items": _cartValue,
               "freight_value": _freightValue,
+              "total_value": _totalValue,
             });
       } else {}
       ApplicationMessages(context: context).showMessage(response.msg);

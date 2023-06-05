@@ -34,7 +34,6 @@ class _Success extends State<Success> {
   late String _qrCodeClipboard;
   late String _typePaymentName;
 
-
   late String _cep;
   late String _city;
   late String _state;
@@ -45,6 +44,7 @@ class _Success extends State<Success> {
 
   late String _cartValue;
   late String _freightValue;
+  late String _totalValue;
 
   late String _barCode;
 
@@ -96,6 +96,7 @@ class _Success extends State<Success> {
 
     _cartValue = data['total_items'];
     _freightValue = data['freight_value'];
+    _totalValue = data['total_value'];
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -270,6 +271,89 @@ class _Success extends State<Success> {
                 Styles().div_horizontal,
                 SizedBox(height: Dimens.marginApplication),
                 Text(
+                  "Valores:",
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: Dimens.textSize5,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(height: Dimens.minMarginApplication),
+                Column(children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Frete",
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: Dimens.textSize4,
+                            color: Colors.black45,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        _freightValue,
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: Dimens.textSize4,
+                          color: Colors.black45,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: Dimens.minMarginApplication),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Valor total em produtos",
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: Dimens.textSize4,
+                            color: Colors.black45,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        _cartValue,
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: Dimens.textSize4,
+                          color: Colors.black45,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: Dimens.minMarginApplication),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Valor total com a entrega",
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: Dimens.textSize5,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        _totalValue,
+                        style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: Dimens.textSize5,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ]),
+                SizedBox(height: Dimens.marginApplication),
+                Styles().div_horizontal,
+                SizedBox(height: Dimens.marginApplication),
+                Text(
                   "Pagamento",
                   style: TextStyle(
                     fontFamily: 'Inter',
@@ -309,15 +393,13 @@ class _Success extends State<Success> {
                             color: Colors.black,
                           ),
                         ),
-
                         SizedBox(height: Dimens.marginApplication),
                         Center(
                             child: Container(
-                              height: 100,
-                              child: SfBarcodeGenerator(
-                                value: _barCode,
-                                symbology: Code128C()),
-                              )),
+                          height: 100,
+                          child: SfBarcodeGenerator(
+                              value: _barCode, symbology: Code128C()),
+                        )),
                       ],
                     )),
                 Visibility(
@@ -341,7 +423,8 @@ class _Success extends State<Success> {
                           ),
                         ),
                         SizedBox(height: Dimens.marginApplication),
-                        Image.memory(height: 200,
+                        Image.memory(
+                            height: 200,
                             Base64Decoder().convert(_base64.toString()))
                       ],
                     )),
