@@ -58,17 +58,6 @@ class _CreditCardAlertDialog extends State<CreditCardAlertDialog> {
   }
 
   @override
-  void dispose() {
-    widget.nameController.dispose();
-    widget.cpfController.dispose();
-    widget.yearController.dispose();
-    widget.monthController.dispose();
-    widget.cardNumberController.dispose();
-    widget.securityCodeController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
         child: Column(
