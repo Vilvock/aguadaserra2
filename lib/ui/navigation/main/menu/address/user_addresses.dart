@@ -248,10 +248,15 @@ class _UserAddresses extends State<UserAddresses> {
                                     complement: response.complemento);
                               });
                           if (result == true) {
-                            Navigator.popUntil(
-                              context,
-                              ModalRoute.withName('/ui/home'),
-                            );
+                            Navigator.of(context)
+                                .pop();
+                            // setState(() {
+                            //
+                            // });
+                            // Navigator.popUntil(
+                            //   context,
+                            //   ModalRoute.withName('/ui/home'),
+                            // );
                             Navigator.pushNamed(context, "/ui/user_addresses");
                           }
                         },
