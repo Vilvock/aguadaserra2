@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:app/model/cart.dart';
 import 'package:app/model/payment.dart';
 import 'package:app/res/styles.dart';
+import 'package:app/ui/components/alert_dialog_credit_card_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -45,6 +46,8 @@ class _Checkout extends State<Checkout> {
   late String _freightValue;
 
   final postRequest = PostRequest();
+
+  var _typePaymentName;
 
   @override
   void initState() {
@@ -282,6 +285,21 @@ class _Checkout extends State<Checkout> {
     _cartValue = data['total_items'];
     _freightValue = data['freight_value'];
 
+    switch (_typePayment) {
+      case "1":
+        _typePaymentName = "Cartão de crédito";
+        break;
+      case "2":
+        _typePaymentName = "Boleto bancário";
+        break;
+      case "3":
+        _typePaymentName = "PIX";
+        break;
+      case "4":
+        _typePaymentName = "Boleto à prazo";
+        break;
+    }
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(
@@ -368,6 +386,9 @@ class _Checkout extends State<Checkout> {
                                       return InkWell(
                                           onTap: () => {},
                                           child: Card(
+                                            elevation: 0,
+                                            color: OwnerColors
+                                                .categoryLightGrey,
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(Dimens
@@ -434,7 +455,7 @@ class _Checkout extends State<Checkout> {
                                                             fontFamily: 'Inter',
                                                             fontSize: Dimens
                                                                 .textSize6,
-                                                            color: Colors.black,
+                                                            color: OwnerColors.darkGreen,
                                                           ),
                                                         ),
                                                       ],
@@ -467,7 +488,7 @@ class _Checkout extends State<Checkout> {
                             ),
                             SizedBox(height: Dimens.minMarginApplication),
                             Text(
-                              "Tipo de pagamento: PIX",
+                              "Tipo de pagamento: $_typePaymentName",
                               style: TextStyle(
                                 fontFamily: 'Inter',
                                 fontSize: Dimens.textSize5,
@@ -589,10 +610,27 @@ class _Checkout extends State<Checkout> {
                                         } else if (_typePayment ==
                                             ApplicationConstant.CREDIT_CARD
                                                 .toString()) {
-                                          await payWithCreditCard(
-                                              _idOrder.toString(),
-                                              _totalValue,
-                                              "");
+
+                                          final result = await showModalBottomSheet<dynamic>(
+                                              isScrollControlled: true,
+                                              context: context,
+                                              shape: Styles().styleShapeBottomSheet,
+                                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                                              builder: (BuildContext context) {
+                                                return CreditCardAlertDialog();
+                                              });
+                                          // if(result == true){
+                                          //   Navigator.popUntil(
+                                          //     context,
+                                          //     ModalRoute.withName('/ui/home'),
+                                          //   );
+                                          //   Navigator.pushNamed(context, "/ui/user_addresses");
+                                          // }
+                                          //
+                                          // await payWithCreditCard(
+                                          //     _idOrder.toString(),
+                                          //     _totalValue,
+                                          //     "");
                                         } else if (_typePayment ==
                                             ApplicationConstant.TICKET
                                                 .toString()) {
