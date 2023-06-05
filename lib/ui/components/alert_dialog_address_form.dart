@@ -15,7 +15,6 @@ import '../../web_service/links.dart';
 import '../../web_service/service_response.dart';
 
 class AddressFormAlertDialog extends StatefulWidget {
-
   final String? id;
   final String? name;
   final String? cep;
@@ -27,7 +26,16 @@ class AddressFormAlertDialog extends StatefulWidget {
   final String? complement;
 
   AddressFormAlertDialog({
-    Key? key, this.id, this.name, this.cep, this.city, this.state, this.nbh, this.address, this.number, this.complement,
+    Key? key,
+    this.id,
+    this.name,
+    this.cep,
+    this.city,
+    this.state,
+    this.nbh,
+    this.address,
+    this.number,
+    this.complement,
   });
 
   // DialogGeneric({Key? key}) : super(key: key);
@@ -43,7 +51,6 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
 
   @override
   void initState() {
-
     if (widget.id != null) {
       nameController.text = widget.name!;
       cepController.text = widget.cep!;
@@ -150,7 +157,8 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
 
       print('HTTP_BODY: $body');
 
-      final json = await postRequest.sendPostRequest(Links.UPDATE_ADDRESS, body);
+      final json =
+          await postRequest.sendPostRequest(Links.UPDATE_ADDRESS, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -204,12 +212,18 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
   Widget build(BuildContext context) {
     validator = Validator(context: context);
 
-    return SingleChildScrollView(child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
+    return SingleChildScrollView(
+        child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
           Padding(
-            padding: EdgeInsets.fromLTRB(Dimens.paddingApplication, Dimens.paddingApplication, Dimens.paddingApplication, MediaQuery.of(context).viewInsets.bottom + Dimens.paddingApplication),
+            padding: EdgeInsets.fromLTRB(
+                Dimens.paddingApplication,
+                Dimens.paddingApplication,
+                Dimens.paddingApplication,
+                MediaQuery.of(context).viewInsets.bottom +
+                    Dimens.paddingApplication),
             child: Column(
               children: [
                 Align(
@@ -376,7 +390,7 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                 ),
                 SizedBox(height: Dimens.marginApplication),
                 TextField(
-                  controller: nbhController,
+                  controller: addressController,
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -385,7 +399,7 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey, width: 1.0),
                     ),
-                    hintText: 'Bairro',
+                    hintText: 'Endereço',
                     hintStyle: TextStyle(color: Colors.grey),
                     border: OutlineInputBorder(
                       borderRadius:
@@ -407,35 +421,36 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                 Row(
                   children: [
                     Expanded(
-                        child: TextField(
-                      controller: addressController,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: OwnerColors.colorPrimary, width: 1.5),
+                      child: TextField(
+                        controller: nbhController,
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: OwnerColors.colorPrimary, width: 1.5),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 1.0),
+                          ),
+                          hintText: 'Bairro',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.circular(Dimens.radiusApplication),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding: EdgeInsets.all(
+                              Dimens.textFieldPaddingApplication),
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 1.0),
+                        keyboardType: TextInputType.text,
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: Dimens.textSize5,
                         ),
-                        hintText: 'Endereço',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(Dimens.radiusApplication),
-                          borderSide: BorderSide.none,
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding:
-                            EdgeInsets.all(Dimens.textFieldPaddingApplication),
                       ),
-                      keyboardType: TextInputType.text,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: Dimens.textSize5,
-                      ),
-                    )),
+                    ),
                     SizedBox(width: Dimens.marginApplication),
                     Expanded(
                       child: TextField(
@@ -506,7 +521,6 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                   child: ElevatedButton(
                     style: Styles().styleDefaultButton,
                     onPressed: () async {
-
                       if (!validator.validateGenericTextField(
                           nameController.text, "Nome do local")) return;
                       if (!validator.validateCEP(cepController.text)) return;
@@ -515,9 +529,9 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                       if (!validator.validateGenericTextField(
                           stateController.text, "Estado")) return;
                       if (!validator.validateGenericTextField(
-                          nbhController.text, "Bairro")) return;
-                      if (!validator.validateGenericTextField(
                           addressController.text, "Endereço")) return;
+                      if (!validator.validateGenericTextField(
+                          nbhController.text, "Bairro")) return;
                       if (!validator.validateGenericTextField(
                           numberController.text, "Número")) return;
 
@@ -548,22 +562,20 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                             complementController.text.toString());
                       }
 
-
-
                       setState(() {
                         _isLoading = false;
                       });
                     },
                     child: (_isLoading)
                         ? const SizedBox(
-                        width: Dimens.buttonIndicatorWidth,
-                        height: Dimens.buttonIndicatorHeight,
-                        child: CircularProgressIndicator(
-                          color: OwnerColors.colorAccent,
-                          strokeWidth: Dimens.buttonIndicatorStrokes,
-                        ))
+                            width: Dimens.buttonIndicatorWidth,
+                            height: Dimens.buttonIndicatorHeight,
+                            child: CircularProgressIndicator(
+                              color: OwnerColors.colorAccent,
+                              strokeWidth: Dimens.buttonIndicatorStrokes,
+                            ))
                         : Text("Salvar",
-                        style: Styles().styleDefaultTextButton),
+                            style: Styles().styleDefaultTextButton),
                   ),
                 ),
               ],

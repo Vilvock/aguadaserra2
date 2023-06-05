@@ -6,14 +6,35 @@
 
 - bug refresh quando lista vazia
 - bug register location
-- bug add endereco pelo carrinho
+- bug add endereco pelo method payment
 - bug filter
 
 add interceptor e timeout request
 confirmar notificacoes ios
 MIGRACAO bgl do android 13
 
+bolinha(badge) de itens carrinho fds
 
 
+nome fantasia subir
+razao social sumir caso for cnpj OK (testar register)
+
+bairro do lado do numero
+cidade e estado deixar 	OK desativado testar address
+
+
+mudar cor icone method payment para grafite
+mudar dimen tamanho imagem (serrilhado)
+
+borda endereco selecionado OK
+
+mudar nomenclatura de endereco para endereco para entrega (checkout) OK
+ e (sucess tamanha qr code menorzin), OK
+ e itens nomear para produtos OK
+ (colocar valor frete, total produtos e total)
+
+nome produto colocar duas linhas e diminuir fonte
+
+list favoritos(trocar desc por categoria) XV
 
 

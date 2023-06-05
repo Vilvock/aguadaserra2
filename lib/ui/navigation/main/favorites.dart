@@ -232,8 +232,7 @@ class _Favorites extends State<Favorites> {
                                             height:
                                                 Dimens.minMarginApplication),
                                         Text(
-                                          Useful().removeAllHtmlTags(
-                                              response.descricao),
+                                          "response.categoria",
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(

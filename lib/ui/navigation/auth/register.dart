@@ -302,36 +302,6 @@ class _RegisterState extends State<Register> {
                     ),
                     SizedBox(height: Dimens.marginApplication),
                     TextField(
-                      controller: socialReasonController,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: OwnerColors.colorPrimary, width: 1.5),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 1.0),
-                        ),
-                        hintText: 'Razão Social',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(Dimens.radiusApplication),
-                          borderSide: BorderSide.none,
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding:
-                            EdgeInsets.all(Dimens.textFieldPaddingApplication),
-                      ),
-                      keyboardType: TextInputType.text,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: Dimens.textSize5,
-                      ),
-                    ),
-                    SizedBox(height: Dimens.marginApplication),
-                    TextField(
                       controller: fantasyNameController,
                       decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
@@ -340,19 +310,19 @@ class _RegisterState extends State<Register> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.grey, width: 1.0),
+                          BorderSide(color: Colors.grey, width: 1.0),
                         ),
-                        hintText: 'Nome Fantasia',
+                        hintText: currentSelectedValue == "Pessoa Jurídica" ? 'Nome Fantasia' : 'Nome completo',
                         hintStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius:
-                              BorderRadius.circular(Dimens.radiusApplication),
+                          BorderRadius.circular(Dimens.radiusApplication),
                           borderSide: BorderSide.none,
                         ),
                         filled: true,
                         fillColor: Colors.white,
                         contentPadding:
-                            EdgeInsets.all(Dimens.textFieldPaddingApplication),
+                        EdgeInsets.all(Dimens.textFieldPaddingApplication),
                       ),
                       keyboardType: TextInputType.text,
                       style: TextStyle(
@@ -361,6 +331,41 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
                     SizedBox(height: Dimens.marginApplication),
+                    Visibility(
+                        visible: currentSelectedValue == "Pessoa Jurídica",
+                        child: Column(children: [
+                          TextField(
+                            controller: socialReasonController,
+                            decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: OwnerColors.colorPrimary,
+                                    width: 1.5),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.grey, width: 1.0),
+                              ),
+                              hintText: 'Razão Social',
+                              hintStyle: TextStyle(color: Colors.grey),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    Dimens.radiusApplication),
+                                borderSide: BorderSide.none,
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              contentPadding: EdgeInsets.all(
+                                  Dimens.textFieldPaddingApplication),
+                            ),
+                            keyboardType: TextInputType.text,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: Dimens.textSize5,
+                            ),
+                          ),
+                          SizedBox(height: Dimens.marginApplication),
+                        ])),
                     TextField(
                       controller: cellphoneController,
                       inputFormatters: [Masks().cellphoneMask()],
@@ -638,10 +643,9 @@ class _RegisterState extends State<Register> {
                       child: ElevatedButton(
                         style: Styles().styleDefaultButton,
                         onPressed: () async {
-
-
                           var _document = "";
                           var _typePerson = "";
+                          var _socialReason = "";
 
                           if (currentSelectedValue == "Pessoa Física") {
                             if (!validator.validateCPF(cpfController.text))
@@ -649,21 +653,24 @@ class _RegisterState extends State<Register> {
 
                             _document = cpfController.text.toString();
                             _typePerson = 1.toString();
-
+                            _socialReason = "";
                           } else {
                             if (!validator.validateCNPJ(cnpjController.text))
                               return;
 
-
                             _document = cnpjController.text.toString();
                             _typePerson = 2.toString();
+
+                            if (!validator.validateGenericTextField(
+                                socialReasonController.text, "Razão social"))
+                              return;
+
+                            _socialReason = socialReasonController.text.toString();
                           }
 
+
                           if (!validator.validateGenericTextField(
-                              socialReasonController.text, "Razão social"))
-                            return;
-                          if (!validator.validateGenericTextField(
-                              fantasyNameController.text, "Nome fantasia"))
+                              fantasyNameController.text, "Nome"))
                             return;
 
                           if (!validator.validateCellphone(

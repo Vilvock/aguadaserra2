@@ -264,6 +264,9 @@ class _UserAddresses extends State<UserAddresses> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 Dimens.minRadiusApplication),
+                              side: response.id.toString() ==
+                                  Preferences.getDefaultAddress()
+                                      .toString() ? BorderSide(color: OwnerColors.colorPrimaryDark, width: 2.0) : BorderSide(color: Colors.transparent, width: 0),
                           ),
                           margin: EdgeInsets.all(Dimens.minMarginApplication),
                           child: Container(

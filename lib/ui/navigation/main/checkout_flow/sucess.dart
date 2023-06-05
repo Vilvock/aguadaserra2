@@ -34,6 +34,15 @@ class _Success extends State<Success> {
   late String _qrCodeClipboard;
   late String _typePaymentName;
 
+
+  late String _cep;
+  late String _city;
+  late String _state;
+  late String _nbh;
+  late String _address;
+  late String _number;
+  late String _complement;
+
   late String _barCode;
 
   final postRequest = PostRequest();
@@ -106,7 +115,32 @@ class _Success extends State<Success> {
                 Styles().div_horizontal,
                 SizedBox(height: Dimens.minMarginApplication),
                 Text(
-                  "Itens:",
+                  "Endereço para entrega:",
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: Dimens.textSize5,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(height: Dimens.minMarginApplication),
+                // Text(
+                //   "$_city - $_state" +
+                //       "\n" +
+                //       "$_nbh, $_address $_number" +
+                //       "\n\n" +
+                //       "$_complement",
+                //   style: TextStyle(
+                //     fontFamily: 'Inter',
+                //     fontSize: Dimens.textSize5,
+                //     color: Colors.black,
+                //   ),
+                // ),
+                SizedBox(height: Dimens.marginApplication),
+                Styles().div_horizontal,
+                SizedBox(height: Dimens.marginApplication),
+                Text(
+                  "Produtos:",
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontSize: Dimens.textSize5,
@@ -292,7 +326,8 @@ class _Success extends State<Success> {
                             color: Colors.black,
                           ),
                         ),
-                        Image.memory(
+                        SizedBox(height: Dimens.marginApplication),
+                        Image.memory(height: 200,
                             Base64Decoder().convert(_base64.toString()))
                       ],
                     )),

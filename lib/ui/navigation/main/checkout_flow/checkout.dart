@@ -390,7 +390,7 @@ class _Checkout extends State<Checkout> {
                                 // ),
                                 // SizedBox(height: Dimens.minMarginApplication),
                                 Text(
-                                  "Endereço:",
+                                  "Endereço para entrega:",
                                   style: TextStyle(
                                     fontFamily: 'Inter',
                                     fontSize: Dimens.textSize5,
@@ -415,7 +415,7 @@ class _Checkout extends State<Checkout> {
                                 Styles().div_horizontal,
                                 SizedBox(height: Dimens.marginApplication),
                                 Text(
-                                  "Itens:",
+                                  "Produtos:",
                                   style: TextStyle(
                                     fontFamily: 'Inter',
                                     fontSize: Dimens.textSize5,
