@@ -789,7 +789,7 @@ class _MethodPayment extends State<MethodPayment>
                                 borderRadius: BorderRadius.circular(
                                     Dimens.minRadiusApplication),
                                 child: Image.asset('images/qr_code.png',
-                                    height: 50, width: 50))),
+                                    height: 50, width: 50, color: Colors.black54,))),
                         Expanded(
                             child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -847,7 +847,7 @@ class _MethodPayment extends State<MethodPayment>
                                 borderRadius: BorderRadius.circular(
                                     Dimens.minRadiusApplication),
                                 child: Image.asset('images/credit_card.png',
-                                    height: 50, width: 50))),
+                                    height: 50, width: 50, color: Colors.black54))),
                         Expanded(
                             child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -904,7 +904,7 @@ class _MethodPayment extends State<MethodPayment>
                                 borderRadius: BorderRadius.circular(
                                     Dimens.minRadiusApplication),
                                 child: Image.asset('images/ticket.png',
-                                    height: 50, width: 50))),
+                                    height: 50, width: 50, color: Colors.black54))),
                         Expanded(
                             child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -964,7 +964,7 @@ class _MethodPayment extends State<MethodPayment>
                                 borderRadius: BorderRadius.circular(
                                     Dimens.minRadiusApplication),
                                 child: Image.asset('images/calendar.png',
-                                    height: 50, width: 50))),
+                                    height: 50, width: 50, color: Colors.black54))),
                         Expanded(
                             child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

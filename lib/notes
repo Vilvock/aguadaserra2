@@ -2,7 +2,6 @@
 ///////////////
 
 
-- colocar quantidade produto digitando tbm
 
 - bug refresh quando lista vazia
 - bug register location
@@ -22,7 +21,7 @@ nome fantasia subir
 razao social sumir caso for cnpj OK (testar register)
 
 bairro do lado do numero
-cidade e estado deixar 	OK desativado testar address
+cidade e estado deixar 	OK desativado testar address OK
 
 
 mudar cor icone method payment para grafite
