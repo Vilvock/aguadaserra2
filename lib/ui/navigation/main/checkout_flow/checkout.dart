@@ -171,6 +171,7 @@ class _Checkout extends State<Checkout> {
               arguments: {
                 "id_cart": _idCart,
                 "payment_type": _typePaymentName,
+                "id_order": _idOrder,
               });
 
         });
@@ -210,6 +211,7 @@ class _Checkout extends State<Checkout> {
               arguments: {
                 "id_cart": _idCart,
                 "payment_type": _typePaymentName,
+                "id_order": _idOrder,
               });
 
         });
@@ -261,6 +263,7 @@ class _Checkout extends State<Checkout> {
               arguments: {
                 "id_cart": _idCart,
                 "payment_type": _typePaymentName,
+                "id_order": _idOrder,
               });
 
         });
@@ -300,6 +303,7 @@ class _Checkout extends State<Checkout> {
               "base64": response.qrcode_64,
               "qrCodeClipboard": response.qrcode,
               "payment_type": _typePaymentName,
+              "id_order": _idOrder,
             });
       } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
@@ -500,6 +504,17 @@ class _Checkout extends State<Checkout> {
                                                                 FontWeight.bold,
                                                                 color: Colors
                                                                     .black,
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                                height: Dimens
+                                                                    .minMarginApplication),
+                                                            Text(
+                                                              "Quantidade: " + response.qtd.toString(),
+                                                              style: TextStyle(
+                                                                fontFamily: 'Inter',
+                                                                fontSize: Dimens.textSize4,
+                                                                color: Colors.black,
                                                               ),
                                                             ),
                                                             SizedBox(

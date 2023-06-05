@@ -28,8 +28,10 @@ class Success extends StatefulWidget {
 class _Success extends State<Success> {
   bool _isLoading = false;
   late int _idCart;
+  late int _idOrder;
   late String _base64;
   late String _qrCodeClipboard;
+  late String _typePaymentName;
 
   final postRequest = PostRequest();
 
@@ -40,7 +42,7 @@ class _Success extends State<Success> {
       print('HTTP_BODY: $body');
 
       final json =
-      await postRequest.sendPostRequest(Links.LIST_CART_ITEMS, body);
+          await postRequest.sendPostRequest(Links.LIST_CART_ITEMS, body);
       final parsedResponse = jsonDecode(json);
 
       print('HTTP_RESPONSE: $parsedResponse');
@@ -60,10 +62,12 @@ class _Success extends State<Success> {
     Map data = {};
     data = ModalRoute.of(context)!.settings.arguments as Map;
 
+    _idOrder = data['id_order'];
     _idCart = data['id_cart'];
     _base64 = data['base64'];
     _qrCodeClipboard = data['qrCodeClipboard'];
 
+    _typePaymentName = data['payment_type'];
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -71,15 +75,7 @@ class _Success extends State<Success> {
           title: "Compra finalizada!",
           // isVisibleBackButton: true,
         ),
-        body: /*FutureBuilder<List<Map<String, dynamic>>>(
-              future: loadProduct(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-
-                  final response = Product.fromJson(snapshot.data![0]);
-
-                  return */
-            Stack(children: [
+        body: Stack(children: [
           SingleChildScrollView(
               child: Container(
             margin: EdgeInsets.all(Dimens.marginApplication),
@@ -93,7 +89,7 @@ class _Success extends State<Success> {
                         'https://assets1.lottiefiles.com/packages/lf20_o3kwwgtn.json')),
                 SizedBox(height: Dimens.marginApplication),
                 Text(
-                  "Detalhes do pedido #0000000",
+                  "Detalhes do pedido #$_idOrder",
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontSize: Dimens.textSize6,
@@ -101,6 +97,9 @@ class _Success extends State<Success> {
                     color: Colors.black,
                   ),
                 ),
+                SizedBox(height: Dimens.minMarginApplication),
+
+                Styles().div_horizontal,
                 SizedBox(height: Dimens.minMarginApplication),
                 Text(
                   "Itens:",
@@ -112,8 +111,7 @@ class _Success extends State<Success> {
                   ),
                 ),
                 FutureBuilder<Cart>(
-                  future:
-                  listCartItems(_idCart.toString()),
+                  future: listCartItems(_idCart.toString()),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return ListView.builder(
@@ -121,61 +119,72 @@ class _Success extends State<Success> {
                         shrinkWrap: true,
                         itemCount: snapshot.data!.itens.length,
                         itemBuilder: (context, index) {
-
-                          final response = Item.fromJson(snapshot.data!.itens[index]);
+                          final response =
+                              Item.fromJson(snapshot.data!.itens[index]);
 
                           return InkWell(
-                              onTap: () => {
-                                Navigator.pushNamed(
-                                    context, "/ui/product_detail",
-                                    arguments: {
-                                      "id_product": response.id,
-                                    })
-                              },
+                              onTap: () => {},
                               child: Card(
+                                elevation: 0,
+                                color: OwnerColors.categoryLightGrey,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
                                       Dimens.minRadiusApplication),
                                 ),
-                                margin: EdgeInsets.all(
-                                    Dimens.minMarginApplication),
+                                margin:
+                                    EdgeInsets.all(Dimens.minMarginApplication),
                                 child: Container(
-                                  padding: EdgeInsets.all(
-                                      Dimens.paddingApplication),
+                                  padding:
+                                      EdgeInsets.all(Dimens.paddingApplication),
                                   child: Row(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Container(
                                           margin: EdgeInsets.only(
-                                              right: Dimens
-                                                  .minMarginApplication),
+                                              right:
+                                                  Dimens.minMarginApplication),
                                           child: ClipRRect(
-                                              borderRadius: BorderRadius
-                                                  .circular(Dimens
-                                                  .minRadiusApplication),
+                                              borderRadius:
+                                                  BorderRadius.circular(Dimens
+                                                      .minRadiusApplication),
                                               child: Image.network(
-                                                ApplicationConstant.URL_PRODUCT_PHOTO + response.url_foto.toString(),
+                                                ApplicationConstant
+                                                        .URL_PRODUCT_PHOTO +
+                                                    response.url_foto
+                                                        .toString(),
                                                 height: 90,
                                                 width: 90,
-                                                errorBuilder: (context, exception, stackTrack) => Icon(Icons.error, size: 90),
+                                                errorBuilder: (context,
+                                                        exception,
+                                                        stackTrack) =>
+                                                    Icon(Icons.error, size: 90),
                                               ))),
                                       Expanded(
                                         child: Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               response.nome_produto,
                                               maxLines: 1,
-                                              overflow:
-                                              TextOverflow.ellipsis,
+                                              overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                 fontFamily: 'Inter',
-                                                fontSize:
-                                                Dimens.textSize6,
-                                                fontWeight:
-                                                FontWeight.bold,
+                                                fontSize: Dimens.textSize6,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                                height: Dimens
+                                                    .minMarginApplication),
+                                            Text(
+                                              "Quantidade: " +
+                                                  response.qtd.toString(),
+                                              style: TextStyle(
+                                                fontFamily: 'Inter',
+                                                fontSize: Dimens.textSize4,
                                                 color: Colors.black,
                                               ),
                                             ),
@@ -186,9 +195,8 @@ class _Success extends State<Success> {
                                               response.valor,
                                               style: TextStyle(
                                                 fontFamily: 'Inter',
-                                                fontSize:
-                                                Dimens.textSize6,
-                                                color: Colors.black,
+                                                fontSize: Dimens.textSize6,
+                                                color: OwnerColors.darkGreen,
                                               ),
                                             ),
                                           ],
@@ -203,10 +211,13 @@ class _Success extends State<Success> {
                     } else if (snapshot.hasError) {
                       return Text('${snapshot.error}');
                     }
-                    return Center( child: CircularProgressIndicator());
+                    return Center(child: CircularProgressIndicator());
                   },
                 ),
-                SizedBox(height: Dimens.marginApplication),
+                SizedBox(height: Dimens.minMarginApplication),
+
+                Styles().div_horizontal,
+                SizedBox(height: Dimens.minMarginApplication),
                 Text(
                   "Pagamento",
                   style: TextStyle(
@@ -217,68 +228,72 @@ class _Success extends State<Success> {
                   ),
                 ),
                 SizedBox(height: Dimens.minMarginApplication),
-                Text(
-                  Strings.shortLoremIpsum +
-                      "\n\n" +
-                      "Copie este código para pagar" +
-                      "\n\n" +
-                      "1. Acesse seu Internet Banking ou app de pagamentos." +
-                      "\n\n" +
-                      "2. Escolha pagar via Pix/QR Code" +
-                      "\n\n" +
-                      "3. Escaneie o seguinte código:",
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: Dimens.textSize5,
-                    color: Colors.black,
-                  ),
-                ),
-
-              Image.memory(Base64Decoder().convert(_base64.toString()))
+                Visibility(
+                    visible: _typePaymentName == "PIX",
+                    child: Column(
+                      children: [
+                        Text(
+                          "Tipo de pagamento: $_typePaymentName" +
+                              "\n\n" +
+                              "Copie este código para pagar" +
+                              "\n\n" +
+                              "1. Acesse seu Internet Banking ou app de pagamentos." +
+                              "\n\n" +
+                              "2. Escolha pagar via Pix/QR Code" +
+                              "\n\n" +
+                              "3. Escaneie o seguinte código:",
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: Dimens.textSize5,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Image.memory(
+                            Base64Decoder().convert(_base64.toString()))
+                      ],
+                    ))
               ],
             ),
           )),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                  margin: EdgeInsets.all(Dimens.minMarginApplication),
-                  width: double.infinity,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Clipboard.setData(new ClipboardData(text: _qrCodeClipboard));
-                        ApplicationMessages(context: context).showMessage("Link Copiado!");
-                      },
-                      style: Styles().styleAlternativeButton,
-                      child: Container(
-                          child: Text("Copiar chave",
-                              textAlign: TextAlign.center,
-                              style: Styles().styleDefaultTextButton)))),
-              Container(
-                  margin: EdgeInsets.all(Dimens.minMarginApplication),
-                  width: double.infinity,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => Home()),
-                            ModalRoute.withName("/ui/home"));
-                      },
-                      style: Styles().styleDefaultButton,
-                      child: Container(
-                          child: Text("Ok",
-                              textAlign: TextAlign.center,
-                              style: Styles().styleDefaultTextButton))))
-            ],
-          )
+          Visibility(
+              visible: _typePaymentName == "PIX",
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                      margin: EdgeInsets.all(Dimens.minMarginApplication),
+                      width: double.infinity,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Clipboard.setData(
+                                new ClipboardData(text: _qrCodeClipboard));
+                            ApplicationMessages(context: context)
+                                .showMessage("Link Copiado!");
+                          },
+                          style: Styles().styleAlternativeButton,
+                          child: Container(
+                              child: Text("Copiar chave",
+                                  textAlign: TextAlign.center,
+                                  style: Styles().styleDefaultTextButton)))),
+                  Container(
+                      margin: EdgeInsets.all(Dimens.minMarginApplication),
+                      width: double.infinity,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(builder: (context) => Home()),
+                                ModalRoute.withName("/ui/home"));
+                          },
+                          style: Styles().styleDefaultButton,
+                          child: Container(
+                              child: Text("Ok",
+                                  textAlign: TextAlign.center,
+                                  style: Styles().styleDefaultTextButton))))
+                ],
+              ))
         ]));
-    /*     } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
-                }
-                return Center( child: CircularProgressIndicator());
-              },
-            )));*/
   }
 }
