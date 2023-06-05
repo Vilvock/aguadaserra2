@@ -793,7 +793,7 @@ class _Checkout extends State<Checkout> {
                                             strokeWidth: Dimens
                                                 .buttonIndicatorStrokes,
                                           ))
-                                          : Text("Fazer Pedido",
+                                          : Text(_typePaymentName == "Cartão de crédito" ? "Inserir dados do cartão" : "Realizar pedido",
                                           style: Styles()
                                               .styleDefaultTextButton),
                                     )),

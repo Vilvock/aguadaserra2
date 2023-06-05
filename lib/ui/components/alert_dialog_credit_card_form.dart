@@ -92,6 +92,8 @@ class _CreditCardAlertDialog extends State<CreditCardAlertDialog> {
                   showBackView: false,
                   isHolderNameVisible: true,
                   obscureCardCvv: false,
+                  obscureInitialCardNumber: false,
+                  obscureCardNumber: false,
                   onCreditCardWidgetChange:
                       (CreditCardBrand) {}, //true when you want to show cvv(back) view
                 ),
