@@ -4,6 +4,7 @@ import 'package:app/config/application_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
+import 'package:syncfusion_flutter_barcodes/barcodes.dart';
 
 import '../../../../global/application_constant.dart';
 import '../../../../model/cart.dart';
@@ -32,6 +33,8 @@ class _Success extends State<Success> {
   late String _base64;
   late String _qrCodeClipboard;
   late String _typePaymentName;
+
+  late String _barCode;
 
   final postRequest = PostRequest();
 
@@ -69,6 +72,8 @@ class _Success extends State<Success> {
 
     _typePaymentName = data['payment_type'];
 
+    _barCode = data['barCode'];
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(
@@ -79,7 +84,7 @@ class _Success extends State<Success> {
           SingleChildScrollView(
               child: Container(
             margin: EdgeInsets.all(Dimens.marginApplication),
-            padding: EdgeInsets.only(bottom: 100),
+            padding: EdgeInsets.only(bottom: 140),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -256,6 +261,15 @@ class _Success extends State<Success> {
                             color: Colors.black,
                           ),
                         ),
+
+                        SizedBox(height: Dimens.marginApplication),
+                        Center(
+                            child: Container(
+                              height: 100,
+                              child: SfBarcodeGenerator(
+                                value: _barCode,
+                                symbology: Code128C()),
+                              )),
                       ],
                     )),
                 Visibility(
@@ -319,6 +333,23 @@ class _Success extends State<Success> {
                           style: Styles().styleAlternativeButton,
                           child: Container(
                               child: Text("Copiar chave",
+                                  textAlign: TextAlign.center,
+                                  style: Styles().styleDefaultTextButton))))),
+              Visibility(
+                  visible: _typePaymentName == "Boleto bancário",
+                  child: Container(
+                      margin: EdgeInsets.all(Dimens.minMarginApplication),
+                      width: double.infinity,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Clipboard.setData(
+                                new ClipboardData(text: _barCode));
+                            ApplicationMessages(context: context)
+                                .showMessage("Link Copiado!");
+                          },
+                          style: Styles().styleAlternativeButton,
+                          child: Container(
+                              child: Text("Copiar",
                                   textAlign: TextAlign.center,
                                   style: Styles().styleDefaultTextButton))))),
               Container(

@@ -51,7 +51,7 @@ dependencies:
   geolocator: ^9.0.2
   autoscale_tabbarview: ^1.0.2
   flutter_credit_card: 3.0.6
-  barcode: ^2.2.4
+  syncfusion_flutter_barcodes: ^21.2.8
   another_stepper: ^1.2.2
 
 

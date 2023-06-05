@@ -264,6 +264,7 @@ class _Checkout extends State<Checkout> {
                 "id_cart": _idCart,
                 "payment_type": _typePaymentName,
                 "id_order": _idOrder,
+                "barCode": response.cod_barras,
               });
 
         });

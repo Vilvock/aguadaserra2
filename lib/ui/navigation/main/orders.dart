@@ -200,7 +200,7 @@ class _Orders extends State<Orders> {
                                                   padding: EdgeInsets.all(Dimens
                                                       .minPaddingApplication),
                                                   child: Text(
-                                                    response.status_pagamento,
+                                                    response.status_pagamento.toString(),
                                                     style: TextStyle(
                                                       fontFamily: 'Inter',
                                                       fontSize:

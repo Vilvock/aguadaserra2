@@ -23,6 +23,9 @@ class Payment extends GlobalWSModel{
   final String data_pagamento;
   final String qrcode;
   final String qrcode_64;
+  final String cod_barras;
+
+
 
   Payment({
     required this.nome,
@@ -44,7 +47,8 @@ class Payment extends GlobalWSModel{
     required this.valor_pagamento,
     required this.data_pagamento,
     required this.qrcode,
-    required this.qrcode_64, required super.status, required super.msg, required super.id, required super.rows,
+    required this.qrcode_64,
+    required this.cod_barras, required super.status, required super.msg, required super.id, required super.rows,
   });
 
   factory Payment.fromJson(Map<String, dynamic> json) {
@@ -69,6 +73,7 @@ class Payment extends GlobalWSModel{
       data_pagamento: json['data_pagamento'],
       qrcode: json['qrcode'],
       qrcode_64: json['qrcode_64'],
+      cod_barras: json['cod_barras'],
       status: json['status'],
       msg: json['msg'],
       id: json['id'],
