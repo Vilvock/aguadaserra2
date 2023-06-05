@@ -16,6 +16,11 @@ class Order extends GlobalWSModel{
   final String nome_status_pedido;
   final String horario_in;
   final String horario_out;
+  final dynamic tipo_pagamento;
+  List<dynamic> endereco;
+  List<dynamic> itens_carrinho;
+
+
 
   Order({
     required this.nome,
@@ -30,7 +35,10 @@ class Order extends GlobalWSModel{
     required this.id_ponto,
     required this.nome_ponto,
     required this.horario_in,
-    required this.horario_out, required super.status, required super.msg, required super.id, required super.rows,
+    required this.horario_out,
+    required this.tipo_pagamento,
+    required this.endereco,
+    required this.itens_carrinho, required super.status, required super.msg, required super.id, required super.rows,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
@@ -48,6 +56,9 @@ class Order extends GlobalWSModel{
       nome_ponto: json['nome_ponto'],
       horario_in: json['horario_in'],
       horario_out: json['horario_out'],
+      tipo_pagamento: json['tipo_pagamento'],
+      endereco: json['endereco'],
+      itens_carrinho: json['itens_carrinho'],
       status: json['status'],
       msg: json['msg'],
       id: json['id'],

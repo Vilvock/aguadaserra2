@@ -8,12 +8,14 @@ MIGRACAO bgl do android 13
 
 colocar quantidade produto digitando tbm
 
+fazer barcode boleto bancario tela sucesso
+
 validacao ter que colocar pra sleecionar um endereco quando o id endereco estiver null no method payment
 
 testar register location
 
 
-
+ver que retorno vem no nome do find pedido tipo pagamento
 ///////////////pedir pra trazer bairro no findendereco
 
 
