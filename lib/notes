@@ -6,15 +6,11 @@ MIGRACAO bgl do android 13
 
 ///////////////
 
-passar endereco pra quando for boleto ou fazer uma dialog la dentro e pegar
-
 - colocar quantidade produto digitando tbm
 
 validacao ter que colocar pra sleecionar um endereco quando o id endereco estiver null no method payment
 
 testar register location
-
-validacao documento profile
 
 
 

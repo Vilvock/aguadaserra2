@@ -41,6 +41,9 @@ class _Checkout extends State<Checkout> {
   late String _number;
   late String _complement;
 
+  late String _cartValue;
+  late String _freightValue;
+
   final postRequest = PostRequest();
 
   @override
@@ -53,7 +56,13 @@ class _Checkout extends State<Checkout> {
     super.dispose();
   }
 
-  Future<void> createTokenCreditCard(String cardNumber, String expirationMonth, String expirationYear, String securityCode, String name, String document) async {
+  Future<void> createTokenCreditCard(
+      String cardNumber,
+      String expirationMonth,
+      String expirationYear,
+      String securityCode,
+      String name,
+      String document) async {
     try {
       final body = {
         "card_number": cardNumber,
@@ -262,7 +271,6 @@ class _Checkout extends State<Checkout> {
     _idOrder = data['id_order'];
     _typePayment = data['type_payment'];
 
-
     _cep = data['cep'];
     _city = data['cidade'];
     _state = data['estado'];
@@ -270,6 +278,9 @@ class _Checkout extends State<Checkout> {
     _address = data['endereco'];
     _number = data['numero'];
     _complement = data['complemento'];
+
+    _cartValue = data['total_items'];
+    _freightValue = data['freight_value'];
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -298,16 +309,16 @@ class _Checkout extends State<Checkout> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "Resumo",
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: Dimens.textSize6,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                            SizedBox(height: Dimens.minMarginApplication),
+                            // Text(
+                            //   "Resumo",
+                            //   style: TextStyle(
+                            //     fontFamily: 'Inter',
+                            //     fontSize: Dimens.textSize6,
+                            //     fontWeight: FontWeight.bold,
+                            //     color: Colors.black,
+                            //   ),
+                            // ),
+                            // SizedBox(height: Dimens.minMarginApplication),
                             Text(
                               "Endereço:",
                               style: TextStyle(
@@ -469,53 +480,158 @@ class _Checkout extends State<Checkout> {
                 ),
               )),
               Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    margin: EdgeInsets.all(Dimens.minMarginApplication),
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: Styles().styleDefaultButton,
-                      onPressed: () async {
-                        setState(() {
-                          _isLoading = true;
-                        });
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.all(Dimens.minMarginApplication),
+                      width: double.infinity,
+                      child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                Dimens.minRadiusApplication),
+                          ),
+                          child: Container(
+                              padding:
+                                  EdgeInsets.all(Dimens.paddingApplication),
+                              child: Column(children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        "Frete",
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontSize: Dimens.textSize5,
+                                          color: Colors.black45,
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      _freightValue,
+                                      style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        fontSize: Dimens.textSize5,
+                                        color: Colors.black45,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                    height:
+                                    Dimens.minMarginApplication),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        "Valor total em produtos",
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontSize: Dimens.textSize5,
+                                          color: Colors.black45,
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      _cartValue,
+                                      style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        fontSize: Dimens.textSize5,
+                                        color: Colors.black45,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                    height:
+                                    Dimens.minMarginApplication),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        "Valor total com a entrega",
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontSize: Dimens.textSize6,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      _totalValue,
+                                      style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        fontSize: Dimens.textSize6,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                    height:
+                                    Dimens.marginApplication),
+                                Container(
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                      style: Styles().styleDefaultButton,
+                                      onPressed: () async {
+                                        setState(() {
+                                          _isLoading = true;
+                                        });
 
-                        if (_typePayment ==
-                            ApplicationConstant.PIX.toString()) {
-                          await payWithPIX(_idOrder.toString(), _totalValue);
-                        } else if (_typePayment ==
-                            ApplicationConstant.CREDIT_CARD.toString()) {
-                          await payWithCreditCard(_idOrder.toString(),
-                              _totalValue, "");
-                        } else if (_typePayment ==
-                            ApplicationConstant.TICKET.toString()) {
-                          await payWithTicket(_idOrder.toString(), _totalValue, _cep, _state, _city, _address, _nbh, _number);
-                        } else {
-                          await payWithTicketWithOutAddress(
-                              _idOrder.toString(), _totalValue);
-                        }
+                                        if (_typePayment ==
+                                            ApplicationConstant.PIX
+                                                .toString()) {
+                                          await payWithPIX(
+                                              _idOrder.toString(), _totalValue);
+                                        } else if (_typePayment ==
+                                            ApplicationConstant.CREDIT_CARD
+                                                .toString()) {
+                                          await payWithCreditCard(
+                                              _idOrder.toString(),
+                                              _totalValue,
+                                              "");
+                                        } else if (_typePayment ==
+                                            ApplicationConstant.TICKET
+                                                .toString()) {
+                                          await payWithTicket(
+                                              _idOrder.toString(),
+                                              _totalValue,
+                                              _cep,
+                                              _state,
+                                              _city,
+                                              _address,
+                                              _nbh,
+                                              _number);
+                                        } else {
+                                          await payWithTicketWithOutAddress(
+                                              _idOrder.toString(), _totalValue);
+                                        }
 
-                        setState(() {
-                          _isLoading = false;
-                        });
-                      },
-                      child: (_isLoading)
-                          ? const SizedBox(
-                              width: Dimens.buttonIndicatorWidth,
-                              height: Dimens.buttonIndicatorHeight,
-                              child: CircularProgressIndicator(
-                                color: OwnerColors.colorAccent,
-                                strokeWidth: Dimens.buttonIndicatorStrokes,
-                              ))
-                          : Text("Fazer Pedido",
-                              style: Styles().styleDefaultTextButton),
-                    ),
-                  )
-                ],
-              )
+                                        setState(() {
+                                          _isLoading = false;
+                                        });
+                                      },
+                                      child: (_isLoading)
+                                          ? const SizedBox(
+                                              width:
+                                                  Dimens.buttonIndicatorWidth,
+                                              height:
+                                                  Dimens.buttonIndicatorHeight,
+                                              child: CircularProgressIndicator(
+                                                color: OwnerColors.colorAccent,
+                                                strokeWidth: Dimens
+                                                    .buttonIndicatorStrokes,
+                                              ))
+                                          : Text("Fazer Pedido",
+                                              style: Styles()
+                                                  .styleDefaultTextButton),
+                                    )),
+                              ]))),
+                    )
+                  ])
             ])));
     /*     } else if (snapshot.hasError) {
                   return Text('${snapshot.error}');

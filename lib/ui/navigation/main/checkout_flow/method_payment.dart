@@ -238,6 +238,8 @@ class _MethodPayment extends State<MethodPayment>
           "bairro": _addressResponse?.bairro.toString(),
           "numero": _addressResponse?.numero.toString(),
           "complemento": _addressResponse?.complemento.toString(),
+          "total_items": cartValue,
+          "freight_value": freightValue,
         });
       } else {
 
