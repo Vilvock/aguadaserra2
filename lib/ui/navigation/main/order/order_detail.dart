@@ -107,7 +107,7 @@ class _OrderDetail extends State<OrderDetail> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Endereço:",
+                            "Endereço para entrega:",
                             style: TextStyle(
                               fontFamily: 'Inter',
                               fontSize: Dimens.textSize5,
@@ -132,7 +132,7 @@ class _OrderDetail extends State<OrderDetail> {
                           Styles().div_horizontal,
                           SizedBox(height: Dimens.marginApplication),
                           Text(
-                            "Itens:",
+                            "Produtos:",
                             style: TextStyle(
                               fontFamily: 'Inter',
                               fontSize: Dimens.textSize5,
@@ -237,9 +237,9 @@ class _OrderDetail extends State<OrderDetail> {
                                   ));
                             },
                           ),
-                          SizedBox(height: Dimens.minMarginApplication),
+                          SizedBox(height: Dimens.marginApplication),
                           Styles().div_horizontal,
-                          SizedBox(height: Dimens.minMarginApplication),
+                          SizedBox(height: Dimens.marginApplication),
                           Text(
                             "Pagamento",
                             style: TextStyle(
@@ -328,9 +328,9 @@ class _OrderDetail extends State<OrderDetail> {
                                   ),
                                 ],
                               )),
-                          SizedBox(height: Dimens.minMarginApplication),
+                          SizedBox(height: Dimens.marginApplication),
                           Styles().div_horizontal,
-                          SizedBox(height: Dimens.minMarginApplication),
+                          SizedBox(height: Dimens.marginApplication),
                           Text(
                             "Status da entrega:",
                             style: TextStyle(

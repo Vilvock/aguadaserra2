@@ -16,6 +16,8 @@ MIGRACAO bgl do android 13
 bolinha(badge) de itens carrinho fds
 
 
+
+
 nome fantasia subir
 razao social sumir caso for cnpj OK (testar register)
 
@@ -31,10 +33,12 @@ borda endereco selecionado OK
 mudar nomenclatura de endereco para endereco para entrega (checkout) OK
  e (sucess tamanha qr code menorzin), OK
  e itens nomear para produtos OK
+
+
  (colocar valor frete, total produtos e total)
 
-nome produto colocar duas linhas e diminuir fonte
+nome produto colocar duas linhas e diminuir fonte OK
 
-list favoritos(trocar desc por categoria) XV
+list favoritos(trocar desc por categoria) OK
 
 

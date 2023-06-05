@@ -172,6 +172,15 @@ class _Checkout extends State<Checkout> {
                 "id_cart": _idCart,
                 "payment_type": _typePaymentName,
                 "id_order": _idOrder,
+                "cep": _cep.toString(),
+                "estado": _state.toString(),
+                "cidade": _city.toString(),
+                "endereco": _address.toString(),
+                "bairro": _nbh.toString(),
+                "numero": _number.toString(),
+                "complemento": _complement.toString(),
+                "total_items": _cartValue,
+                "freight_value": _freightValue,
               });
 
         });
@@ -212,6 +221,15 @@ class _Checkout extends State<Checkout> {
                 "id_cart": _idCart,
                 "payment_type": _typePaymentName,
                 "id_order": _idOrder,
+                "cep": _cep.toString(),
+                "estado": _state.toString(),
+                "cidade": _city.toString(),
+                "endereco": _address.toString(),
+                "bairro": _nbh.toString(),
+                "numero": _number.toString(),
+                "complemento": _complement.toString(),
+                "total_items": _cartValue,
+                "freight_value": _freightValue,
               });
 
         });
@@ -265,6 +283,15 @@ class _Checkout extends State<Checkout> {
                 "payment_type": _typePaymentName,
                 "id_order": _idOrder,
                 "barCode": response.cod_barras,
+                "cep": _cep.toString(),
+                "estado": _state.toString(),
+                "cidade": _city.toString(),
+                "endereco": _address.toString(),
+                "bairro": _nbh.toString(),
+                "numero": _number.toString(),
+                "complemento": _complement.toString(),
+                "total_items": _cartValue,
+                "freight_value": _freightValue,
               });
 
         });
@@ -305,6 +332,15 @@ class _Checkout extends State<Checkout> {
               "qrCodeClipboard": response.qrcode,
               "payment_type": _typePaymentName,
               "id_order": _idOrder,
+              "cep": _cep.toString(),
+              "estado": _state.toString(),
+              "cidade": _city.toString(),
+              "endereco": _address.toString(),
+              "bairro": _nbh.toString(),
+              "numero": _number.toString(),
+              "complemento": _complement.toString(),
+              "total_items": _cartValue,
+              "freight_value": _freightValue,
             });
       } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
@@ -494,13 +530,13 @@ class _Checkout extends State<Checkout> {
                                                             Text(
                                                               response
                                                                   .nome_produto,
-                                                              maxLines: 1,
+                                                              maxLines: 2,
                                                               overflow: TextOverflow
                                                                   .ellipsis,
                                                               style: TextStyle(
                                                                 fontFamily: 'Inter',
                                                                 fontSize: Dimens
-                                                                    .textSize6,
+                                                                    .textSize5,
                                                                 fontWeight:
                                                                 FontWeight.bold,
                                                                 color: Colors

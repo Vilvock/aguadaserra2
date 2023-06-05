@@ -43,6 +43,9 @@ class _Success extends State<Success> {
   late String _number;
   late String _complement;
 
+  late String _cartValue;
+  late String _freightValue;
+
   late String _barCode;
 
   final postRequest = PostRequest();
@@ -83,6 +86,17 @@ class _Success extends State<Success> {
 
     _barCode = data['barCode'];
 
+    _cep = data['cep'];
+    _city = data['cidade'];
+    _state = data['estado'];
+    _nbh = data['bairro'];
+    _address = data['endereco'];
+    _number = data['numero'];
+    _complement = data['complemento'];
+
+    _cartValue = data['total_items'];
+    _freightValue = data['freight_value'];
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(
@@ -111,9 +125,9 @@ class _Success extends State<Success> {
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(height: Dimens.minMarginApplication),
+                SizedBox(height: Dimens.marginApplication),
                 Styles().div_horizontal,
-                SizedBox(height: Dimens.minMarginApplication),
+                SizedBox(height: Dimens.marginApplication),
                 Text(
                   "Endereço para entrega:",
                   style: TextStyle(
@@ -124,18 +138,18 @@ class _Success extends State<Success> {
                   ),
                 ),
                 SizedBox(height: Dimens.minMarginApplication),
-                // Text(
-                //   "$_city - $_state" +
-                //       "\n" +
-                //       "$_nbh, $_address $_number" +
-                //       "\n\n" +
-                //       "$_complement",
-                //   style: TextStyle(
-                //     fontFamily: 'Inter',
-                //     fontSize: Dimens.textSize5,
-                //     color: Colors.black,
-                //   ),
-                // ),
+                Text(
+                  "$_city - $_state" +
+                      "\n" +
+                      "$_nbh, $_address $_number" +
+                      "\n\n" +
+                      "$_complement",
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: Dimens.textSize5,
+                    color: Colors.black,
+                  ),
+                ),
                 SizedBox(height: Dimens.marginApplication),
                 Styles().div_horizontal,
                 SizedBox(height: Dimens.marginApplication),
@@ -205,11 +219,11 @@ class _Success extends State<Success> {
                                           children: [
                                             Text(
                                               response.nome_produto,
-                                              maxLines: 1,
+                                              maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                 fontFamily: 'Inter',
-                                                fontSize: Dimens.textSize6,
+                                                fontSize: Dimens.textSize5,
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.black,
                                               ),
@@ -252,9 +266,9 @@ class _Success extends State<Success> {
                     return Center(child: CircularProgressIndicator());
                   },
                 ),
-                SizedBox(height: Dimens.minMarginApplication),
+                SizedBox(height: Dimens.marginApplication),
                 Styles().div_horizontal,
-                SizedBox(height: Dimens.minMarginApplication),
+                SizedBox(height: Dimens.marginApplication),
                 Text(
                   "Pagamento",
                   style: TextStyle(
