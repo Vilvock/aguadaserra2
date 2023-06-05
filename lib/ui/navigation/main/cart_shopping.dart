@@ -15,6 +15,7 @@ import '../../../res/strings.dart';
 import '../../../res/styles.dart';
 import '../../../web_service/links.dart';
 import '../../../web_service/service_response.dart';
+import '../../components/alert_dialog_change_quantity_item.dart';
 import '../../components/alert_dialog_generic.dart';
 import '../../components/custom_app_bar.dart';
 import '../../components/progress_hud.dart';
@@ -32,6 +33,14 @@ class _CartShopping extends State<CartShopping> {
   int _quantity = 1;
 
   final postRequest = PostRequest();
+
+  final TextEditingController quantityController = TextEditingController();
+
+  @override
+  void dispose() {
+    quantityController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -364,6 +373,28 @@ class _CartShopping extends State<CartShopping> {
                                                                       SizedBox(
                                                                           width:
                                                                               Dimens.minMarginApplication),
+                                                                      GestureDetector(onTap: () {
+                                                                        showModalBottomSheet<dynamic>(
+                                                                            isScrollControlled: true,
+                                                                            context: context,
+                                                                            shape: Styles().styleShapeBottomSheet,
+                                                                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                                                                            builder: (BuildContext context) {
+                                                                              return ChangeQuantityAlertDialog(
+                                                                                  quantityController: quantityController,
+                                                                                  btnConfirm: Container(
+                                                                                      margin: EdgeInsets.only(top: Dimens.marginApplication),
+                                                                                      width: double.infinity,
+                                                                                      child: ElevatedButton(
+                                                                                          style: Styles().styleDefaultButton,
+                                                                                          onPressed: () {
+                                                                                            //
+
+                                                                                            Navigator.of(context).pop();
+                                                                                          },
+                                                                                          child: Text("Alterar quantidade", style: Styles().styleDefaultTextButton))));
+                                                                            });
+                                                                      }, child:
                                                                       Text(
                                                                         _quantity
                                                                             .toString(),
@@ -376,7 +407,7 @@ class _CartShopping extends State<CartShopping> {
                                                                           color:
                                                                               Colors.black,
                                                                         ),
-                                                                      ),
+                                                                      )),
                                                                       SizedBox(
                                                                           width:
                                                                               Dimens.minMarginApplication),
