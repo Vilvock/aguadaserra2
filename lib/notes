@@ -6,7 +6,7 @@ MIGRACAO bgl do android 13
 
 ///////////////
 
-- colocar quantidade produto digitando tbm
+colocar quantidade produto digitando tbm
 
 validacao ter que colocar pra sleecionar um endereco quando o id endereco estiver null no method payment
 

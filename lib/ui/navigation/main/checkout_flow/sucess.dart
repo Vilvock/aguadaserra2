@@ -28,7 +28,7 @@ class Success extends StatefulWidget {
 class _Success extends State<Success> {
   bool _isLoading = false;
   late int _idCart;
-  late int _idOrder;
+  late String _idOrder;
   late String _base64;
   late String _qrCodeClipboard;
   late String _typePaymentName;
@@ -98,7 +98,6 @@ class _Success extends State<Success> {
                   ),
                 ),
                 SizedBox(height: Dimens.minMarginApplication),
-
                 Styles().div_horizontal,
                 SizedBox(height: Dimens.minMarginApplication),
                 Text(
@@ -215,7 +214,6 @@ class _Success extends State<Success> {
                   },
                 ),
                 SizedBox(height: Dimens.minMarginApplication),
-
                 Styles().div_horizontal,
                 SizedBox(height: Dimens.minMarginApplication),
                 Text(
@@ -228,6 +226,38 @@ class _Success extends State<Success> {
                   ),
                 ),
                 SizedBox(height: Dimens.minMarginApplication),
+                Visibility(
+                    visible: _typePaymentName == "Cartão de crédito",
+                    child: Column(
+                      children: [
+                        Text(
+                          "Tipo de pagamento: $_typePaymentName",
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: Dimens.textSize5,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    )),
+                Visibility(
+                    visible: _typePaymentName == "Boleto bancário",
+                    child: Column(
+                      children: [
+                        Text(
+                          "Tipo de pagamento: $_typePaymentName" +
+                              "\n\n" +
+                              "Para pagar pelo Internet Banking. copie a linha digitável ou escaneie o código de barras." +
+                              "\n\n" +
+                              "Se o pagamento é feito de segunda a sexta, é creditado no dia seguinte. Se você pagar no fim de semana, será creditado na terça-feira.",
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: Dimens.textSize5,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    )),
                 Visibility(
                     visible: _typePaymentName == "PIX",
                     child: Column(
@@ -251,18 +281,32 @@ class _Success extends State<Success> {
                         Image.memory(
                             Base64Decoder().convert(_base64.toString()))
                       ],
-                    ))
+                    )),
+                Visibility(
+                    visible: _typePaymentName == "Boleto à prazo",
+                    child: Column(
+                      children: [
+                        Text(
+                          "Tipo de pagamento: $_typePaymentName",
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: Dimens.textSize5,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    )),
               ],
             ),
           )),
-          Visibility(
-              visible: _typePaymentName == "PIX",
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Visibility(
+                  visible: _typePaymentName == "PIX",
+                  child: Container(
                       margin: EdgeInsets.all(Dimens.minMarginApplication),
                       width: double.infinity,
                       child: ElevatedButton(
@@ -276,24 +320,24 @@ class _Success extends State<Success> {
                           child: Container(
                               child: Text("Copiar chave",
                                   textAlign: TextAlign.center,
-                                  style: Styles().styleDefaultTextButton)))),
-                  Container(
-                      margin: EdgeInsets.all(Dimens.minMarginApplication),
-                      width: double.infinity,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(builder: (context) => Home()),
-                                ModalRoute.withName("/ui/home"));
-                          },
-                          style: Styles().styleDefaultButton,
-                          child: Container(
-                              child: Text("Ok",
-                                  textAlign: TextAlign.center,
-                                  style: Styles().styleDefaultTextButton))))
-                ],
-              ))
+                                  style: Styles().styleDefaultTextButton))))),
+              Container(
+                  margin: EdgeInsets.all(Dimens.minMarginApplication),
+                  width: double.infinity,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => Home()),
+                            ModalRoute.withName("/ui/home"));
+                      },
+                      style: Styles().styleDefaultButton,
+                      child: Container(
+                          child: Text("Ok",
+                              textAlign: TextAlign.center,
+                              style: Styles().styleDefaultTextButton))))
+            ],
+          )
         ]));
   }
 }

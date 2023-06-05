@@ -983,7 +983,7 @@ class _MethodPayment extends State<MethodPayment>
                               height: Dimens.minMarginApplication,
                             ),
                             Text(
-                              ".",
+                              "Parcele o valor total da compra.",
                               style: TextStyle(
                                 fontFamily: 'Inter',
                                 fontSize: Dimens.textSize4,

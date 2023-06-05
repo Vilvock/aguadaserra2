@@ -170,7 +170,7 @@ class _CreditCardAlertDialog extends State<CreditCardAlertDialog> {
                 Styles().div_horizontal,
                 SizedBox(height: Dimens.marginApplication),
                 TextField(
-                  maxLength: 16,
+                  maxLength: 19,
                   controller: widget.cardNumberController,
                   decoration: InputDecoration(
                     counter: SizedBox(
