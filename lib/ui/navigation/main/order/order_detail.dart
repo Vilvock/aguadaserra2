@@ -338,15 +338,43 @@ class _OrderDetail extends State<OrderDetail> {
                                   "Cartão Online",
                               child: Column(
                                 children: [
-                                  Text(
-                                    "Tipo de pagamento: " +
-                                        response.tipo_pagamento,
-                                    style: TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontSize: Dimens.textSize5,
-                                      color: Colors.black,
-                                    ),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                          margin: EdgeInsets.only(right: Dimens.minMarginApplication),
+                                          child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(
+                                                  Dimens.minRadiusApplication),
+                                              child: Image.asset('images/credit_card.png',
+                                                  height: 24, width: 24))),
+                                      Expanded(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Cartão de crédito",
+                                                style: TextStyle(
+                                                  fontFamily: 'Inter',
+                                                  fontSize: Dimens.textSize5,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ],
+                                          )),
+
+                                    ],
                                   ),
+                                  // Text(
+                                  //   "Tipo de pagamento: " +
+                                  //       response.tipo_pagamento,
+                                  //   style: TextStyle(
+                                  //     fontFamily: 'Inter',
+                                  //     fontSize: Dimens.textSize5,
+                                  //     color: Colors.black,
+                                  //   ),
+                                  // ),
                                 ],
                               )),
                           Visibility(
@@ -354,42 +382,99 @@ class _OrderDetail extends State<OrderDetail> {
                                   "Boleto",
                               child: Column(
                                 children: [
-                                  Text(
-                                    "Tipo de pagamento: " +
-                                        response.tipo_pagamento /*+
-                                        "\n\n" +
-                                        "Para pagar pelo Internet Banking. copie a linha digitável ou escaneie o código de barras." +
-                                        "\n\n" +
-                                        "Se o pagamento é feito de segunda a sexta, é creditado no dia seguinte. Se você pagar no fim de semana, será creditado na terça-feira."*/,
-                                    style: TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontSize: Dimens.textSize5,
-                                      color: Colors.black,
-                                    ),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                          margin: EdgeInsets.only(right: Dimens.minMarginApplication),
+                                          child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(
+                                                  Dimens.minRadiusApplication),
+                                              child: Image.asset('images/ticket.png',
+                                                  height: 24, width: 24))),
+                                      Expanded(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Boleto bancário",
+                                                style: TextStyle(
+                                                  fontFamily: 'Inter',
+                                                  fontSize: Dimens.textSize5,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ],
+                                          )),
+
+                                    ],
                                   ),
+                                  // Text(
+                                  //   "Tipo de pagamento: " +
+                                  //       response.tipo_pagamento /*+
+                                  //       "\n\n" +
+                                  //       "Para pagar pelo Internet Banking. copie a linha digitável ou escaneie o código de barras." +
+                                  //       "\n\n" +
+                                  //       "Se o pagamento é feito de segunda a sexta, é creditado no dia seguinte. Se você pagar no fim de semana, será creditado na terça-feira."*/,
+                                  //   style: TextStyle(
+                                  //     fontFamily: 'Inter',
+                                  //     fontSize: Dimens.textSize5,
+                                  //     color: Colors.black,
+                                  //   ),
+                                  // ),
                                 ],
                               )),
                           Visibility(
                               visible: response.tipo_pagamento == "PIX",
                               child: Column(
                                 children: [
-                                  Text(
-                                    "Tipo de pagamento: " +
-                                        response.tipo_pagamento /*+
-                                        "\n\n" +
-                                        "Copie este código para pagar" +
-                                        "\n\n" +
-                                        "1. Acesse seu Internet Banking ou app de pagamentos." +
-                                        "\n\n" +
-                                        "2. Escolha pagar via Pix/QR Code" +
-                                        "\n\n" +
-                                        "3. Escaneie o seguinte código:"*/,
-                                    style: TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontSize: Dimens.textSize5,
-                                      color: Colors.black,
-                                    ),
+
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                          margin: EdgeInsets.only(right: Dimens.minMarginApplication),
+                                          child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(
+                                                  Dimens.minRadiusApplication),
+                                              child: Image.asset('images/qr_code.png',
+                                                  height: 24, width: 24))),
+                                      Expanded(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "PIX",
+                                                style: TextStyle(
+                                                  fontFamily: 'Inter',
+                                                  fontSize: Dimens.textSize5,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ],
+                                          )),
+
+                                    ],
                                   ),
+                                  // Text(
+                                  //   "Tipo de pagamento: " +
+                                  //       response.tipo_pagamento /*+
+                                  //       "\n\n" +
+                                  //       "Copie este código para pagar" +
+                                  //       "\n\n" +
+                                  //       "1. Acesse seu Internet Banking ou app de pagamentos." +
+                                  //       "\n\n" +
+                                  //       "2. Escolha pagar via Pix/QR Code" +
+                                  //       "\n\n" +
+                                  //       "3. Escaneie o seguinte código:"*/,
+                                  //   style: TextStyle(
+                                  //     fontFamily: 'Inter',
+                                  //     fontSize: Dimens.textSize5,
+                                  //     color: Colors.black,
+                                  //   ),
+                                  // ),
                                   // Image.memory(
                                   //     Base64Decoder().convert(
                                   //         _base64.toString()))
@@ -400,15 +485,35 @@ class _OrderDetail extends State<OrderDetail> {
                                   "Boleto Parcelado",
                               child: Column(
                                 children: [
-                                  Text(
-                                    "Tipo de pagamento: " +
-                                        response.tipo_pagamento,
-                                    style: TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontSize: Dimens.textSize5,
-                                      color: Colors.black,
-                                    ),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                          margin: EdgeInsets.only(right: Dimens.minMarginApplication),
+                                          child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(
+                                                  Dimens.minRadiusApplication),
+                                              child: Image.asset('images/calendar.png',
+                                                  height: 24, width: 24))),
+                                      Expanded(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Boleto à prazo",
+                                                style: TextStyle(
+                                                  fontFamily: 'Inter',
+                                                  fontSize: Dimens.textSize5,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ],
+                                          )),
+
+                                    ],
                                   ),
+
                                 ],
                               )),
                           SizedBox(height: Dimens.marginApplication),
