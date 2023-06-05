@@ -262,14 +262,6 @@ class _FilterProducts extends State<FilterProducts> {
                   },
                 ),
                 SizedBox(height: Dimens.marginApplication),
-                Text(
-                  "Subcategoria:",
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: Dimens.textSize5,
-                    color: Colors.black,
-                  ),
-                ),
                 FutureBuilder<List<Map<String, dynamic>>>(
                   future: listSubCategories(_idCategory.toString()),
                   builder: (context, snapshot) {
@@ -287,7 +279,17 @@ class _FilterProducts extends State<FilterProducts> {
 
                         print("aaaaaaaaaaaaa" + subCategoryList.toString());
 
-                        return Container(
+                        return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                          Text(
+                            "Subcategoria:",
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: Dimens.textSize5,
+                              color: Colors.black,
+                            ),
+                          ),
+
+                          Container(
                             padding: EdgeInsets.only(
                                 top: Dimens.minPaddingApplication,
                                 bottom: Dimens.minPaddingApplication),
@@ -329,14 +331,14 @@ class _FilterProducts extends State<FilterProducts> {
                                   );
                                 }).toList(),
                               ),
-                            ));
+                            ))]);
                       } else {
 
                       }
                     } else if (snapshot.hasError) {
                       return Text('${snapshot.error}');
                     }
-                    return Center(child: CircularProgressIndicator());
+                    return Center(/*child: CircularProgressIndicator()*/);
                   },
                 ),
                 SizedBox(height: Dimens.marginApplication),
