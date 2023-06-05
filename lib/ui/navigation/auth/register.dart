@@ -680,7 +680,7 @@ class _RegisterState extends State<Register> {
                             _isLoading = true;
                           });
 
-                          var position = await determinePosition();
+                          // var position = await determinePosition();
 
                           await registerRequest(
                               emailController.text,
@@ -689,8 +689,8 @@ class _RegisterState extends State<Register> {
                               socialReasonController.text,
                               _document,
                               cellphoneController.text,
-                              position!.latitude.toString(),
-                              position!.longitude.toString(),
+                              "",
+                              "",
                               _typePerson);
 
                           setState(() {

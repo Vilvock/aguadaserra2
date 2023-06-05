@@ -2,14 +2,12 @@ bug:
 
 add interceptor e timeout request
 confirmar notificacoes ios
-testar register location
 MIGRACAO bgl do android 13
 
 ///////////////
 
 - colocar quantidade produto digitando tbm
-
-///ver que retorno vem no nome do find pedido tipo pagamento boleto bancario
+bug register location
 
 
 

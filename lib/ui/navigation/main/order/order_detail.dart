@@ -268,16 +268,16 @@ class _OrderDetail extends State<OrderDetail> {
                               )),
                           Visibility(
                               visible: response.tipo_pagamento ==
-                                  "Boleto bancário",
+                                  "Boleto",
                               child: Column(
                                 children: [
                                   Text(
                                     "Tipo de pagamento: " +
-                                        response.tipo_pagamento +
+                                        response.tipo_pagamento /*+
                                         "\n\n" +
                                         "Para pagar pelo Internet Banking. copie a linha digitável ou escaneie o código de barras." +
                                         "\n\n" +
-                                        "Se o pagamento é feito de segunda a sexta, é creditado no dia seguinte. Se você pagar no fim de semana, será creditado na terça-feira.",
+                                        "Se o pagamento é feito de segunda a sexta, é creditado no dia seguinte. Se você pagar no fim de semana, será creditado na terça-feira."*/,
                                     style: TextStyle(
                                       fontFamily: 'Inter',
                                       fontSize: Dimens.textSize5,
