@@ -372,6 +372,30 @@ class _ContainerHomeState extends State<ContainerHome> {
     }
   }
 
+  Future<List<Map<String, dynamic>>> listOthersRequest() async {
+    try {
+      final body = {
+        "id_user": await Preferences.getUserData()!.id,
+        "qtd_lista": 0,
+        "token": ApplicationConstant.TOKEN
+      };
+
+      print('HTTP_BODY: $body');
+
+      final json =
+      await postRequest.sendPostRequest(Links.LIST_OTHER_PRODUCTS, body);
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      return _map;
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
   Future<void> saveFcm() async {
     try {
       await Preferences.init();
@@ -872,7 +896,7 @@ class _ContainerHomeState extends State<ContainerHome> {
                                         ),
                                         FutureBuilder<
                                                 List<Map<String, dynamic>>>(
-                                            future: listHighlightsRequest(),
+                                            future: listOthersRequest(),
                                             builder: (context, snapshot) {
                                               if (snapshot.hasData) {
                                                 var gridItems = <Widget>[];

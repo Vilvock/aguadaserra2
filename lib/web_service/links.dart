@@ -19,6 +19,7 @@ abstract class Links {
   static const String LOAD_PRODUCT = "produtos/list_produtosDetalhes/";
   static const String LIST_HIGHLIGHTS = "produtos/list_produtosDest/";
   static const String FILTER_PRODUCTS = "produtos/list_produtosFiltro/";
+  static const String LIST_OTHER_PRODUCTS = "produtos/list_produtosOutros/";
 
   //enderecos
   static const String SAVE_ADDRESS = "usuarios/saveendereco/";

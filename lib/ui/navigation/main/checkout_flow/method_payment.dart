@@ -36,7 +36,7 @@ class _MethodPayment extends State<MethodPayment>
   var _schedule = "";
   String _idSchedule = "";
 
-  String _idAddress = "";
+  String _idAddress = "null";
   late int _idCart;
   late String _totalValue;
   late String _freightValue;
@@ -60,7 +60,7 @@ class _MethodPayment extends State<MethodPayment>
     );
     Preferences.init();
     _idAddress = Preferences.getDefaultAddress().toString();
-
+    print(_idAddress);
 
     loadProfileRequest();
     super.initState();
@@ -75,7 +75,7 @@ class _MethodPayment extends State<MethodPayment>
 
   void goToCheckout (String typePayment) {
 
-    if (_idAddress.isNullOrEmpty) {
+    if (_idAddress == "null") {
       ApplicationMessages(context: context).showMessage("É necessário selecionar um endereço padrão para prosseguir!");
 
     } else {
@@ -497,6 +497,7 @@ class _MethodPayment extends State<MethodPayment>
                               return Center(child: CircularProgressIndicator());
                             }),
                       ),
+                      Visibility(visible: _idAddress != "null", child:
                       FutureBuilder<Map<String, dynamic>>(
                           future: calculeFreightValue(),
                           builder: (context, snapshot) {
@@ -541,7 +542,7 @@ class _MethodPayment extends State<MethodPayment>
                             }
 
                             return Center();
-                          }),
+                          })),
                     ],
                   )),
               // Container(

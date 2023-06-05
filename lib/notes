@@ -1,13 +1,17 @@
-bug:
+
+///////////////
+
+
+- colocar quantidade produto digitando tbm
+
+- bug refresh quando lista vazia
+- bug register location
+- bug add endereco pelo carrinho
+- bug filter
 
 add interceptor e timeout request
 confirmar notificacoes ios
 MIGRACAO bgl do android 13
-
-///////////////
-
-- colocar quantidade produto digitando tbm
-bug register location
 
 
 
