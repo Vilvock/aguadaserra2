@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../../../config/application_messages.dart';
 import '../../../../../config/preferences.dart';
@@ -158,11 +159,32 @@ class _Payment extends State<Payments> {
                     );
                   },
                 );
+              } else {
+                return Container(
+                    padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height / 20),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                              child: Lottie.network(
+                                  height: 160,
+                                  'https://assets3.lottiefiles.com/private_files/lf30_cgfdhxgx.json')),
+                          SizedBox(height: Dimens.marginApplication),
+                          Text(
+                            Strings.empty_list,
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: Dimens.textSize5,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ]));
               }
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             }
-            return const CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           },
         ),
       ),

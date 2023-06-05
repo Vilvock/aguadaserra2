@@ -231,7 +231,7 @@ class _MainMenu extends State<MainMenu> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Meus pegamentos",
+                                  "Meus pagamentos",
                                   style: TextStyle(
                                     fontFamily: 'Inter',
                                     fontSize: Dimens.textSize5,
