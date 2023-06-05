@@ -38,16 +38,20 @@ class _ProductDetail extends State<ProductDetail> {
 
   late int _id;
   int _quantity = 1;
+  final TextEditingController quantityController = TextEditingController();
 
   final postRequest = PostRequest();
 
   @override
   void initState() {
+
+    quantityController.text = _quantity.toString();
     super.initState();
   }
 
   @override
   void dispose() {
+    quantityController.dispose();
     super.dispose();
   }
 
@@ -178,7 +182,7 @@ class _ProductDetail extends State<ProductDetail> {
     _id = data['id_product'];
 
     return Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         appBar: CustomAppBar(
           title: "Detalhes da oferta",
           isVisibleBackButton: true, /*isVisibleFavoriteButton: true*/
@@ -370,20 +374,49 @@ class _ProductDetail extends State<ProductDetail> {
 
                                                 setState(() {
                                                   _quantity--;
+
+                                                  quantityController.text = _quantity.toString();
                                                 });
                                               },
                                             ),
                                             SizedBox(
                                                 width: Dimens
                                                     .minMarginApplication),
-                                            Text(
-                                              _quantity.toString(),
-                                              style: TextStyle(
-                                                fontFamily: 'Inter',
-                                                fontSize: Dimens.textSize5,
-                                                color: Colors.black,
-                                              ),
-                                            ),
+                                                Container(width: 100, child:
+                                                TextField(
+                                                  controller: quantityController,
+                                                  decoration: InputDecoration(
+                                                    focusedBorder: OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: OwnerColors.colorPrimary, width: 1.5),
+                                                    ),
+                                                    enabledBorder: OutlineInputBorder(
+                                                      borderSide:
+                                                      BorderSide(color: Colors.grey, width: 1.0),
+                                                    ),
+                                                    hintStyle: TextStyle(color: Colors.grey),
+                                                    border: OutlineInputBorder(
+                                                      borderRadius:
+                                                      BorderRadius.circular(Dimens.radiusApplication),
+                                                      borderSide: BorderSide.none,
+                                                    ),
+                                                    filled: true,
+                                                    fillColor: Colors.white,
+                                                  ),
+                                                  keyboardType: TextInputType.number,
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: Dimens.textSize5,
+                                                  ),
+                                                )),
+                                            // Text(
+                                            //   _quantity.toString(),
+                                            //   style: TextStyle(
+                                            //     fontFamily: 'Inter',
+                                            //     fontSize: Dimens.textSize5,
+                                            //     color: Colors.black,
+                                            //   ),
+                                            // ),
                                             SizedBox(
                                                 width: Dimens
                                                     .minMarginApplication),
@@ -393,6 +426,7 @@ class _ProductDetail extends State<ProductDetail> {
                                               onPressed: () {
                                                 setState(() {
                                                   _quantity++;
+                                                  quantityController.text = _quantity.toString();
                                                 });
                                               },
                                             ),
@@ -481,7 +515,7 @@ class _ProductDetail extends State<ProductDetail> {
                                       GestureDetector(
                                         onTap: () => {
                                           openCart(response.valor,
-                                              _quantity.toString())
+                                              quantityController.text.toString())
                                         },
                                         child: Text("Adicionar",
                                             style: TextStyle(
