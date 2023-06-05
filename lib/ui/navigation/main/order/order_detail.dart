@@ -343,58 +343,66 @@ class _OrderDetail extends State<OrderDetail> {
                           SizedBox(height: 40),
                           AnotherStepper(
                               stepperDirection: Axis.horizontal,
-                              iconWidth: 40,
-                              iconHeight: 40,
+                              iconWidth: 20,
+                              iconHeight: 20,
                               activeBarColor: Colors.green,
                               inActiveBarColor: Colors.grey,
-                              inverted: true,
                               verticalGap: 30,
-                              activeIndex: 1,
-                              barThickness: 8,
+                              activeIndex: response.status_pedido,
+                              barThickness: 4,
                               stepperList: [
                                 StepperData(
-                                    title: StepperText("Delivered",
-                                        textStyle: const TextStyle(color: Colors.grey)),
+                                    title: StepperText("Recebido",
+                                        textStyle: const TextStyle(color: Colors.grey, fontSize: Dimens.textSize4)),
                                     iconWidget: Container(
                                       padding: const EdgeInsets.all(8),
-                                      decoration: const BoxDecoration(
-                                          color: Colors.redAccent,
+                                      decoration: BoxDecoration(
+                                          color: response.status_pedido > 0 ? Colors.green : Colors.grey,
                                           borderRadius: BorderRadius.all(Radius.circular(30))),
                                     )),
                                 StepperData(
-                                    title: StepperText("Delivered",
-                                        textStyle: const TextStyle(color: Colors.grey)),
+                                    title: StepperText("Em separação",
+                                        textStyle: const TextStyle(color: Colors.grey, fontSize: Dimens.textSize4)),
                                     iconWidget: Container(
                                       padding: const EdgeInsets.all(8),
-                                      decoration: const BoxDecoration(
-                                          color: Colors.redAccent,
+                                      decoration: BoxDecoration(
+                                          color: response.status_pedido > 1 ? Colors.green : Colors.grey,
                                           borderRadius: BorderRadius.all(Radius.circular(30))),
                                     )),
                                 StepperData(
-                                    title: StepperText("Delivered",
-                                        textStyle: const TextStyle(color: Colors.grey)),
+                                    title: StepperText("Faturado",
+                                        textStyle: const TextStyle(color: Colors.grey, fontSize: Dimens.textSize4)),
                                     iconWidget: Container(
                                       padding: const EdgeInsets.all(8),
-                                      decoration: const BoxDecoration(
-                                          color: Colors.redAccent,
+                                      decoration: BoxDecoration(
+                                          color: response.status_pedido > 2 ? Colors.green : Colors.grey,
                                           borderRadius: BorderRadius.all(Radius.circular(30))),
                                     )),
                                 StepperData(
-                                    title: StepperText("Delivered",
-                                        textStyle: const TextStyle(color: Colors.grey)),
+                                    title: StepperText("Enviado",
+                                        textStyle: const TextStyle(color: Colors.grey, fontSize: Dimens.textSize4)),
                                     iconWidget: Container(
                                       padding: const EdgeInsets.all(8),
-                                      decoration: const BoxDecoration(
-                                          color: Colors.redAccent,
+                                      decoration: BoxDecoration(
+                                          color: response.status_pedido > 3 ? Colors.green : Colors.grey,
                                           borderRadius: BorderRadius.all(Radius.circular(30))),
                                     )),
                                 StepperData(
-                                    title: StepperText("Delivered",
-                                        textStyle: const TextStyle(color: Colors.grey)),
+                                    title: StepperText("Entregue",
+                                        textStyle: const TextStyle(color: Colors.grey, fontSize: Dimens.textSize4)),
                                     iconWidget: Container(
                                       padding: const EdgeInsets.all(8),
-                                      decoration: const BoxDecoration(
-                                          color: Colors.redAccent,
+                                      decoration: BoxDecoration(
+                                          color: response.status_pedido > 4 ? Colors.green : Colors.grey,
+                                          borderRadius: BorderRadius.all(Radius.circular(30))),
+                                    )),
+                                StepperData(
+                                    title: StepperText("Cancelado",
+                                        textStyle: const TextStyle(color: Colors.grey, fontSize: Dimens.textSize4)),
+                                    iconWidget: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                          color: response.status_pedido > 5 ? Colors.green : Colors.grey,
                                           borderRadius: BorderRadius.all(Radius.circular(30))),
                                     )),
 
