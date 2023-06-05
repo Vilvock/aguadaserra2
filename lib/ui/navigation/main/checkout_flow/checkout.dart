@@ -28,6 +28,7 @@ class Checkout extends StatefulWidget {
 
 class _Checkout extends State<Checkout> {
   bool _isLoading = false;
+  bool _isLoadingDialog = false;
 
   late int _idCart;
   late String _totalValue;
@@ -48,6 +49,14 @@ class _Checkout extends State<Checkout> {
   final postRequest = PostRequest();
 
   var _typePaymentName;
+
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController cpfController = TextEditingController();
+  final TextEditingController yearController = TextEditingController();
+  final TextEditingController monthController = TextEditingController();
+  final TextEditingController cardNumberController = TextEditingController();
+  final TextEditingController securityCodeController = TextEditingController();
+
 
   @override
   void initState() {
@@ -387,8 +396,8 @@ class _Checkout extends State<Checkout> {
                                           onTap: () => {},
                                           child: Card(
                                             elevation: 0,
-                                            color: OwnerColors
-                                                .categoryLightGrey,
+                                            color:
+                                                OwnerColors.categoryLightGrey,
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(Dimens
@@ -455,7 +464,8 @@ class _Checkout extends State<Checkout> {
                                                             fontFamily: 'Inter',
                                                             fontSize: Dimens
                                                                 .textSize6,
-                                                            color: OwnerColors.darkGreen,
+                                                            color: OwnerColors
+                                                                .darkGreen,
                                                           ),
                                                         ),
                                                       ],
@@ -539,9 +549,7 @@ class _Checkout extends State<Checkout> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(
-                                    height:
-                                    Dimens.minMarginApplication),
+                                SizedBox(height: Dimens.minMarginApplication),
                                 Row(
                                   children: [
                                     Expanded(
@@ -564,9 +572,7 @@ class _Checkout extends State<Checkout> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(
-                                    height:
-                                    Dimens.minMarginApplication),
+                                SizedBox(height: Dimens.minMarginApplication),
                                 Row(
                                   children: [
                                     Expanded(
@@ -582,17 +588,14 @@ class _Checkout extends State<Checkout> {
                                     Text(
                                       _totalValue,
                                       style: TextStyle(
-                                        fontFamily: 'Inter',
-                                        fontSize: Dimens.textSize6,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold
-                                      ),
+                                          fontFamily: 'Inter',
+                                          fontSize: Dimens.textSize6,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
-                                SizedBox(
-                                    height:
-                                    Dimens.marginApplication),
+                                SizedBox(height: Dimens.marginApplication),
                                 Container(
                                     width: double.infinity,
                                     child: ElevatedButton(
@@ -610,14 +613,53 @@ class _Checkout extends State<Checkout> {
                                         } else if (_typePayment ==
                                             ApplicationConstant.CREDIT_CARD
                                                 .toString()) {
-
-                                          /*final result = */await showModalBottomSheet<dynamic>(
+                                          /*final result = */ await showModalBottomSheet<
+                                                  dynamic>(
                                               isScrollControlled: true,
                                               context: context,
-                                              shape: Styles().styleShapeBottomSheet,
-                                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                                              shape: Styles()
+                                                  .styleShapeBottomSheet,
+                                              clipBehavior:
+                                                  Clip.antiAliasWithSaveLayer,
                                               builder: (BuildContext context) {
-                                                return CreditCardAlertDialog();
+                                                return CreditCardAlertDialog(
+                                                  cardNumberController:
+                                                      cardNumberController,
+                                                  cpfController: cpfController,
+                                                  monthController:
+                                                      monthController,
+                                                  nameController:
+                                                      nameController,
+                                                  securityCodeController:
+                                                      securityCodeController,
+                                                  yearController: yearController,
+                                                  btnConfirm: Container(
+                                                    margin: EdgeInsets.only(top: Dimens.marginApplication),
+                                                    width: double.infinity,
+                                                    child: ElevatedButton(
+                                                      style: Styles().styleDefaultButton,
+                                                      onPressed: () async {
+                                                        setState(() {
+                                                          _isLoadingDialog = true;
+                                                        });
+
+                                                        setState(() {
+                                                          _isLoadingDialog = false;
+                                                        });
+                                                      },
+                                                      child: (_isLoadingDialog)
+                                                          ? const SizedBox(
+                                                          width: Dimens.buttonIndicatorWidth,
+                                                          height: Dimens.buttonIndicatorHeight,
+                                                          child: CircularProgressIndicator(
+                                                            color: OwnerColors.colorAccent,
+                                                            strokeWidth: Dimens.buttonIndicatorStrokes,
+                                                          ))
+                                                          : Text("Realizar pedido",
+                                                          style: Styles().styleDefaultTextButton),
+                                                    ),
+                                                  ),
+                                                );
                                               });
                                           // if(result == true){
                                           //   Navigator.popUntil(

@@ -16,27 +16,24 @@ import '../../web_service/links.dart';
 import '../../web_service/service_response.dart';
 
 class CreditCardAlertDialog extends StatefulWidget {
-  final String? id;
-  final String? name;
-  final String? cep;
-  final String? city;
-  final String? state;
-  final String? nbh;
-  final String? address;
-  final String? number;
-  final String? complement;
+
+  Container? btnConfirm;
+  TextEditingController nameController;
+  TextEditingController cpfController;
+  TextEditingController yearController;
+  TextEditingController monthController;
+  TextEditingController cardNumberController;
+  TextEditingController securityCodeController;
 
   CreditCardAlertDialog({
     Key? key,
-    this.id,
-    this.name,
-    this.cep,
-    this.city,
-    this.state,
-    this.nbh,
-    this.address,
-    this.number,
-    this.complement,
+    this.btnConfirm,
+    required this.nameController,
+    required this.cpfController,
+    required this.yearController,
+    required this.monthController,
+    required this.cardNumberController,
+    required this.securityCodeController
   });
 
   // DialogGeneric({Key? key}) : super(key: key);
@@ -48,37 +45,26 @@ class CreditCardAlertDialog extends StatefulWidget {
 class _CreditCardAlertDialog extends State<CreditCardAlertDialog> {
   bool _isLoading = false;
 
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController cpfController = TextEditingController();
-  final TextEditingController cepController = TextEditingController();
-  final TextEditingController yearController = TextEditingController();
-  final TextEditingController monthController = TextEditingController();
-  final TextEditingController cardNumberController = TextEditingController();
-  final TextEditingController securityCodeController = TextEditingController();
-
   @override
   void initState() {
-    if (widget.id != null) {
-      nameController.text = widget.name!;
-      cepController.text = widget.cep!;
-      yearController.text = widget.city!;
-      monthController.text = widget.state!;
-      cardNumberController.text = widget.nbh!;
-      securityCodeController.text = widget.complement!;
-    }
+    widget.nameController.text = "";
+    widget.cpfController.text = "";
+    widget.yearController.text = "";
+    widget.monthController.text = "";
+    widget.cardNumberController.text = "";
+    widget.securityCodeController.text = "";
 
     super.initState();
   }
 
   @override
   void dispose() {
-    nameController.dispose();
-    cpfController.dispose();
-    cepController.dispose();
-    yearController.dispose();
-    monthController.dispose();
-    cardNumberController.dispose();
-    securityCodeController.dispose();
+    widget.nameController.dispose();
+    widget.cpfController.dispose();
+    widget.yearController.dispose();
+    widget.monthController.dispose();
+    widget.cardNumberController.dispose();
+    widget.securityCodeController.dispose();
     super.dispose();
   }
 
@@ -110,10 +96,10 @@ class _CreditCardAlertDialog extends State<CreditCardAlertDialog> {
                       },
                     )),
                 CreditCardWidget(
-                  cardNumber: cardNumberController.text,
-                  expiryDate: yearController.text,
-                  cardHolderName: nameController.text,
-                  cvvCode: securityCodeController.text,
+                  cardHolderName: widget.nameController.text,
+                  cardNumber: widget.cardNumberController.text,
+                  expiryDate: widget.monthController.text + " " + widget.yearController.text,
+                  cvvCode: widget.securityCodeController.text,
                   showBackView: false,
                   isHolderNameVisible: true,
                   obscureCardCvv: false,
@@ -134,7 +120,7 @@ class _CreditCardAlertDialog extends State<CreditCardAlertDialog> {
                 ),
                 SizedBox(height: Dimens.marginApplication),
                 TextField(
-                  controller: nameController,
+                  controller: widget.nameController,
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -163,7 +149,7 @@ class _CreditCardAlertDialog extends State<CreditCardAlertDialog> {
                 ),
                 SizedBox(height: Dimens.marginApplication),
                 TextField(
-                  controller: cpfController,
+                  controller: widget.cpfController,
                   inputFormatters: [Masks().cpfMask()],
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
@@ -195,7 +181,7 @@ class _CreditCardAlertDialog extends State<CreditCardAlertDialog> {
                 Styles().div_horizontal,
                 SizedBox(height: Dimens.marginApplication),
                 TextField(
-                  controller: cardNumberController,
+                  controller: widget.cardNumberController,
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -216,7 +202,7 @@ class _CreditCardAlertDialog extends State<CreditCardAlertDialog> {
                     contentPadding:
                         EdgeInsets.all(Dimens.textFieldPaddingApplication),
                   ),
-                  keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.number,
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: Dimens.textSize5,
@@ -227,7 +213,8 @@ class _CreditCardAlertDialog extends State<CreditCardAlertDialog> {
                   children: [
                     Expanded(
                       child: TextField(
-                        controller: yearController,
+                        maxLength: 4,
+                        controller: widget.yearController,
                         decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -249,7 +236,7 @@ class _CreditCardAlertDialog extends State<CreditCardAlertDialog> {
                           contentPadding: EdgeInsets.all(
                               Dimens.textFieldPaddingApplication),
                         ),
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.number,
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: Dimens.textSize5,
@@ -259,7 +246,8 @@ class _CreditCardAlertDialog extends State<CreditCardAlertDialog> {
                     SizedBox(width: Dimens.marginApplication),
                     Expanded(
                       child: TextField(
-                        controller: monthController,
+                        maxLength: 2,
+                        controller: widget.monthController,
                         decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -281,7 +269,7 @@ class _CreditCardAlertDialog extends State<CreditCardAlertDialog> {
                           contentPadding: EdgeInsets.all(
                               Dimens.textFieldPaddingApplication),
                         ),
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.number,
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: Dimens.textSize5,
@@ -292,8 +280,13 @@ class _CreditCardAlertDialog extends State<CreditCardAlertDialog> {
                 ),
                 SizedBox(height: Dimens.marginApplication),
                 TextField(
-                  controller: securityCodeController,
+                  maxLength: 4,
+                  controller: widget.securityCodeController,
                   decoration: InputDecoration(
+                      counter: SizedBox(
+                        width: 0,
+                        height: 0,
+                      ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                           color: OwnerColors.colorPrimary, width: 1.5),
@@ -320,6 +313,7 @@ class _CreditCardAlertDialog extends State<CreditCardAlertDialog> {
                   ),
                 ),
                 SizedBox(height: Dimens.marginApplication),
+                widget.btnConfirm!
               ],
             ),
           ),
