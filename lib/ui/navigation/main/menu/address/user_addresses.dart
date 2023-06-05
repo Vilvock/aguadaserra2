@@ -209,7 +209,6 @@ class _UserAddresses extends State<UserAddresses> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
@@ -248,7 +247,7 @@ class _UserAddresses extends State<UserAddresses> {
                                     number: response.numero,
                                     complement: response.complemento);
                               });
-                          if(result == true){
+                          if (result == true) {
                             Navigator.popUntil(
                               context,
                               ModalRoute.withName('/ui/home'),
@@ -272,7 +271,9 @@ class _UserAddresses extends State<UserAddresses> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Visibility(
-                                        visible: response.id.toString() == Preferences.getDefaultAddress().toString(),
+                                        visible: response.id.toString() ==
+                                            Preferences.getDefaultAddress()
+                                                .toString(),
                                         child: Text(
                                           "Endereço selecionado",
                                           style: TextStyle(
@@ -309,75 +310,80 @@ class _UserAddresses extends State<UserAddresses> {
                                       SizedBox(
                                           height: Dimens.minMarginApplication),
                                       Visibility(
-                                        visible: response.id.toString() != Preferences.getDefaultAddress().toString(),
-                                        child: GestureDetector(onTap:() async {
-
-
+                                        visible: response.id.toString() !=
+                                            Preferences.getDefaultAddress()
+                                                .toString(),
+                                        child: GestureDetector(
+                                          onTap: () async {
                                             await Preferences.init();
-                                            await Preferences.setDefaultAddress(response.id.toString());
+                                            await Preferences.setDefaultAddress(
+                                                response.id.toString());
 
-
-                                            setState(() {
-
-                                            });
-
-
-                                        }, child: Text(
-                                          "Definir endereço padrão",
-                                          style: TextStyle(
-                                            fontFamily: 'Inter',
-                                            fontSize: Dimens.textSize4,
-                                            fontWeight: FontWeight.bold,
-                                            color: OwnerColors.colorPrimary,
-                                          )),
+                                            setState(() {});
+                                          },
+                                          child: Text("Definir endereço padrão",
+                                              style: TextStyle(
+                                                fontFamily: 'Inter',
+                                                fontSize: Dimens.textSize4,
+                                                fontWeight: FontWeight.bold,
+                                                color: OwnerColors.colorPrimary,
+                                              )),
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                                Align(
-                                    alignment: AlignmentDirectional.topEnd,
-                                    child: IconButton(
-                                      icon: Icon(
-                                        Icons.close,
-                                        color: Colors.black,
-                                      ),
-                                      onPressed: () {
-                                        showModalBottomSheet<dynamic>(
-                                          isScrollControlled: true,
-                                          context: context,
-                                          shape: Styles().styleShapeBottomSheet,
-                                          clipBehavior:
-                                              Clip.antiAliasWithSaveLayer,
-                                          builder: (BuildContext context) {
-                                            return GenericAlertDialog(
-                                                title: Strings.attention,
-                                                content:
-                                                    "Tem certeza que deseja remover este endereço salvo?",
-                                                btnBack: TextButton(
-                                                    child: Text(
-                                                      Strings.no,
-                                                      style: TextStyle(
-                                                        fontFamily: 'Inter',
-                                                        color: Colors.black54,
-                                                      ),
-                                                    ),
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    }),
-                                                btnConfirm: TextButton(
-                                                    child: Text(Strings.yes),
-                                                    onPressed: () {
-                                                      deleteAddress(response.id
-                                                          .toString());
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    }));
+                                Visibility(
+                                    visible: response.id.toString() !=
+                                        Preferences.getDefaultAddress()
+                                            .toString(),
+                                    child: Align(
+                                        alignment: AlignmentDirectional.topEnd,
+                                        child: IconButton(
+                                          icon: Icon(
+                                            Icons.close,
+                                            color: Colors.black,
+                                          ),
+                                          onPressed: () {
+                                            showModalBottomSheet<dynamic>(
+                                              isScrollControlled: true,
+                                              context: context,
+                                              shape: Styles()
+                                                  .styleShapeBottomSheet,
+                                              clipBehavior:
+                                                  Clip.antiAliasWithSaveLayer,
+                                              builder: (BuildContext context) {
+                                                return GenericAlertDialog(
+                                                    title: Strings.attention,
+                                                    content:
+                                                        "Tem certeza que deseja remover este endereço salvo?",
+                                                    btnBack: TextButton(
+                                                        child: Text(
+                                                          Strings.no,
+                                                          style: TextStyle(
+                                                            fontFamily: 'Inter',
+                                                            color:
+                                                                Colors.black54,
+                                                          ),
+                                                        ),
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        }),
+                                                    btnConfirm: TextButton(
+                                                        child:
+                                                            Text(Strings.yes),
+                                                        onPressed: () {
+                                                          deleteAddress(response
+                                                              .id
+                                                              .toString());
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        }));
+                                              },
+                                            );
                                           },
-                                        );
-                                      },
-                                    )),
+                                        ))),
                               ],
                             ),
                           ),

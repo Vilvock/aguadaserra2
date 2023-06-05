@@ -5,6 +5,7 @@ import 'package:app/model/order.dart';
 import 'package:app/ui/components/alert_dialog_date_picker.dart';
 import 'package:autoscale_tabbarview/autoscale_tabbarview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_credit_card/extension.dart';
 
 import '../../../../config/application_messages.dart';
 import '../../../../config/preferences.dart';
@@ -73,30 +74,36 @@ class _MethodPayment extends State<MethodPayment>
   }
 
   void goToCheckout (String typePayment) {
-    if (_tabController.index == 0) {
-      addOrder(
-          _idCart.toString(),
-          ApplicationConstant.TYPE_DELIVERY_1.toString(),
-          _idAddress.toString(),
-          null,
-          null,
-          typePayment,
-          _itensValue,
-          _freightValue,
-          _totalValue,
-          "");
+
+    if (_idAddress.isNullOrEmpty) {
+      ApplicationMessages(context: context).showMessage("É necessário selecionar um endereço padrão para prosseguir!");
+
     } else {
-      addOrder(
-          _idCart.toString(),
-          ApplicationConstant.TYPE_DELIVERY_2.toString(),
-          null,
-          _idSchedule,
-          dateController.text.toString(),
-          typePayment,
-          _itensValue,
-          _freightValue,
-          _totalValue,
-          "");
+      if (_tabController.index == 0) {
+        addOrder(
+            _idCart.toString(),
+            ApplicationConstant.TYPE_DELIVERY_1.toString(),
+            _idAddress.toString(),
+            null,
+            null,
+            typePayment,
+            _itensValue,
+            _freightValue,
+            _totalValue,
+            "");
+      } else {
+        addOrder(
+            _idCart.toString(),
+            ApplicationConstant.TYPE_DELIVERY_2.toString(),
+            null,
+            _idSchedule,
+            dateController.text.toString(),
+            typePayment,
+            _itensValue,
+            _freightValue,
+            _totalValue,
+            "");
+      }
     }
   }
 
@@ -808,14 +815,11 @@ class _MethodPayment extends State<MethodPayment>
                             ),
                           ],
                         )),
-                        IconButton(
-                          icon: Icon(
-                            Icons.arrow_forward_ios,
-                            color: Colors.black38,
-                            size: 20,
-                          ),
-                          onPressed: () => {},
-                        )
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: Colors.black38,
+                          size: 20,
+                        ),
                       ],
                     ),
                   ))),
@@ -869,14 +873,11 @@ class _MethodPayment extends State<MethodPayment>
                             ),
                           ],
                         )),
-                        IconButton(
-                          icon: Icon(
-                            Icons.arrow_forward_ios,
-                            color: Colors.black38,
-                            size: 20,
-                          ),
-                          onPressed: () => {},
-                        )
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: Colors.black38,
+                          size: 20,
+                        ),
                       ],
                     ),
                   ))),
@@ -929,14 +930,11 @@ class _MethodPayment extends State<MethodPayment>
                             ),
                           ],
                         )),
-                        IconButton(
-                          icon: Icon(
-                            Icons.arrow_forward_ios,
-                            color: Colors.black38,
-                            size: 20,
-                          ),
-                          onPressed: () => {},
-                        )
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: Colors.black38,
+                          size: 20,
+                        ),
                       ],
                     ),
                   ))),
@@ -992,14 +990,12 @@ class _MethodPayment extends State<MethodPayment>
                             ),
                           ],
                         )),
-                        IconButton(
-                          icon: Icon(
+                         Icon(
                             Icons.arrow_forward_ios,
                             color: Colors.black38,
                             size: 20,
                           ),
-                          onPressed: () => {},
-                        )
+
                       ],
                     ),
                   ))))
