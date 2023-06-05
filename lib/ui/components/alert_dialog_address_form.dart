@@ -325,6 +325,7 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                   children: [
                     Expanded(
                       child: TextField(
+                        readOnly: true,
                         controller: cityController,
                         decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
@@ -357,6 +358,7 @@ class _AddressFormAlertDialog extends State<AddressFormAlertDialog> {
                     SizedBox(width: Dimens.marginApplication),
                     Expanded(
                       child: TextField(
+                        readOnly: true,
                         controller: stateController,
                         decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(

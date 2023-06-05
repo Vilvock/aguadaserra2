@@ -241,6 +241,89 @@ class _OrderDetail extends State<OrderDetail> {
                           Styles().div_horizontal,
                           SizedBox(height: Dimens.marginApplication),
                           Text(
+                            "Valores:",
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: Dimens.textSize5,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          SizedBox(height: Dimens.minMarginApplication),
+                          Column(children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    "Frete",
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: Dimens.textSize4,
+                                      color: Colors.black45,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  response.valor_frete,
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: Dimens.textSize4,
+                                    color: Colors.black45,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: Dimens.minMarginApplication),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    "Valor total em produtos",
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: Dimens.textSize4,
+                                      color: Colors.black45,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  response.valor,
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: Dimens.textSize4,
+                                    color: Colors.black45,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: Dimens.minMarginApplication),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    "Valor total com a entrega",
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: Dimens.textSize5,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  response.valor_total,
+                                  style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: Dimens.textSize5,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ]),
+                          SizedBox(height: Dimens.marginApplication),
+                          Styles().div_horizontal,
+                          SizedBox(height: Dimens.marginApplication),
+                          Text(
                             "Pagamento",
                             style: TextStyle(
                               fontFamily: 'Inter',

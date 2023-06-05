@@ -318,7 +318,7 @@ class _ProfileState extends State<Profile> {
                           borderSide:
                               BorderSide(color: Colors.grey, width: 1.0),
                         ),
-                        hintText: 'Nome Fantasia',
+                        hintText: 'Nome',
                         hintStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius:
