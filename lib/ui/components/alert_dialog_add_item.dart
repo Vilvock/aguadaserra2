@@ -41,7 +41,12 @@ class _AddItemAlertDialogState extends State<AddItemAlertDialog> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Padding(
-            padding: const EdgeInsets.all(Dimens.paddingApplication),
+            padding: EdgeInsets.fromLTRB(
+                Dimens.paddingApplication,
+                Dimens.paddingApplication,
+                Dimens.paddingApplication,
+                MediaQuery.of(context).viewInsets.bottom +
+                    Dimens.paddingApplication),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

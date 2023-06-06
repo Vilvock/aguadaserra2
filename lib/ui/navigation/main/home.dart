@@ -852,8 +852,8 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                                                               child: ElevatedButton(
                                                                                                   style: Styles().styleDefaultButton,
                                                                                                   onPressed: () {
-                                                                                                    if (quantityController.text.toString() == "0") {
-                                                                                                      ApplicationMessages(context: context).showMessage("A quantidade não pode ser 0");
+                                                                                                    if (int.parse(quantityController.text.toString()) <= 0) {
+                                                                                                      ApplicationMessages(context: context).showMessage("A quantidade não pode ser menos que 0");
                                                                                                       return;
                                                                                                     }
 
@@ -1031,8 +1031,8 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                                                               child: ElevatedButton(
                                                                                                   style: Styles().styleDefaultButton,
                                                                                                   onPressed: () {
-                                                                                                    if (quantityController.text.toString() == "0") {
-                                                                                                      ApplicationMessages(context: context).showMessage("A quantidade não pode ser 0");
+                                                                                                    if (int.parse(quantityController.text.toString()) <= 0) {
+                                                                                                      ApplicationMessages(context: context).showMessage("A quantidade não pode ser menos que 0");
                                                                                                       return;
                                                                                                     }
 
