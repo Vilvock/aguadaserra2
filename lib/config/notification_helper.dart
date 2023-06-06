@@ -11,7 +11,14 @@ class LocalNotification {
       android: AndroidInitializationSettings(
         '@mipmap/ic_launcher',
       ),
+      iOS: DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true)
     );
+
+
+
     _notiPlugin.initialize(initialSettings,
         onDidReceiveNotificationResponse: (NotificationResponse details) {
           print('onDidReceiveNotificationResponse Function');
@@ -33,6 +40,9 @@ class LocalNotification {
         importance: Importance.max,
         priority: Priority.high,
       ),
+      iOS: DarwinNotificationDetails(
+
+      )
     );
     _notiPlugin.show(
       DateTime.now().microsecond,
