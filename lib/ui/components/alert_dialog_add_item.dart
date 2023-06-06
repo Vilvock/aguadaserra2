@@ -23,8 +23,18 @@ class _AddItemAlertDialogState extends State<AddItemAlertDialog> {
   int _quantity = 1;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     widget.quantityController.text = _quantity.toString();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
 
     return Column(
         mainAxisSize: MainAxisSize.min,
@@ -74,32 +84,51 @@ class _AddItemAlertDialogState extends State<AddItemAlertDialog> {
                               IconButton(
                                 icon: Icon(Icons.remove, color: Colors.black),
                                 onPressed: () {
-                                  if (_quantity == 1) return;
+                                  if (int.parse(widget.quantityController.text.toString()) == 1) return;
 
                                   setState(() {
-                                    _quantity--;
-                                    widget.quantityController.text =
-                                        _quantity.toString();
+                                    var newQtt = int.parse(widget.quantityController.text.toString());
+                                    newQtt--;
+                                    widget.quantityController.text = newQtt.toString();
                                   });
                                 },
                               ),
                               SizedBox(width: Dimens.minMarginApplication),
-                              Text(
-                                _quantity.toString(),
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontSize: Dimens.textSize5,
-                                  color: Colors.black,
-                                ),
-                              ),
+                                  Container(width: 100, child:
+                                  TextField(
+                                    controller: widget.quantityController,
+                                    decoration: InputDecoration(
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: OwnerColors.colorPrimary, width: 1.5),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide:
+                                        BorderSide(color: Colors.grey, width: 1.0),
+                                      ),
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(Dimens.radiusApplication),
+                                        borderSide: BorderSide.none,
+                                      ),
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                    ),
+                                    keyboardType: TextInputType.number,
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: Dimens.textSize5,
+                                    ),
+                                  )),
                               SizedBox(width: Dimens.minMarginApplication),
                               IconButton(
                                 icon: Icon(Icons.add, color: Colors.black),
                                 onPressed: () {
                                   setState(() {
-                                    _quantity++;
-                                    widget.quantityController.text =
-                                        _quantity.toString();
+                                    var newQtt = int.parse(widget.quantityController.text.toString());
+                                    newQtt++;
+                                    widget.quantityController.text = newQtt.toString();
                                   });
                                 },
                               ),
