@@ -31,6 +31,12 @@ import 'package:flutter/services.dart';
 import 'config/notification_helper.dart';
 import 'config/preferences.dart';
 
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  LocalNotification.showNotification(message);
+  print("Handling a background message: $message");
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -47,6 +53,8 @@ void main() async {
       projectId: WSConstants.PROJECT_ID,
     )*/);
   }
+
+  LocalNotification.initialize();
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   NotificationSettings settings = await messaging.requestPermission(
@@ -67,14 +75,6 @@ void main() async {
     print('User declined or has not accepted permission');
   }
 
-  Future<void> _firebaseMessagingBackgroundHandler(
-      RemoteMessage message) async {
-    print('Mensagem recebida em segundo plano: ${message.data}');
-  }
-
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-  LocalNotification.initialize();
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     LocalNotification.showNotification(message);
     print('Mensagem recebida: ${message.data}');
@@ -83,8 +83,9 @@ void main() async {
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     print('Mensagem abertaaaaaaaaa: ${message.data}');
 
-
   });
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   runApp(MaterialApp(
     theme: ThemeData(
