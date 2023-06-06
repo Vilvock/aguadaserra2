@@ -233,6 +233,7 @@ class _FilterProducts extends State<FilterProducts> {
                                     if(categoryList.indexOf(newValue) > 0) {
                                       _categoryPosition = categoryList.indexOf(newValue) - 1;
                                       _idCategory = Product.fromJson(snapshot.data![_categoryPosition!]).id.toString();
+                                      _idSubcategory = null;
                                     } else {
                                       _idCategory = null;
                                     }
