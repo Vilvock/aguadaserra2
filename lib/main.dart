@@ -28,6 +28,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'config/notification_helper.dart';
 import 'config/preferences.dart';
 
 void main() async {
@@ -57,20 +58,33 @@ void main() async {
     provisional: false,
     sound: true,
   );
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Mensagem recebida: ${message.notification.title}');
-  });
 
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    print('Mensagem aberta: ${message.notification.title}');
-  });
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    print('User granted permission');
+  } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+    print('User granted provisional permission');
+  } else {
+    print('User declined or has not accepted permission');
+  }
 
   Future<void> _firebaseMessagingBackgroundHandler(
       RemoteMessage message) async {
-    print('Mensagem recebida em segundo plano: ${message.notification.title}');
+    print('Mensagem recebida em segundo plano: ${message.data}');
   }
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  LocalNotification.initialize();
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    LocalNotification.showNotification(message);
+    print('Mensagem recebida: ${message.data}');
+  });
+
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    print('Mensagem abertaaaaaaaaa: ${message.data}');
+
+
+  });
 
   runApp(MaterialApp(
     theme: ThemeData(

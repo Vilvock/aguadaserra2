@@ -4,7 +4,7 @@
 
 
 - bug refresh quando lista vazia
-- bug register location
+- bug register location (lat long)
 - bug add endereco pelo method payment
 
 add interceptor e timeout request
