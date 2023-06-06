@@ -6,14 +6,11 @@
 - bug refresh quando lista vazia
 - bug register location
 - bug add endereco pelo method payment
-- bug filter
 
 add interceptor e timeout request
-confirmar notificacoes ios
-MIGRACAO bgl do android 13
-
 bolinha(badge) de itens carrinho fds
 
+confirmar notificacoes ios
 
 
 

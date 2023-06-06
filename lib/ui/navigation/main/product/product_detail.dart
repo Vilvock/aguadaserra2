@@ -370,12 +370,12 @@ class _ProductDetail extends State<ProductDetail> {
                                               icon: Icon(Icons.remove,
                                                   color: Colors.black),
                                               onPressed: () {
-                                                if (_quantity == 1) return;
+                                                if (int.parse(quantityController.text.toString()) == 1) return;
 
                                                 setState(() {
-                                                  _quantity--;
-
-                                                  quantityController.text = _quantity.toString();
+                                                  var newQtt = int.parse(quantityController.text.toString());
+                                                  newQtt--;
+                                                  quantityController.text = newQtt.toString();
                                                 });
                                               },
                                             ),
@@ -425,8 +425,10 @@ class _ProductDetail extends State<ProductDetail> {
                                                   color: Colors.black),
                                               onPressed: () {
                                                 setState(() {
-                                                  _quantity++;
-                                                  quantityController.text = _quantity.toString();
+
+                                                  var newQtt = int.parse(quantityController.text.toString());
+                                                  newQtt++;
+                                                  quantityController.text = newQtt.toString();
                                                 });
                                               },
                                             ),
@@ -513,9 +515,15 @@ class _ProductDetail extends State<ProductDetail> {
                                         ),
                                       ),
                                       GestureDetector(
-                                        onTap: () => {
+                                        onTap: () {
+
+                                          if (quantityController.text.toString() == "0") {
+                                            ApplicationMessages(context: context).showMessage("A quantidade não pode ser 0");
+                                            return;
+                                          }
+
                                           openCart(response.valor,
-                                              quantityController.text.toString())
+                                              quantityController.text.toString());
                                         },
                                         child: Text("Adicionar",
                                             style: TextStyle(
