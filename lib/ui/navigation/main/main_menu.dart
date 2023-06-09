@@ -124,6 +124,9 @@ class _MainMenu extends State<MainMenu> {
                                         ApplicationConstant.URL_AVATAR +
                                             response.avatar.toString(),
                                         fit: BoxFit.cover, /*fit: BoxFit.cover*/
+                                          errorBuilder: (context, exception, stackTrack) => Image.asset(
+                                            'images/default.png',
+                                          )
                                       ),
                                     ),
                                   ),
