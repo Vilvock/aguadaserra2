@@ -39,6 +39,7 @@ abstract class Links {
   static const String UPDATE_ITEM_CART = "carrinho/update_item_carrinho";
   static const String LIST_CART_ITEMS = "carrinho/list_itens_carrinho/";
   static const String DELETE_ITEM_CART = "carrinho/delete_item_carrinho/";
+  static const String DELETE_CART = "carrinho/limparCarrinho";
 
   //frete
   static const String CALCULE_FREIGHT = "frete/calcular_frete/";

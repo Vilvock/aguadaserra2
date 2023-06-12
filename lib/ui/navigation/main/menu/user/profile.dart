@@ -57,7 +57,6 @@ class _ProfileState extends State<Profile> {
       final imageTemp = File(image.path);
 
       sendPhoto(imageTemp);
-
     } on PlatformException catch (e) {
       print('Failed to pick image: $e');
     }
@@ -70,7 +69,6 @@ class _ProfileState extends State<Profile> {
       final imageTemp = File(image.path);
 
       sendPhoto(imageTemp);
-
     } on PlatformException catch (e) {
       print('Failed to pick image: $e');
     }
@@ -78,8 +76,10 @@ class _ProfileState extends State<Profile> {
 
   Future<void> sendPhoto(File image) async {
     try {
-
-      final json = await postRequest.sendPostRequestMultiPart(Links.UPDATE_AVATAR, image, await Preferences.getUserData()!.id.toString());
+      final json = await postRequest.sendPostRequestMultiPart(
+          Links.UPDATE_AVATAR,
+          image,
+          await Preferences.getUserData()!.id.toString());
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -92,7 +92,6 @@ class _ProfileState extends State<Profile> {
         setState(() {});
       } else {}
       ApplicationMessages(context: context).showMessage(response.msg);
-
     } catch (e) {
       throw Exception('HTTP_ERROR: $e');
     }
@@ -131,8 +130,8 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-  Future<void> updateUserDataRequest(
-      String name, String documentCnpj, String cellphone, String email) async {
+  Future<void> updateUserDataRequest(String ie, String name,
+      String documentCnpj, String cellphone, String email) async {
     try {
       final body = {
         "id": await Preferences.getUserData()!.id,
@@ -140,6 +139,7 @@ class _ProfileState extends State<Profile> {
         "documento": documentCnpj,
         "celular": cellphone,
         "email": email,
+        "ie": ie,
         "token": ApplicationConstant.TOKEN
       };
 
@@ -209,6 +209,7 @@ class _ProfileState extends State<Profile> {
   final TextEditingController documentController = TextEditingController();
   final TextEditingController cellphoneController = TextEditingController();
   final TextEditingController fantasyNameController = TextEditingController();
+  final TextEditingController iEController = TextEditingController();
 
   @override
   void dispose() {
@@ -219,6 +220,7 @@ class _ProfileState extends State<Profile> {
     documentController.dispose();
     cellphoneController.dispose();
     fantasyNameController.dispose();
+    iEController.dispose();
     super.dispose();
   }
 
@@ -381,7 +383,7 @@ class _ProfileState extends State<Profile> {
                           borderSide:
                               BorderSide(color: Colors.grey, width: 1.0),
                         ),
-                        hintText: 'CNPJ',
+                        hintText: 'Documento',
                         hintStyle: TextStyle(color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius:
@@ -400,6 +402,44 @@ class _ProfileState extends State<Profile> {
                       ),
                     ),
                     SizedBox(height: Dimens.marginApplication),
+                    Visibility(
+                        visible:
+                            _profileResponse?.id_tipo_cliente.toString() == "2",
+                        child: Column(
+                          children: [
+                            TextField(
+                              controller: iEController,
+                              decoration: InputDecoration(
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: OwnerColors.colorPrimary,
+                                      width: 1.5),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.grey, width: 1.0),
+                                ),
+                                hintText: 'Inscrição Estadual',
+                                hintStyle: TextStyle(color: Colors.grey),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      Dimens.radiusApplication),
+                                  borderSide: BorderSide.none,
+                                ),
+                                filled: true,
+                                fillColor: Colors.white,
+                                contentPadding: EdgeInsets.all(
+                                    Dimens.textFieldPaddingApplication),
+                              ),
+                              keyboardType: TextInputType.text,
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: Dimens.textSize5,
+                              ),
+                            ),
+                            SizedBox(height: Dimens.marginApplication),
+                          ],
+                        )),
                     TextField(
                       controller: cellphoneController,
                       inputFormatters: [Masks().cellphoneMask()],
@@ -440,12 +480,19 @@ class _ProfileState extends State<Profile> {
                         style: Styles().styleDefaultButton,
                         onPressed: () async {
                           if (!validator.validateGenericTextField(
-                              fantasyNameController.text, "Nome fantasia"))
-                            return;
-                          if (!validator.validateEmail(emailController.text))
-                            return;
-                          if (!validator.validateCNPJ(documentController.text))
-                            return;
+                              fantasyNameController.text, "Nome")) return;
+                          // if (!validator.validateEmail(emailController.text))
+                          //   return;
+                          // if (!validator.validateCNPJ(documentController.text))
+                          //   return;
+
+                          if (_profileResponse?.id_tipo_cliente.toString() ==
+                              "2") {
+                            if (!validator.validateGenericTextField(
+                                iEController.text, "Inscrição Estadual"))
+                              return;
+                          }
+
                           if (!validator.validateCellphone(
                               cellphoneController.text)) return;
 
@@ -454,6 +501,7 @@ class _ProfileState extends State<Profile> {
                           });
 
                           await updateUserDataRequest(
+                              iEController.text,
                               fantasyNameController.text,
                               documentController.text,
                               cellphoneController.text,

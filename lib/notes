@@ -2,30 +2,42 @@
 ///////////////
 
 
-
-- bug refresh quando lista vazia
-- bug register location (lat long)
-- bug add endereco pelo method payment
-
-add interceptor e timeout request
-bolinha(badge) de itens carrinho fds
+bug refresh quando lista vazia
+bug register location (lat long)
+bug add endereco pelo method payment
 
 
-permissoes strings em pt br ios
+- add interceptor e timeout request
+- trocar msg global para uma que apareca
+- permissoes strings em pt br ios
+- colocar notificacoes pra funcionar quando app esta fechado
+- setar quantidade digitando carrinho
+{
+    "token": "J4HQi3e0",
+    "id": 228,
+    "op": 1,
+    "valor": 0
+}
+
+- add quantidade pelos favoritos tbm
+- esqueceu senha
+- limpar carrinho igual ifood
+
+{
+    "token": "J4HQi3e0",
+    "id_carrinho": 57
+}
+
+- pedir bgl pro q vai no suporte
+
 
 testar notificacoes pedidos
-testar marcara cep
-colocar notificacoes pra funcionar quando app esta fechado
-trocar msg global para uma que apareca
-setar quantidade digitando carrinho
-add quantidade pelos favoritos tbm
-esqueceu senha
-limpar carrinho igual ifood
-No app, quando clico para editar o perfil e clico em salvar, está dando mensagem de CNPJ inválido, sendo que o cliente é CPF:
+
+No app, quando clico para editar o perfil e clico em salvar, está dando mensagem de CNPJ inválido, sendo que o cliente é CPF: OK
+testar marcara cep OK
 
 
 
-pedir bgl pro q vai no suporte
 
 
 
