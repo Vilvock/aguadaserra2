@@ -20,18 +20,28 @@ class ChangeQuantityAlertDialog extends StatefulWidget {
 }
 
 class _ChangeQuantityAlertDialogState extends State<ChangeQuantityAlertDialog> {
-  int _quantity = 1;
+  // int _quantity = 1;
+
+  @override
+  void initState() {
+    // widget.quantityController.text = _quantity.toString();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    widget.quantityController.text = _quantity.toString();
 
     return Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Padding(
-            padding: const EdgeInsets.all(Dimens.paddingApplication),
+            padding: EdgeInsets.fromLTRB(
+                Dimens.paddingApplication,
+                Dimens.paddingApplication,
+                Dimens.paddingApplication,
+                MediaQuery.of(context).viewInsets.bottom +
+                    Dimens.paddingApplication),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -57,7 +67,7 @@ class _ChangeQuantityAlertDialogState extends State<ChangeQuantityAlertDialog> {
                         borderSide:
                         BorderSide(color: Colors.grey, width: 1.0),
                       ),
-                      hintText: 'Número',
+                      hintText: 'Quantidade',
                       hintStyle: TextStyle(color: Colors.grey),
                       border: OutlineInputBorder(
                         borderRadius:

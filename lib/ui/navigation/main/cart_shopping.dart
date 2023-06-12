@@ -72,6 +72,33 @@ class _CartShopping extends State<CartShopping> {
     }
   }
 
+
+  Future<void> updateItem2(String id, String value) async {
+    try {
+      final body = {"id": id, "op": 1,
+        "valor": value, "token": ApplicationConstant.TOKEN};
+
+      print('HTTP_BODY: $body');
+
+      final json =
+      await postRequest.sendPostRequest(Links.UPDATE_ITEM_CART, body);
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      final response = Cart.fromJson(_map[0]);
+
+      if (response.status == "01") {
+        setState(() {});
+      } else {}
+      // ApplicationMessages(context: context).showMessage(response.msg);
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
   Future<void> addItemToFavorite(String idProduct) async {
     try {
       final body = {
@@ -373,7 +400,10 @@ class _CartShopping extends State<CartShopping> {
                                                                       SizedBox(
                                                                           width:
                                                                               Dimens.minMarginApplication),
-                                                                      GestureDetector(onTap: () {/*
+                                                                      GestureDetector(onTap: () {
+
+                                                                        quantityController.text = responseList.qtd.toString();
+
                                                                         showModalBottomSheet<dynamic>(
                                                                             isScrollControlled: true,
                                                                             context: context,
@@ -388,13 +418,15 @@ class _CartShopping extends State<CartShopping> {
                                                                                       child: ElevatedButton(
                                                                                           style: Styles().styleDefaultButton,
                                                                                           onPressed: () {
-                                                                                            //
+
+
+                                                                                            updateItem2(responseList.id_item.toString(), quantityController.text.toString());
 
                                                                                             Navigator.of(context).pop();
                                                                                           },
                                                                                           child: Text("Alterar quantidade", style: Styles().styleDefaultTextButton))));
                                                                             });
-                                                                     */ }, child:
+                                                                      }, child:
                                                                       Text(
                                                                         _quantity
                                                                             .toString(),
