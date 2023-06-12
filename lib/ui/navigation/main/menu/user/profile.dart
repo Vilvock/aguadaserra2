@@ -121,6 +121,7 @@ class _ProfileState extends State<Profile> {
       emailController.text = _profileResponse!.email.toString();
       documentController.text = _profileResponse!.documento.toString();
       cellphoneController.text = _profileResponse!.celular.toString();
+      iEController.text = _profileResponse!.ie.toString();
       // });
       // } else {}
 
@@ -231,22 +232,20 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: CustomAppBar(title: "Meu Perfil", isVisibleBackButton: true),
-        body: Container(
-            child: Container(
-          child: Column(children: [
-            Expanded(
-                child: SingleChildScrollView(
-              child: Container(
-                margin: EdgeInsets.all(Dimens.marginApplication),
-                child: Column(
-                  children: [
-                    FutureBuilder<Map<String, dynamic>>(
-                      future: loadProfileRequest(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          final response = User.fromJson(snapshot.data!);
+        body: FutureBuilder<Map<String, dynamic>>(
+            future: loadProfileRequest(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final response = User.fromJson(snapshot.data!);
 
-                          return Container(
+                return Column(children: [
+                  Expanded(
+                      child: SingleChildScrollView(
+                    child: Container(
+                      margin: EdgeInsets.all(Dimens.marginApplication),
+                      child: Column(
+                        children: [
+                          Container(
                               height: 128,
                               width: 128,
                               margin: EdgeInsets.only(
@@ -301,458 +300,469 @@ class _ProfileState extends State<Profile> {
                                     },
                                   ),
                                 )
-                              ]));
-                        } else if (snapshot.hasError) {
-                          return Text('${snapshot.error}');
-                        }
-                        return Center(child: CircularProgressIndicator());
-                      },
-                    ),
-                    SizedBox(height: Dimens.marginApplication),
-                    TextField(
-                      controller: fantasyNameController,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: OwnerColors.colorPrimary, width: 1.5),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 1.0),
-                        ),
-                        hintText: 'Nome',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(Dimens.radiusApplication),
-                          borderSide: BorderSide.none,
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding:
-                            EdgeInsets.all(Dimens.textFieldPaddingApplication),
-                      ),
-                      keyboardType: TextInputType.text,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: Dimens.textSize5,
-                      ),
-                    ),
-                    SizedBox(height: Dimens.marginApplication),
-                    TextField(
-                      readOnly: true,
-                      controller: emailController,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: OwnerColors.colorPrimary, width: 1.5),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 1.0),
-                        ),
-                        hintText: 'E-mail',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(Dimens.radiusApplication),
-                          borderSide: BorderSide.none,
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding:
-                            EdgeInsets.all(Dimens.textFieldPaddingApplication),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: Dimens.textSize5,
-                      ),
-                    ),
-                    SizedBox(height: Dimens.marginApplication),
-                    TextField(
-                      readOnly: true,
-                      controller: documentController,
-                      // inputFormatters: [Masks().cnpjMask()],
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: OwnerColors.colorPrimary, width: 1.5),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 1.0),
-                        ),
-                        hintText: 'Documento',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(Dimens.radiusApplication),
-                          borderSide: BorderSide.none,
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding:
-                            EdgeInsets.all(Dimens.textFieldPaddingApplication),
-                      ),
-                      keyboardType: TextInputType.number,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: Dimens.textSize5,
-                      ),
-                    ),
-                    SizedBox(height: Dimens.marginApplication),
-                    Visibility(
-                        visible:
-                            _profileResponse?.id_tipo_cliente.toString() == "2",
-                        child: Column(
-                          children: [
-                            TextField(
-                              controller: iEController,
-                              decoration: InputDecoration(
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: OwnerColors.colorPrimary,
-                                      width: 1.5),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.grey, width: 1.0),
-                                ),
-                                hintText: 'Inscrição Estadual',
-                                hintStyle: TextStyle(color: Colors.grey),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      Dimens.radiusApplication),
-                                  borderSide: BorderSide.none,
-                                ),
-                                filled: true,
-                                fillColor: Colors.white,
-                                contentPadding: EdgeInsets.all(
-                                    Dimens.textFieldPaddingApplication),
+                              ])),
+                          SizedBox(height: Dimens.marginApplication),
+                          TextField(
+                            controller: fantasyNameController,
+                            decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: OwnerColors.colorPrimary,
+                                    width: 1.5),
                               ),
-                              keyboardType: TextInputType.text,
+                              enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.grey, width: 1.0),
+                              ),
+                              hintText: 'Nome',
+                              hintStyle: TextStyle(color: Colors.grey),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    Dimens.radiusApplication),
+                                borderSide: BorderSide.none,
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              contentPadding: EdgeInsets.all(
+                                  Dimens.textFieldPaddingApplication),
+                            ),
+                            keyboardType: TextInputType.text,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: Dimens.textSize5,
+                            ),
+                          ),
+                          SizedBox(height: Dimens.marginApplication),
+                          TextField(
+                            readOnly: true,
+                            controller: emailController,
+                            decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: OwnerColors.colorPrimary,
+                                    width: 1.5),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.grey, width: 1.0),
+                              ),
+                              hintText: 'E-mail',
+                              hintStyle: TextStyle(color: Colors.grey),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    Dimens.radiusApplication),
+                                borderSide: BorderSide.none,
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              contentPadding: EdgeInsets.all(
+                                  Dimens.textFieldPaddingApplication),
+                            ),
+                            keyboardType: TextInputType.emailAddress,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: Dimens.textSize5,
+                            ),
+                          ),
+                          SizedBox(height: Dimens.marginApplication),
+                          TextField(
+                            readOnly: true,
+                            controller: documentController,
+                            // inputFormatters: [Masks().cnpjMask()],
+                            decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: OwnerColors.colorPrimary,
+                                    width: 1.5),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.grey, width: 1.0),
+                              ),
+                              hintText: 'Documento',
+                              hintStyle: TextStyle(color: Colors.grey),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    Dimens.radiusApplication),
+                                borderSide: BorderSide.none,
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              contentPadding: EdgeInsets.all(
+                                  Dimens.textFieldPaddingApplication),
+                            ),
+                            keyboardType: TextInputType.number,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: Dimens.textSize5,
+                            ),
+                          ),
+                          SizedBox(height: Dimens.marginApplication),
+                          Visibility(
+                              visible: response.tipo_pessoa == 2,
+                              child: Column(
+                                children: [
+                                  TextField(
+                                    controller: iEController,
+                                    decoration: InputDecoration(
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: OwnerColors.colorPrimary,
+                                            width: 1.5),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.grey, width: 1.0),
+                                      ),
+                                      hintText: 'Inscrição Estadual',
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            Dimens.radiusApplication),
+                                        borderSide: BorderSide.none,
+                                      ),
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      contentPadding: EdgeInsets.all(
+                                          Dimens.textFieldPaddingApplication),
+                                    ),
+                                    keyboardType: TextInputType.text,
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: Dimens.textSize5,
+                                    ),
+                                  ),
+                                  SizedBox(height: Dimens.marginApplication),
+                                ],
+                              )),
+                          TextField(
+                            controller: cellphoneController,
+                            inputFormatters: [Masks().cellphoneMask()],
+                            decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: OwnerColors.colorPrimary,
+                                    width: 1.5),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.grey, width: 1.0),
+                              ),
+                              hintText: 'Celular',
+                              hintStyle: TextStyle(color: Colors.grey),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    Dimens.radiusApplication),
+                                borderSide: BorderSide.none,
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              contentPadding: EdgeInsets.all(
+                                  Dimens.textFieldPaddingApplication),
+                            ),
+                            keyboardType: TextInputType.number,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: Dimens.textSize5,
+                            ),
+                          ),
+                          SizedBox(height: Dimens.marginApplication),
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: Dimens.marginApplication,
+                                bottom: Dimens.marginApplication),
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              style: Styles().styleDefaultButton,
+                              onPressed: () async {
+                                if (!validator.validateGenericTextField(
+                                    fantasyNameController.text, "Nome")) return;
+                                // if (!validator.validateEmail(emailController.text))
+                                //   return;
+                                // if (!validator.validateCNPJ(documentController.text))
+                                //   return;
+
+                                if (_profileResponse?.tipo_pessoa.toString() ==
+                                    "2") {
+                                  if (!validator.validateGenericTextField(
+                                      iEController.text, "Inscrição Estadual"))
+                                    return;
+                                }
+
+                                if (!validator.validateCellphone(
+                                    cellphoneController.text)) return;
+
+                                setState(() {
+                                  _isLoading = true;
+                                });
+
+                                await updateUserDataRequest(
+                                    iEController.text,
+                                    fantasyNameController.text,
+                                    documentController.text,
+                                    cellphoneController.text,
+                                    emailController.text);
+
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                              },
+                              child: (_isLoading)
+                                  ? const SizedBox(
+                                      width: Dimens.buttonIndicatorWidth,
+                                      height: Dimens.buttonIndicatorHeight,
+                                      child: CircularProgressIndicator(
+                                        color: OwnerColors.colorAccent,
+                                        strokeWidth:
+                                            Dimens.buttonIndicatorStrokes,
+                                      ))
+                                  : Text("Atualizar dados",
+                                      style: Styles().styleDefaultTextButton),
+                            ),
+                          ),
+                          SizedBox(height: Dimens.marginApplication),
+                          Container(
+                            width: double.infinity,
+                            margin: EdgeInsets.only(
+                                bottom: Dimens.marginApplication),
+                            child: Text(
+                              "Alterar Senha",
+                              textAlign: TextAlign.start,
                               style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: Dimens.textSize5,
+                                fontFamily: 'Inter',
+                                fontSize: Dimens.textSize6,
+                                color: Colors.black,
                               ),
                             ),
-                            SizedBox(height: Dimens.marginApplication),
-                          ],
-                        )),
-                    TextField(
-                      controller: cellphoneController,
-                      inputFormatters: [Masks().cellphoneMask()],
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: OwnerColors.colorPrimary, width: 1.5),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 1.0),
-                        ),
-                        hintText: 'Celular',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(Dimens.radiusApplication),
-                          borderSide: BorderSide.none,
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding:
-                            EdgeInsets.all(Dimens.textFieldPaddingApplication),
-                      ),
-                      keyboardType: TextInputType.number,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: Dimens.textSize5,
-                      ),
-                    ),
-                    SizedBox(height: Dimens.marginApplication),
-                    Container(
-                      margin: EdgeInsets.only(
-                          top: Dimens.marginApplication,
-                          bottom: Dimens.marginApplication),
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: Styles().styleDefaultButton,
-                        onPressed: () async {
-                          if (!validator.validateGenericTextField(
-                              fantasyNameController.text, "Nome")) return;
-                          // if (!validator.validateEmail(emailController.text))
-                          //   return;
-                          // if (!validator.validateCNPJ(documentController.text))
-                          //   return;
-
-                          if (_profileResponse?.id_tipo_cliente.toString() ==
-                              "2") {
-                            if (!validator.validateGenericTextField(
-                                iEController.text, "Inscrição Estadual"))
-                              return;
-                          }
-
-                          if (!validator.validateCellphone(
-                              cellphoneController.text)) return;
-
-                          setState(() {
-                            _isLoading = true;
-                          });
-
-                          await updateUserDataRequest(
-                              iEController.text,
-                              fantasyNameController.text,
-                              documentController.text,
-                              cellphoneController.text,
-                              emailController.text);
-
-                          setState(() {
-                            _isLoading = false;
-                          });
-                        },
-                        child: (_isLoading)
-                            ? const SizedBox(
-                                width: Dimens.buttonIndicatorWidth,
-                                height: Dimens.buttonIndicatorHeight,
-                                child: CircularProgressIndicator(
-                                  color: OwnerColors.colorAccent,
-                                  strokeWidth: Dimens.buttonIndicatorStrokes,
-                                ))
-                            : Text("Atualizar dados",
-                                style: Styles().styleDefaultTextButton),
-                      ),
-                    ),
-                    SizedBox(height: Dimens.marginApplication),
-                    Container(
-                      width: double.infinity,
-                      margin: EdgeInsets.only(bottom: Dimens.marginApplication),
-                      child: Text(
-                        "Alterar Senha",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: Dimens.textSize6,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    TextField(
-                      onChanged: (value) {
-                        setState(() {
-                          hasPasswordCoPassword = false;
-                          visibileOne = true;
-                          hasMinLength = passwordController.text.length >= 8;
-                          hasUppercase = passwordController.text
-                              .contains(RegExp(r'[A-Z]'));
-
-                          hasPasswordCoPassword = coPasswordController.text ==
-                              passwordController.text;
-
-                          if (hasMinLength && hasUppercase) {
-                            visibileOne = false;
-                          }
-                        });
-                      },
-                      controller: passwordController,
-                      decoration: InputDecoration(
-                        suffixIcon: IconButton(
-                            icon: Icon(
-                              // Based on passwordVisible state choose the icon
-                              _passwordVisible
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: OwnerColors.colorPrimary,
-                            ),
-                            onPressed: () {
-                              // Update the state i.e. toogle the state of passwordVisible variable
+                          ),
+                          TextField(
+                            onChanged: (value) {
                               setState(() {
-                                _passwordVisible = !_passwordVisible;
-                              });
-                            }),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: OwnerColors.colorPrimary, width: 1.5),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 1.0),
-                        ),
-                        hintText: 'Senha',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(Dimens.radiusApplication),
-                          borderSide: BorderSide.none,
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding:
-                            EdgeInsets.all(Dimens.textFieldPaddingApplication),
-                      ),
-                      keyboardType: TextInputType.visiblePassword,
-                      obscureText: !_passwordVisible,
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: Dimens.textSize5,
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Visibility(
-                      visible: passwordController.text.isNotEmpty,
-                      child: Row(
-                        children: [
-                          Icon(
-                            hasMinLength
-                                ? Icons.check_circle
-                                : Icons.check_circle,
-                            color: hasMinLength
-                                ? Colors.green
-                                : OwnerColors.lightGrey,
-                          ),
-                          Text(
-                            'Deve ter no mínimo 8 carácteres',
-                          ),
-                        ],
-                      ),
-                    ),
-                    Visibility(
-                      visible: passwordController.text.isNotEmpty,
-                      child: Row(
-                        children: [
-                          Icon(
-                            hasUppercase
-                                ? Icons.check_circle
-                                : Icons.check_circle,
-                            color: hasUppercase
-                                ? Colors.green
-                                : OwnerColors.lightGrey,
-                          ),
-                          Text(
-                            'Deve ter uma letra maiúscula',
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: Dimens.marginApplication),
-                    TextField(
-                      onChanged: (value) {
-                        setState(() {
-                          visibileTwo = true;
-                          hasPasswordCoPassword = coPasswordController.text ==
-                              passwordController.text;
+                                hasPasswordCoPassword = false;
+                                visibileOne = true;
+                                hasMinLength =
+                                    passwordController.text.length >= 8;
+                                hasUppercase = passwordController.text
+                                    .contains(RegExp(r'[A-Z]'));
 
-                          if (hasPasswordCoPassword) {
-                            visibileTwo = false;
-                          }
-                        });
-                      },
-                      controller: coPasswordController,
-                      decoration: InputDecoration(
-                        suffixIcon: IconButton(
-                            icon: Icon(
-                              // Based on passwordVisible state choose the icon
-                              _passwordVisible2
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: OwnerColors.colorPrimary,
+                                hasPasswordCoPassword =
+                                    coPasswordController.text ==
+                                        passwordController.text;
+
+                                if (hasMinLength && hasUppercase) {
+                                  visibileOne = false;
+                                }
+                              });
+                            },
+                            controller: passwordController,
+                            decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                  icon: Icon(
+                                    // Based on passwordVisible state choose the icon
+                                    _passwordVisible
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                    color: OwnerColors.colorPrimary,
+                                  ),
+                                  onPressed: () {
+                                    // Update the state i.e. toogle the state of passwordVisible variable
+                                    setState(() {
+                                      _passwordVisible = !_passwordVisible;
+                                    });
+                                  }),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: OwnerColors.colorPrimary,
+                                    width: 1.5),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.grey, width: 1.0),
+                              ),
+                              hintText: 'Senha',
+                              hintStyle: TextStyle(color: Colors.grey),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    Dimens.radiusApplication),
+                                borderSide: BorderSide.none,
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              contentPadding: EdgeInsets.all(
+                                  Dimens.textFieldPaddingApplication),
                             ),
-                            onPressed: () {
-                              // Update the state i.e. toogle the state of passwordVisible variable
-                              setState(() {
-                                _passwordVisible2 = !_passwordVisible2;
-                              });
-                            }),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: OwnerColors.colorPrimary, width: 1.5),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 1.0),
-                        ),
-                        hintText: 'Confirmar Senha',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(Dimens.radiusApplication),
-                          borderSide: BorderSide.none,
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding:
-                            EdgeInsets.all(Dimens.textFieldPaddingApplication),
-                      ),
-                      keyboardType: TextInputType.visiblePassword,
-                      obscureText: !_passwordVisible2,
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: Dimens.textSize5,
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Visibility(
-                      visible: coPasswordController.text.isNotEmpty,
-                      child: Row(
-                        children: [
-                          Icon(
-                            hasPasswordCoPassword
-                                ? Icons.check_circle
-                                : Icons.check_circle,
-                            color: hasPasswordCoPassword
-                                ? Colors.green
-                                : OwnerColors.lightGrey,
+                            keyboardType: TextInputType.visiblePassword,
+                            obscureText: !_passwordVisible,
+                            enableSuggestions: false,
+                            autocorrect: false,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: Dimens.textSize5,
+                            ),
                           ),
-                          Text(
-                            'As senhas fornecidas são idênticas',
+                          SizedBox(height: 4),
+                          Visibility(
+                            visible: passwordController.text.isNotEmpty,
+                            child: Row(
+                              children: [
+                                Icon(
+                                  hasMinLength
+                                      ? Icons.check_circle
+                                      : Icons.check_circle,
+                                  color: hasMinLength
+                                      ? Colors.green
+                                      : OwnerColors.lightGrey,
+                                ),
+                                Text(
+                                  'Deve ter no mínimo 8 carácteres',
+                                ),
+                              ],
+                            ),
+                          ),
+                          Visibility(
+                            visible: passwordController.text.isNotEmpty,
+                            child: Row(
+                              children: [
+                                Icon(
+                                  hasUppercase
+                                      ? Icons.check_circle
+                                      : Icons.check_circle,
+                                  color: hasUppercase
+                                      ? Colors.green
+                                      : OwnerColors.lightGrey,
+                                ),
+                                Text(
+                                  'Deve ter uma letra maiúscula',
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: Dimens.marginApplication),
+                          TextField(
+                            onChanged: (value) {
+                              setState(() {
+                                visibileTwo = true;
+                                hasPasswordCoPassword =
+                                    coPasswordController.text ==
+                                        passwordController.text;
+
+                                if (hasPasswordCoPassword) {
+                                  visibileTwo = false;
+                                }
+                              });
+                            },
+                            controller: coPasswordController,
+                            decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                  icon: Icon(
+                                    // Based on passwordVisible state choose the icon
+                                    _passwordVisible2
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                    color: OwnerColors.colorPrimary,
+                                  ),
+                                  onPressed: () {
+                                    // Update the state i.e. toogle the state of passwordVisible variable
+                                    setState(() {
+                                      _passwordVisible2 = !_passwordVisible2;
+                                    });
+                                  }),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: OwnerColors.colorPrimary,
+                                    width: 1.5),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.grey, width: 1.0),
+                              ),
+                              hintText: 'Confirmar Senha',
+                              hintStyle: TextStyle(color: Colors.grey),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    Dimens.radiusApplication),
+                                borderSide: BorderSide.none,
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              contentPadding: EdgeInsets.all(
+                                  Dimens.textFieldPaddingApplication),
+                            ),
+                            keyboardType: TextInputType.visiblePassword,
+                            obscureText: !_passwordVisible2,
+                            enableSuggestions: false,
+                            autocorrect: false,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: Dimens.textSize5,
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Visibility(
+                            visible: coPasswordController.text.isNotEmpty,
+                            child: Row(
+                              children: [
+                                Icon(
+                                  hasPasswordCoPassword
+                                      ? Icons.check_circle
+                                      : Icons.check_circle,
+                                  color: hasPasswordCoPassword
+                                      ? Colors.green
+                                      : OwnerColors.lightGrey,
+                                ),
+                                Text(
+                                  'As senhas fornecidas são idênticas',
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: Dimens.marginApplication),
+                          Container(
+                            margin:
+                                EdgeInsets.only(top: Dimens.marginApplication),
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              style: Styles().styleDefaultButton,
+                              onPressed: () async {
+                                if (!validator.validatePassword(
+                                    passwordController.text)) return;
+                                if (!validator.validateCoPassword(
+                                    passwordController.text,
+                                    coPasswordController.text)) return;
+
+                                setState(() {
+                                  _isLoading = true;
+                                });
+
+                                await updatePasswordRequest(
+                                    passwordController.text);
+
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                              },
+                              child: (_isLoading)
+                                  ? const SizedBox(
+                                      width: Dimens.buttonIndicatorWidth,
+                                      height: Dimens.buttonIndicatorHeight,
+                                      child: CircularProgressIndicator(
+                                        color: OwnerColors.colorAccent,
+                                        strokeWidth:
+                                            Dimens.buttonIndicatorStrokes,
+                                      ))
+                                  : Text("Atualizar senha",
+                                      style: Styles().styleDefaultTextButton),
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(height: Dimens.marginApplication),
-                    Container(
-                      margin: EdgeInsets.only(top: Dimens.marginApplication),
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: Styles().styleDefaultButton,
-                        onPressed: () async {
-                          if (!validator.validatePassword(
-                              passwordController.text)) return;
-                          if (!validator.validateCoPassword(
-                              passwordController.text,
-                              coPasswordController.text)) return;
-
-                          setState(() {
-                            _isLoading = true;
-                          });
-
-                          await updatePasswordRequest(passwordController.text);
-
-                          setState(() {
-                            _isLoading = false;
-                          });
-                        },
-                        child: (_isLoading)
-                            ? const SizedBox(
-                                width: Dimens.buttonIndicatorWidth,
-                                height: Dimens.buttonIndicatorHeight,
-                                child: CircularProgressIndicator(
-                                  color: OwnerColors.colorAccent,
-                                  strokeWidth: Dimens.buttonIndicatorStrokes,
-                                ))
-                            : Text("Atualizar senha",
-                                style: Styles().styleDefaultTextButton),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )),
-          ]),
-        )));
+                  )),
+                ]);
+              } else if (snapshot.hasError) {
+                return Text('${snapshot.error}');
+              }
+              return Center(child: CircularProgressIndicator());
+            }));
   }
 }
