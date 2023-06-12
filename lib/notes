@@ -2,18 +2,16 @@
 ///////////////
 
 
-bug refresh quando lista vazia
-bug register location (lat long)
-bug add endereco pelo method payment
-
+bug add endereco pelo method payment, e update endereco normal
 
 - add interceptor e timeout request
 - trocar msg global para uma que apareca
 - permissoes strings em pt br ios
 - colocar notificacoes pra funcionar quando app esta fechado
-- pedir conteudo pro q vai no suporte
+- bug register location (lat long)
+- bug refresh quando lista vazia
 
-
+whatsapp OK
 limpar carrinho igual ifood OK
 esqueceu senha OK
 No app, quando clico para editar o perfil e clico em salvar, está dando mensagem de CNPJ inválido, sendo que o cliente é CPF: OK

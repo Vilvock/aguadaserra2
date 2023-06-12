@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:app/res/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../config/application_messages.dart';
 import '../../../config/preferences.dart';
 import '../../../config/validator.dart';
@@ -33,6 +35,29 @@ class _MainMenu extends State<MainMenu> {
   late Validator validator;
   final postRequest = PostRequest();
   User? _profileResponse;
+
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(Uri.parse(launchWhatsApp(phone: 554836582500, message: "").toString()), mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch');
+    }
+  }
+
+  String launchWhatsApp(
+      {required int phone,
+        required String message,
+      }) {
+    String url() {
+      if (Platform.isAndroid) {
+        // add the [https]
+        return "https://wa.me/$phone/?text=${Uri.parse(message)}"; // new line
+      } else {
+        // add the [https]
+        return "https://api.whatsapp.com/send?phone=$phone=${Uri.parse(
+            message)}"; // new line
+      }
+    }
+    return url();
+  }
 
   Future<Map<String, dynamic>> loadProfileRequest() async {
     try {
@@ -343,7 +368,10 @@ class _MainMenu extends State<MainMenu> {
                         ],
                       ),
                     ),
-                    onTap: () {}),
+                    onTap: () async {
+                      await _launchUrl();
+
+                    }),
 
                 Styles().div_horizontal,
 
