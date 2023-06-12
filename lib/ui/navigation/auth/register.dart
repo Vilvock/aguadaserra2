@@ -55,6 +55,7 @@ class _RegisterState extends State<Register> {
   User? _registerResponse;
 
   Future<void> registerRequest(
+      String ie,
       String email,
       String password,
       String fantasyName,
@@ -68,6 +69,7 @@ class _RegisterState extends State<Register> {
       final body = {
         "razao_social": socialReason,
         "nome_fantasia": fantasyName,
+        "ie": ie,
         "documento": document,
         "tipo_pessoa": typePerson,
         "email": email,
@@ -144,6 +146,7 @@ class _RegisterState extends State<Register> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController coPasswordController = TextEditingController();
   final TextEditingController socialReasonController = TextEditingController();
+  final TextEditingController iEController = TextEditingController();
   final TextEditingController cnpjController = TextEditingController();
   final TextEditingController cpfController = TextEditingController();
   final TextEditingController cellphoneController = TextEditingController();
@@ -155,6 +158,7 @@ class _RegisterState extends State<Register> {
     passwordController.dispose();
     coPasswordController.dispose();
     socialReasonController.dispose();
+    iEController.dispose();
     cnpjController.dispose();
     cpfController.dispose();
     cellphoneController.dispose();
@@ -301,36 +305,6 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
                     SizedBox(height: Dimens.marginApplication),
-                    TextField(
-                      controller: fantasyNameController,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: OwnerColors.colorPrimary, width: 1.5),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                          BorderSide(color: Colors.grey, width: 1.0),
-                        ),
-                        hintText: currentSelectedValue == "Pessoa Jurídica" ? 'Nome Fantasia' : 'Nome completo',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.circular(Dimens.radiusApplication),
-                          borderSide: BorderSide.none,
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding:
-                        EdgeInsets.all(Dimens.textFieldPaddingApplication),
-                      ),
-                      keyboardType: TextInputType.text,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: Dimens.textSize5,
-                      ),
-                    ),
-                    SizedBox(height: Dimens.marginApplication),
                     Visibility(
                         visible: currentSelectedValue == "Pessoa Jurídica",
                         child: Column(children: [
@@ -365,7 +339,67 @@ class _RegisterState extends State<Register> {
                             ),
                           ),
                           SizedBox(height: Dimens.marginApplication),
+                          TextField(
+                            controller: iEController,
+                            decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: OwnerColors.colorPrimary, width: 1.5),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                BorderSide(color: Colors.grey, width: 1.0),
+                              ),
+                              hintText: 'Inscrição Estadual',
+                              hintStyle: TextStyle(color: Colors.grey),
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                BorderRadius.circular(Dimens.radiusApplication),
+                                borderSide: BorderSide.none,
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              contentPadding:
+                              EdgeInsets.all(Dimens.textFieldPaddingApplication),
+                            ),
+                            keyboardType: TextInputType.text,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: Dimens.textSize5,
+                            ),
+                          ),
+                          SizedBox(height: Dimens.marginApplication),
                         ])),
+                    TextField(
+                      controller: fantasyNameController,
+                      decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: OwnerColors.colorPrimary, width: 1.5),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide(color: Colors.grey, width: 1.0),
+                        ),
+                        hintText: currentSelectedValue == "Pessoa Jurídica" ? 'Nome Fantasia' : 'Nome completo',
+                        hintStyle: TextStyle(color: Colors.grey),
+                        border: OutlineInputBorder(
+                          borderRadius:
+                          BorderRadius.circular(Dimens.radiusApplication),
+                          borderSide: BorderSide.none,
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                        contentPadding:
+                        EdgeInsets.all(Dimens.textFieldPaddingApplication),
+                      ),
+                      keyboardType: TextInputType.text,
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: Dimens.textSize5,
+                      ),
+                    ),
+                    SizedBox(height: Dimens.marginApplication),
                     TextField(
                       controller: cellphoneController,
                       inputFormatters: [Masks().cellphoneMask()],
@@ -665,6 +699,10 @@ class _RegisterState extends State<Register> {
                                 socialReasonController.text, "Razão social"))
                               return;
 
+                            if (!validator.validateGenericTextField(
+                                iEController.text, "Inscrição Estadual"))
+                              return;
+
                             _socialReason = socialReasonController.text.toString();
                           }
 
@@ -690,6 +728,7 @@ class _RegisterState extends State<Register> {
                           // var position = await determinePosition();
 
                           await registerRequest(
+                              iEController.text,
                               emailController.text,
                               passwordController.text,
                               fantasyNameController.text,
