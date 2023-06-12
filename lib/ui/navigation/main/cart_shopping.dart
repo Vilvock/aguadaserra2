@@ -418,7 +418,10 @@ class _CartShopping extends State<CartShopping> {
                                                                                       child: ElevatedButton(
                                                                                           style: Styles().styleDefaultButton,
                                                                                           onPressed: () {
-
+                                                                                            if (int.parse(quantityController.text.toString()) <= 0) {
+                                                                                              ApplicationMessages(context: context).showMessage("A quantidade não pode ser menos que 0");
+                                                                                              return;
+                                                                                            }
 
                                                                                             updateItem2(responseList.id_item.toString(), quantityController.text.toString());
 

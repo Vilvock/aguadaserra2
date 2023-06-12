@@ -16,6 +16,7 @@ import '../../../res/strings.dart';
 import '../../../res/styles.dart';
 import '../../../web_service/links.dart';
 import '../../../web_service/service_response.dart';
+import '../../components/alert_dialog_add_item.dart';
 import '../../components/alert_dialog_generic.dart';
 import '../../components/custom_app_bar.dart';
 import '../../components/progress_hud.dart';
@@ -30,12 +31,21 @@ class Favorites extends StatefulWidget {
 class _Favorites extends State<Favorites> {
   bool _isLoading = false;
 
+  final postRequest = PostRequest();
+
   @override
   void initState() {
     super.initState();
   }
 
-  final postRequest = PostRequest();
+  final TextEditingController quantityController = TextEditingController();
+
+  @override
+  void dispose() {
+    quantityController.dispose();
+    super.dispose();
+  }
+
 
   Future<void> removeFavorite(String idFavorite) async {
     try {
@@ -285,12 +295,38 @@ class _Favorites extends State<Favorites> {
                                                   ),
                                                   GestureDetector(
                                                       onTap: () => {
-                                                            openCart(
-                                                                response
-                                                                    .id_produto
-                                                                    .toString(),
-                                                                response.valor,
-                                                                1.toString())
+
+                                                        showModalBottomSheet<dynamic>(
+                                                            isScrollControlled: true,
+                                                            context: context,
+                                                            shape: Styles().styleShapeBottomSheet,
+                                                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                                                            builder: (BuildContext context) {
+                                                              return AddItemAlertDialog(
+                                                                  quantityController: quantityController,
+                                                                  btnConfirm: Container(
+                                                                      margin: EdgeInsets.only(top: Dimens.marginApplication),
+                                                                      width: double.infinity,
+                                                                      child: ElevatedButton(
+                                                                          style: Styles().styleDefaultButton,
+                                                                          onPressed: () {
+                                                                            if (int.parse(quantityController.text.toString()) <= 0) {
+                                                                              ApplicationMessages(context: context).showMessage("A quantidade não pode ser menos que 0");
+                                                                              return;
+                                                                            }
+
+                                                                            openCart(
+                                                                                response
+                                                                                    .id_produto
+                                                                                    .toString(),
+                                                                                response.valor,
+                                                                                quantityController.text.toString());
+                                                                            Navigator.of(context).pop();
+                                                                          },
+                                                                          child: Text("Adicionar ao carrinho", style: Styles().styleDefaultTextButton))));
+                                                            })
+
+
                                                           },
                                                       child: Text(
                                                         "Adicionar",
