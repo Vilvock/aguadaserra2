@@ -12,7 +12,6 @@ bug add endereco pelo method payment
 - permissoes strings em pt br ios
 - colocar notificacoes pra funcionar quando app esta fechado
 
-- esqueceu senha
 - limpar carrinho igual ifood
 
 {
@@ -25,6 +24,7 @@ bug add endereco pelo method payment
 
 testar notificacoes pedidos
 
+esqueceu senha OK
 No app, quando clico para editar o perfil e clico em salvar, está dando mensagem de CNPJ inválido, sendo que o cliente é CPF: OK
 testar marcara cep OK
 setar quantidade digitando carrinho OK

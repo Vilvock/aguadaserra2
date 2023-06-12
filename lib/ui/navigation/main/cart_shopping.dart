@@ -72,16 +72,19 @@ class _CartShopping extends State<CartShopping> {
     }
   }
 
-
   Future<void> updateItem2(String id, String value) async {
     try {
-      final body = {"id": id, "op": 1,
-        "valor": value, "token": ApplicationConstant.TOKEN};
+      final body = {
+        "id": id,
+        "op": 1,
+        "valor": value,
+        "token": ApplicationConstant.TOKEN
+      };
 
       print('HTTP_BODY: $body');
 
       final json =
-      await postRequest.sendPostRequest(Links.UPDATE_ITEM_CART, body);
+          await postRequest.sendPostRequest(Links.UPDATE_ITEM_CART, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -183,6 +186,32 @@ class _CartShopping extends State<CartShopping> {
 
       final json =
           await postRequest.sendPostRequest(Links.DELETE_ITEM_CART, body);
+
+      List<Map<String, dynamic>> _map = [];
+      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+
+      print('HTTP_RESPONSE: $_map');
+
+      final response = Cart.fromJson(_map[0]);
+
+      if (response.status == "01") {
+        setState(() {});
+      } else {}
+      ApplicationMessages(context: context).showMessage(response.msg);
+    } catch (e) {
+      throw Exception('HTTP_ERROR: $e');
+    }
+  }
+
+  Future<void> deleteCart(String idCart) async {
+    try {
+      final body = {
+        "id_carrinho": idCart, "token": ApplicationConstant.TOKEN};
+
+      print('HTTP_BODY: $body');
+
+      final json =
+      await postRequest.sendPostRequest(Links.DELETE_CART, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -400,49 +429,48 @@ class _CartShopping extends State<CartShopping> {
                                                                       SizedBox(
                                                                           width:
                                                                               Dimens.minMarginApplication),
-                                                                      GestureDetector(onTap: () {
+                                                                      GestureDetector(
+                                                                          onTap:
+                                                                              () {
+                                                                            quantityController.text =
+                                                                                responseList.qtd.toString();
 
-                                                                        quantityController.text = responseList.qtd.toString();
+                                                                            showModalBottomSheet<dynamic>(
+                                                                                isScrollControlled: true,
+                                                                                context: context,
+                                                                                shape: Styles().styleShapeBottomSheet,
+                                                                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                                                                builder: (BuildContext context) {
+                                                                                  return ChangeQuantityAlertDialog(
+                                                                                      quantityController: quantityController,
+                                                                                      btnConfirm: Container(
+                                                                                          margin: EdgeInsets.only(top: Dimens.marginApplication),
+                                                                                          width: double.infinity,
+                                                                                          child: ElevatedButton(
+                                                                                              style: Styles().styleDefaultButton,
+                                                                                              onPressed: () {
+                                                                                                if (int.parse(quantityController.text.toString()) <= 0) {
+                                                                                                  ApplicationMessages(context: context).showMessage("A quantidade não pode ser menos que 0");
+                                                                                                  return;
+                                                                                                }
 
-                                                                        showModalBottomSheet<dynamic>(
-                                                                            isScrollControlled: true,
-                                                                            context: context,
-                                                                            shape: Styles().styleShapeBottomSheet,
-                                                                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                                                                            builder: (BuildContext context) {
-                                                                              return ChangeQuantityAlertDialog(
-                                                                                  quantityController: quantityController,
-                                                                                  btnConfirm: Container(
-                                                                                      margin: EdgeInsets.only(top: Dimens.marginApplication),
-                                                                                      width: double.infinity,
-                                                                                      child: ElevatedButton(
-                                                                                          style: Styles().styleDefaultButton,
-                                                                                          onPressed: () {
-                                                                                            if (int.parse(quantityController.text.toString()) <= 0) {
-                                                                                              ApplicationMessages(context: context).showMessage("A quantidade não pode ser menos que 0");
-                                                                                              return;
-                                                                                            }
+                                                                                                updateItem2(responseList.id_item.toString(), quantityController.text.toString());
 
-                                                                                            updateItem2(responseList.id_item.toString(), quantityController.text.toString());
-
-                                                                                            Navigator.of(context).pop();
-                                                                                          },
-                                                                                          child: Text("Alterar quantidade", style: Styles().styleDefaultTextButton))));
-                                                                            });
-                                                                      }, child:
-                                                                      Text(
-                                                                        _quantity
-                                                                            .toString(),
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontFamily:
-                                                                              'Inter',
-                                                                          fontSize:
-                                                                              Dimens.textSize5,
-                                                                          color:
-                                                                              Colors.black,
-                                                                        ),
-                                                                      )),
+                                                                                                Navigator.of(context).pop();
+                                                                                              },
+                                                                                              child: Text("Alterar quantidade", style: Styles().styleDefaultTextButton))));
+                                                                                });
+                                                                          },
+                                                                          child:
+                                                                              Text(
+                                                                            _quantity.toString(),
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontFamily: 'Inter',
+                                                                              fontSize: Dimens.textSize5,
+                                                                              color: Colors.black,
+                                                                            ),
+                                                                          )),
                                                                       SizedBox(
                                                                           width:
                                                                               Dimens.minMarginApplication),
@@ -679,6 +707,66 @@ class _CartShopping extends State<CartShopping> {
                                             //     ),
                                             //   ],
                                             // ),
+                                            GestureDetector(
+                                                onTap: () {
+                                                  showModalBottomSheet<dynamic>(
+                                                    isScrollControlled: true,
+                                                    context: context,
+                                                    shape: Styles().styleShapeBottomSheet,
+                                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                                    builder: (BuildContext context) {
+                                                      return GenericAlertDialog(
+                                                          title: Strings.attention,
+                                                          content: "Tem certeza que deseja remover todos os itens do seu carrinho?",
+                                                          btnBack: TextButton(
+                                                              child: Text(
+                                                                Strings.no,
+                                                                style: TextStyle(
+                                                                  fontFamily: 'Inter',
+                                                                  color: Colors.black54,
+                                                                ),
+                                                              ),
+                                                              onPressed: () {
+                                                                Navigator.of(context).pop();
+                                                              }),
+                                                          btnConfirm: TextButton(
+                                                              child: Text(Strings.yes),
+                                                              onPressed: () {
+                                                                deleteCart(_idCart.toString());
+                                                                Navigator.of(context).pop();
+                                                              }));
+                                                    },
+                                                  );
+                                                },
+                                                child: Align(
+                                                    alignment:
+                                                        AlignmentDirectional
+                                                            .bottomEnd,
+                                                    child: Container(
+                                                      child: Text(
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                        "Limpar carrinho",
+                                                        style: TextStyle(
+                                                          fontFamily: 'Inter',
+                                                          fontSize:
+                                                              Dimens.textSize6,
+                                                          color: OwnerColors.colorPrimary,
+                                                          fontWeight: FontWeight.bold
+                                                        ),
+                                                      ),
+                                                    ))),
+                                            SizedBox(
+                                                height:
+                                                Dimens.marginApplication),
+                                            Divider(
+                                              color: Colors.black12,
+                                              height: 2,
+                                              thickness: 1.5,
+                                            ),
+                                            SizedBox(
+                                                height:
+                                                Dimens.marginApplication),
                                             Row(
                                               children: [
                                                 Expanded(
