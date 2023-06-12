@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:app/config/useful.dart';
 import 'package:app/res/owner_colors.dart';
 import 'package:app/ui/navigation/auth/login.dart';
+import 'package:app/ui/navigation/auth/recover_password.dart';
 import 'package:app/ui/navigation/auth/register.dart';
 import 'package:app/ui/navigation/intro/onboarding.dart';
 import 'package:app/ui/navigation/intro/splash.dart';
@@ -102,6 +103,7 @@ void main() async {
       '/ui/onboarding': (context) => Onboarding(),
       '/ui/login': (context) => Login(),
       '/ui/register': (context) => Register(),
+      '/ui/recover_password': (context) => RecoverPassword(),
       '/ui/home': (context) => Home(),
       '/ui/profile': (context) => Profile(),
       '/ui/pdf_viewer': (context) => PdfViewer(),

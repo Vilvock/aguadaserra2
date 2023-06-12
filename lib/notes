@@ -11,15 +11,7 @@ bug add endereco pelo method payment
 - trocar msg global para uma que apareca
 - permissoes strings em pt br ios
 - colocar notificacoes pra funcionar quando app esta fechado
-- setar quantidade digitando carrinho
-{
-    "token": "J4HQi3e0",
-    "id": 228,
-    "op": 1,
-    "valor": 0
-}
 
-- add quantidade pelos favoritos tbm
 - esqueceu senha
 - limpar carrinho igual ifood
 
@@ -35,6 +27,8 @@ testar notificacoes pedidos
 
 No app, quando clico para editar o perfil e clico em salvar, está dando mensagem de CNPJ inválido, sendo que o cliente é CPF: OK
 testar marcara cep OK
+setar quantidade digitando carrinho OK
+add quantidade pelos favoritos tbm OK
 
 
 

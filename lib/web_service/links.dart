@@ -11,6 +11,7 @@ abstract class Links {
   static const String DISABLE_ACCOUNT = "usuarios/desativarconta/";
   static const String SAVE_FCM = "usuarios/savefcm/";
   static const String LIST_NOTIFICATIONS = "usuarios/notificacoes/";
+  static const String RECOVER_PASSWORD = "usuarios/recuperarsenha/";
 
   //produtos
   static const String LIST_CATEGORIES = "produtos/list_categorias/";

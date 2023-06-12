@@ -207,20 +207,33 @@ class _LoginState extends State<Login> {
                           fontSize: Dimens.textSize5,
                         ),
                       ),
-                      Container(
-                        margin:
-                            EdgeInsets.only(top: Dimens.minMarginApplication),
-                        width: double.infinity,
-                        child: Text(
-                          "Esqueceu sua senha?",
+                      SizedBox(height: Dimens.minMarginApplication),
+                      Container(width: double.infinity, child:
+                      RichText(
+                        textAlign: TextAlign.end,
+                        text: TextSpan(
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: Dimens.textSize5,
                             fontFamily: 'Inter',
                           ),
-                          textAlign: TextAlign.end,
+                          children: <TextSpan>[
+                            TextSpan(text: 'Esqueceu sua senha? '),
+                            TextSpan(
+                                text: 'Entre aqui',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: Dimens.textSize5,
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.bold),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.pushNamed(
+                                        context, "/ui/recover_password");
+                                  }),
+                          ],
                         ),
-                      ),
+                      )),
                       SizedBox(height: 48),
                       Container(
                         margin: EdgeInsets.only(top: Dimens.marginApplication),
@@ -228,9 +241,8 @@ class _LoginState extends State<Login> {
                         child: ElevatedButton(
                           style: Styles().styleDefaultButton,
                           onPressed: () async {
-
-                            if (!validator
-                                .validateEmail(emailController.text)) return;
+                            if (!validator.validateEmail(emailController.text))
+                              return;
 
                             setState(() {
                               _isLoading = true;
@@ -273,14 +285,12 @@ class _LoginState extends State<Login> {
                                     color: Colors.white,
                                     fontSize: Dimens.textSize5,
                                     fontFamily: 'Inter',
-                                    fontWeight: FontWeight.bold
-                                ),
+                                    fontWeight: FontWeight.bold),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-
-                                    Navigator.pushNamed(context, "/ui/register");
+                                    Navigator.pushNamed(
+                                        context, "/ui/register");
                                   }),
-
                           ],
                         ),
                       )
