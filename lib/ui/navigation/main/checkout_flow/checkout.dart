@@ -34,6 +34,7 @@ class _Checkout extends State<Checkout> {
   late String _totalValue;
   late String _typePayment;
 
+  late String _idAddress;
   late String _cep;
   late String _city;
   late String _state;
@@ -436,6 +437,7 @@ class _Checkout extends State<Checkout> {
     // _idOrder = data['id_order'];
     _typePayment = data['type_payment'];
 
+    _idAddress = data['id_address'];
     _cep = data['cep'];
     _city = data['cidade'];
     _state = data['estado'];
@@ -828,8 +830,8 @@ class _Checkout extends State<Checkout> {
                                                                             _idAddress.toString(),
                                                                             null,
                                                                             null,
-                                                                            typePayment,
-                                                                            _itensValue,
+                                                                            _typePayment,
+                                                                            _cartValue,
                                                                             _freightValue,
                                                                             _totalValue,
                                                                             "");
