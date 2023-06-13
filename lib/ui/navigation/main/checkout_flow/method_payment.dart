@@ -84,7 +84,7 @@ class _MethodPayment extends State<MethodPayment>
           "id_cart": _idCart,
           "total_value": _totalValue,
           // "id_order": response.id.toString(),
-          "type_payment": ApplicationConstant.TYPE_DELIVERY_1.toString(),
+          "type_payment": typePayment,
           "id_address": _addressResponse?.id.toString(),
           "cep": _addressResponse?.cep.toString(),
           "estado": _addressResponse?.estado.toString(),

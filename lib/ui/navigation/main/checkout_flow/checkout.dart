@@ -888,8 +888,8 @@ class _Checkout extends State<Checkout> {
                                                     _idAddress.toString(),
                                                     null,
                                                     null,
-                                                    typePayment,
-                                                    _itensValue,
+                                                    _typePayment,
+                                                    _cartValue,
                                                     _freightValue,
                                                     _totalValue,
                                                     "");
