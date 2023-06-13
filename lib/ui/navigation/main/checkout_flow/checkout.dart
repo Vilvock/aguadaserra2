@@ -703,7 +703,7 @@ class _Checkout extends State<Checkout> {
                                     width: double.infinity,
                                     child: ElevatedButton(
                                       style: Styles().styleDefaultButton,
-                                      onPressed: () async {
+                                      onPressed: _isLoading ? null : () async {
                                         setState(() {
                                           _isLoading = true;
                                         });
@@ -744,7 +744,7 @@ class _Checkout extends State<Checkout> {
                                                     child: ElevatedButton(
                                                       style: Styles()
                                                           .styleDefaultButton,
-                                                      onPressed: () async {
+                                                      onPressed: _isLoadingDialog ? null : () async {
                                                         setState(() {
                                                           _isLoadingDialog =
                                                           true;

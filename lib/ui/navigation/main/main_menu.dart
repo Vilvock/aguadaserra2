@@ -47,14 +47,14 @@ class _MainMenu extends State<MainMenu> {
         required String message,
       }) {
     String url() {
-      if (Platform.isAndroid) {
+/*      if (Platform.isAndroid) {
         // add the [https]
         return "https://wa.me/$phone/?text=${Uri.parse(message)}"; // new line
       } else {
-        // add the [https]
+        // add the [https]*/
         return "https://api.whatsapp.com/send?phone=$phone=${Uri.parse(
             message)}"; // new line
-      }
+      // }
     }
     return url();
   }

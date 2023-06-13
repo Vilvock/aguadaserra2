@@ -4,13 +4,13 @@
 
 bug add endereco pelo method payment, e update endereco normal
 
-- add interceptor e timeout request
 - trocar msg global para uma que apareca
-- permissoes strings em pt br ios
-- colocar notificacoes pra funcionar quando app esta fechado
-- bug register location (lat long)
+- add interceptor e timeout request
 - bug refresh quando lista vazia
+- bug register location (lat long)
+- colocar notificacoes pra funcionar quando app esta fechado
 
+permissoes strings em pt br ios OK
 whatsapp OK
 limpar carrinho igual ifood OK
 esqueceu senha OK
