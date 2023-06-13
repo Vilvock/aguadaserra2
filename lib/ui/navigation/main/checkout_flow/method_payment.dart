@@ -80,29 +80,44 @@ class _MethodPayment extends State<MethodPayment>
 
     } else {
       if (_tabController.index == 0) {
-        addOrder(
-            _idCart.toString(),
-            ApplicationConstant.TYPE_DELIVERY_1.toString(),
-            _idAddress.toString(),
-            null,
-            null,
-            typePayment,
-            _itensValue,
-            _freightValue,
-            _totalValue,
-            "");
+        Navigator.pushNamed(context, "/ui/checkout", arguments: {
+          "id_cart": _idCart,
+          "total_value": _totalValue,
+          // "id_order": response.id.toString(),
+          "type_payment": ApplicationConstant.TYPE_DELIVERY_1.toString(),
+          "cep": _addressResponse?.cep.toString(),
+          "estado": _addressResponse?.estado.toString(),
+          "cidade":_addressResponse?.cidade.toString(),
+          "endereco": _addressResponse?.endereco.toString(),
+          "bairro": _addressResponse?.bairro.toString(),
+          "numero": _addressResponse?.numero.toString(),
+          "complemento": _addressResponse?.complemento.toString(),
+          "total_items": _itensValue,
+          "freight_value": _freightValue,
+        });
+        // addOrder(
+        //     _idCart.toString(),
+        //     ApplicationConstant.TYPE_DELIVERY_1.toString(),
+        //     _idAddress.toString(),
+        //     null,
+        //     null,
+        //     typePayment,
+        //     _itensValue,
+        //     _freightValue,
+        //     _totalValue,
+        //     "");
       } else {
-        addOrder(
-            _idCart.toString(),
-            ApplicationConstant.TYPE_DELIVERY_2.toString(),
-            null,
-            _idSchedule,
-            dateController.text.toString(),
-            typePayment,
-            _itensValue,
-            _freightValue,
-            _totalValue,
-            "");
+        // addOrder(
+        //     _idCart.toString(),
+        //     ApplicationConstant.TYPE_DELIVERY_2.toString(),
+        //     null,
+        //     _idSchedule,
+        //     dateController.text.toString(),
+        //     typePayment,
+        //     _itensValue,
+        //     _freightValue,
+        //     _totalValue,
+        //     "");
       }
     }
   }
@@ -194,68 +209,68 @@ class _MethodPayment extends State<MethodPayment>
     }
   }
 
-  Future<void> addOrder(
-      String idCart,
-      String typeDelivery, // 1 tipo entrega no endereco e 2 retirada eu acho
-      String? idAddress, // quando for tipo entrega 1
-      String? scheduleWithdrawalId, // quando for tipo retirada 2
-      String? dateWithdrawal, // quando for tipo retirada 2
-      String typePayment,
-      String cartValue,
-      String freightValue,
-      String totalValue,
-      String obs) async {
-    try {
-      final body = {
-        "id_user": await Preferences.getUserData()!.id,
-        "id_carrinho": idCart,
-        "tipo_entrega": typeDelivery,
-        "id_endereco": idAddress,
-        "hora_retirada_id": scheduleWithdrawalId,
-        "metodo_pagamento": typePayment,
-        "data_retirada": dateWithdrawal,
-        "valor": cartValue,
-        "valor_frete": freightValue,
-        "valor_total": totalValue,
-        "obs": obs,
-        "token": ApplicationConstant.TOKEN
-      };
-
-      print('HTTP_BODY: $body');
-
-      final json = await postRequest.sendPostRequest(Links.ADD_ORDER, body);
-
-      List<Map<String, dynamic>> _map = [];
-      _map = List<Map<String, dynamic>>.from(jsonDecode(json));
-
-      print('HTTP_RESPONSE: $_map');
-
-      final response = Cart.fromJson(_map[0]);
-
-      if (response.status == "01") {
-        Navigator.pushNamed(context, "/ui/checkout", arguments: {
-          "id_cart": _idCart,
-          "total_value": _totalValue,
-          "id_order": response.id.toString(),
-          "type_payment": typePayment,
-          "cep": _addressResponse?.cep.toString(),
-          "estado": _addressResponse?.estado.toString(),
-          "cidade":_addressResponse?.cidade.toString(),
-          "endereco": _addressResponse?.endereco.toString(),
-          "bairro": _addressResponse?.bairro.toString(),
-          "numero": _addressResponse?.numero.toString(),
-          "complemento": _addressResponse?.complemento.toString(),
-          "total_items": cartValue,
-          "freight_value": freightValue,
-        });
-      } else {
-
-        ApplicationMessages(context: context).showMessage(response.msg);
-      }
-    } catch (e) {
-      throw Exception('HTTP_ERROR: $e');
-    }
-  }
+  // Future<void> addOrder(
+  //     String idCart,
+  //     String typeDelivery, // 1 tipo entrega no endereco e 2 retirada eu acho
+  //     String? idAddress, // quando for tipo entrega 1
+  //     String? scheduleWithdrawalId, // quando for tipo retirada 2
+  //     String? dateWithdrawal, // quando for tipo retirada 2
+  //     String typePayment,
+  //     String cartValue,
+  //     String freightValue,
+  //     String totalValue,
+  //     String obs) async {
+  //   try {
+  //     final body = {
+  //       "id_user": await Preferences.getUserData()!.id,
+  //       "id_carrinho": idCart,
+  //       "tipo_entrega": typeDelivery,
+  //       "id_endereco": idAddress,
+  //       "hora_retirada_id": scheduleWithdrawalId,
+  //       "metodo_pagamento": typePayment,
+  //       "data_retirada": dateWithdrawal,
+  //       "valor": cartValue,
+  //       "valor_frete": freightValue,
+  //       "valor_total": totalValue,
+  //       "obs": obs,
+  //       "token": ApplicationConstant.TOKEN
+  //     };
+  //
+  //     print('HTTP_BODY: $body');
+  //
+  //     final json = await postRequest.sendPostRequest(Links.ADD_ORDER, body);
+  //
+  //     List<Map<String, dynamic>> _map = [];
+  //     _map = List<Map<String, dynamic>>.from(jsonDecode(json));
+  //
+  //     print('HTTP_RESPONSE: $_map');
+  //
+  //     final response = Cart.fromJson(_map[0]);
+  //
+  //     if (response.status == "01") {
+  //       Navigator.pushNamed(context, "/ui/checkout", arguments: {
+  //         "id_cart": _idCart,
+  //         "total_value": _totalValue,
+  //         "id_order": response.id.toString(),
+  //         "type_payment": typePayment,
+  //         "cep": _addressResponse?.cep.toString(),
+  //         "estado": _addressResponse?.estado.toString(),
+  //         "cidade":_addressResponse?.cidade.toString(),
+  //         "endereco": _addressResponse?.endereco.toString(),
+  //         "bairro": _addressResponse?.bairro.toString(),
+  //         "numero": _addressResponse?.numero.toString(),
+  //         "complemento": _addressResponse?.complemento.toString(),
+  //         "total_items": cartValue,
+  //         "freight_value": freightValue,
+  //       });
+  //     } else {
+  //
+  //       ApplicationMessages(context: context).showMessage(response.msg);
+  //     }
+  //   } catch (e) {
+  //     throw Exception('HTTP_ERROR: $e');
+  //   }
+  // }
 
   Future<Map<String, dynamic>> calculeFreightValue() async {
     try {
