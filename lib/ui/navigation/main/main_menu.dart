@@ -37,7 +37,7 @@ class _MainMenu extends State<MainMenu> {
   User? _profileResponse;
 
   Future<void> _launchUrl() async {
-    if (!await launchUrl(Uri.parse(launchWhatsApp(phone: 554836582500, message: "").toString()), mode: LaunchMode.externalApplication)) {
+    if (!await launchUrl(Uri.parse(launchWhatsApp(phone: 554836582500, message: "").toString()), mode: LaunchMode.platformDefault)) {
       throw Exception('Could not launch');
     }
   }
@@ -52,8 +52,7 @@ class _MainMenu extends State<MainMenu> {
         return "https://wa.me/$phone/?text=${Uri.parse(message)}"; // new line
       } else {
         // add the [https]*/
-        return "https://api.whatsapp.com/send?phone=$phone=${Uri.parse(
-            message)}"; // new line
+        return "https://api.whatsapp.com/send?phone=554836512500"; // new line
       // }
     }
     return url();
