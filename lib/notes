@@ -10,14 +10,10 @@ bug add endereco pelo method payment, e update endereco normal
 - bug register location (lat long)
 - colocar notificacoes pra funcionar quando app esta fechado
 
-permissoes strings em pt br ios OK
-whatsapp OK
-limpar carrinho igual ifood OK
-esqueceu senha OK
-No app, quando clico para editar o perfil e clico em salvar, está dando mensagem de CNPJ inválido, sendo que o cliente é CPF: OK
-testar marcara cep OK
-setar quantidade digitando carrinho OK
-add quantidade pelos favoritos tbm OK
+
+- whatsapp
+- Desabilitar o cadastro pessoa fisica
+- Mudar o layout das categorias na home... nao vai ser mais carrossel... pq vai ter 3 ou 4 categorias apenas (segue print como precisa ficar) 2 por coluna.
 
 
 
