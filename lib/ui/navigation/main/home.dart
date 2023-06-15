@@ -383,7 +383,7 @@ class _ContainerHomeState extends State<ContainerHome> {
       print('HTTP_BODY: $body');
 
       final json =
-      await postRequest.sendPostRequest(Links.LIST_OTHER_PRODUCTS, body);
+          await postRequest.sendPostRequest(Links.LIST_OTHER_PRODUCTS, body);
 
       List<Map<String, dynamic>> _map = [];
       _map = List<Map<String, dynamic>>.from(jsonDecode(json));
@@ -522,83 +522,88 @@ class _ContainerHomeState extends State<ContainerHome> {
                                             future: listCategories(),
                                             builder: (context, snapshot) {
                                               if (snapshot.hasData) {
-                                                final responseItem =
-                                                    Product.fromJson(
-                                                        snapshot.data![0]);
+                                                var gridItems = <Widget>[];
 
-                                                if (responseItem.rows != 0) {
-                                                  return Container(
-                                                    height: 120,
-                                                    child: ListView.builder(
-                                                      scrollDirection:
-                                                          Axis.horizontal,
-                                                      itemCount:
-                                                          snapshot.data!.length,
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        final response = Product
-                                                            .fromJson(snapshot
-                                                                .data![index]);
-                                                        return InkWell(
-                                                            onTap: () => {
-                                                                  Navigator.pushNamed(
-                                                                      context,
-                                                                      "/ui/subcategories",
-                                                                      arguments: {
-                                                                        "id_category":
-                                                                            response.id,
-                                                                      })
-                                                                },
-                                                            child: Column(
-                                                                children: [
-                                                                  Container(
-                                                                    margin: EdgeInsets
-                                                                        .all(Dimens
-                                                                            .minMarginApplication),
-                                                                    child:
-                                                                        ClipOval(
-                                                                      child: SizedBox
-                                                                          .fromSize(
-                                                                        size: Size.fromRadius(
-                                                                            38),
-                                                                        // Image radius
-                                                                        child: Image.network(
-                                                                            ApplicationConstant.URL_CATEGORIES +
-                                                                                response.url.toString(),
-                                                                            fit: BoxFit.cover,
-                                                                            errorBuilder: (context, exception, stackTrack) => Image.asset(
-                                                                                  'images/default.png',
-                                                                                ) /*fit: BoxFit.cover*/
-                                                                            ),
-                                                                      ),
-                                                                    ),
+                                                for (var i = 0;
+                                                    i < snapshot.data!.length;
+                                                    i++) {
+                                                  final response =
+                                                      Product.fromJson(
+                                                          snapshot.data![i]);
+
+                                                  gridItems.add(InkWell(
+                                                      onTap: () => {
+                                                            Navigator.pushNamed(
+                                                                context,
+                                                                "/ui/subcategories",
+                                                                arguments: {
+                                                                  "id_category":
+                                                                      response
+                                                                          .id,
+                                                                })
+                                                          },
+                                                      child: Column(children: [
+                                                        Container(
+                                                          margin: EdgeInsets
+                                                              .all(Dimens
+                                                                  .minMarginApplication),
+                                                          child: ClipOval(
+                                                            child: SizedBox
+                                                                .fromSize(
+                                                              size: Size
+                                                                  .fromRadius(
+                                                                      50),
+                                                              // Image radius
+                                                              child: Image.network(
+                                                                  ApplicationConstant
+                                                                          .URL_CATEGORIES +
+                                                                      response
+                                                                          .url
+                                                                          .toString(),
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                  errorBuilder: (context,
+                                                                          exception,
+                                                                          stackTrack) =>
+                                                                      Image
+                                                                          .asset(
+                                                                        'images/default.png',
+                                                                      ) /*fit: BoxFit.cover*/
                                                                   ),
-                                                                  Text(
-                                                                    response
-                                                                        .nome,
-                                                                    maxLines: 1,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontFamily:
-                                                                          'Inter',
-                                                                      fontSize:
-                                                                          Dimens
-                                                                              .textSize4,
-                                                                    ),
-                                                                  ),
-                                                                ]));
-                                                      },
-                                                    ),
-                                                  );
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          response.nome,
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: TextStyle(
+                                                            fontFamily: 'Inter',
+                                                            fontSize: Dimens
+                                                                .textSize4,
+                                                          ),
+                                                        ),
+                                                      ])));
                                                 }
+
+                                                return Container(
+                                                  // margin: EdgeInsets.only(left: 10, right: 10),
+                                                  child: GridView.count(
+                                                    childAspectRatio: 1.30,
+                                                    primary: false,
+                                                    shrinkWrap: true,
+                                                    crossAxisCount: 2,
+                                                    children: gridItems,
+                                                  ),
+                                                );
                                               } else if (snapshot.hasError) {
                                                 return Text(
                                                     '${snapshot.error}');
                                               }
-                                              return const CircularProgressIndicator();
+                                              return Center(
+                                                  /*child: CircularProgressIndicator()*/
+                                                  );
                                             }),
                                         SizedBox(
                                             height: Dimens.marginApplication),
@@ -915,20 +920,34 @@ class _ContainerHomeState extends State<ContainerHome> {
 
                                                   var _isFavorite = false;
 
-                                                  for (var i = 0; i < responseFavoriteList.length; i++) {
-                                                    final favorite = Favorite.fromJson(responseFavoriteList[i]);
+                                                  for (var i = 0;
+                                                      i <
+                                                          responseFavoriteList
+                                                              .length;
+                                                      i++) {
+                                                    final favorite =
+                                                        Favorite.fromJson(
+                                                            responseFavoriteList[
+                                                                i]);
 
-                                                    if (favorite.id_produto == response.id) {
+                                                    if (favorite.id_produto ==
+                                                        response.id) {
                                                       _isFavorite = true;
                                                     }
                                                   }
 
                                                   var _isCart = false;
 
-                                                  for (var i = 0; i < responseCartList.length; i++) {
-                                                    final item = Item.fromJson(responseCartList[i]);
+                                                  for (var i = 0;
+                                                      i <
+                                                          responseCartList
+                                                              .length;
+                                                      i++) {
+                                                    final item = Item.fromJson(
+                                                        responseCartList[i]);
 
-                                                    if (item.id_produto == response.id) {
+                                                    if (item.id_produto ==
+                                                        response.id) {
                                                       _isCart = true;
                                                     }
                                                   }
@@ -1001,8 +1020,9 @@ class _ContainerHomeState extends State<ContainerHome> {
                                                                         ),
                                                                         onPressed:
                                                                             () {
-                                                                          addItemToFavorite(
-                                                                              response.id.toString());
+                                                                          addItemToFavorite(response
+                                                                              .id
+                                                                              .toString());
                                                                         },
                                                                       ),
                                                                       IconButton(

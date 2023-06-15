@@ -37,7 +37,7 @@ class _MainMenu extends State<MainMenu> {
   User? _profileResponse;
 
   Future<void> _launchUrl() async {
-    if (!await launchUrl(Uri.parse(launchWhatsApp(phone: 554836582500, message: "").toString()), mode: LaunchMode.platformDefault)) {
+    if (!await launchUrl(Uri.parse(launchWhatsApp(phone: 554836582500, message: "").toString()), mode: LaunchMode.externalNonBrowserApplication)) {
       throw Exception('Could not launch');
     }
   }
