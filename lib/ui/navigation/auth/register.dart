@@ -41,7 +41,7 @@ class _RegisterState extends State<Register> {
 
   late bool _isLoading = false;
 
-  String currentSelectedValue = "Pessoa Física";
+  String currentSelectedValue = "Pessoa Jurídica";
 
   @override
   void initState() {
@@ -206,39 +206,39 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
                     SizedBox(height: 32),
-                    Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              Dimens.minRadiusApplication),
-                        ),
-                        child: Container(
-                            padding: EdgeInsets.all(Dimens.paddingApplication),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                isExpanded: true,
-                                value: currentSelectedValue,
-                                isDense: true,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    currentSelectedValue = newValue!;
-                                  });
-                                },
-                                items: <String>[
-                                  'Pessoa Física',
-                                  'Pessoa Jurídica'
-                                ].map((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value,
-                                        style: TextStyle(
-                                          fontFamily: 'Inter',
-                                          color: OwnerColors.colorPrimary,
-                                        )),
-                                  );
-                                }).toList(),
-                              ),
-                            ))),
-                    SizedBox(height: Dimens.marginApplication),
+                    // Card(
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(
+                    //           Dimens.minRadiusApplication),
+                    //     ),
+                    //     child: Container(
+                    //         padding: EdgeInsets.all(Dimens.paddingApplication),
+                    //         child: DropdownButtonHideUnderline(
+                    //           child: DropdownButton<String>(
+                    //             isExpanded: true,
+                    //             value: currentSelectedValue,
+                    //             isDense: true,
+                    //             onChanged: (newValue) {
+                    //               setState(() {
+                    //                 currentSelectedValue = newValue!;
+                    //               });
+                    //             },
+                    //             items: <String>[
+                    //               'Pessoa Física',
+                    //               'Pessoa Jurídica'
+                    //             ].map((String value) {
+                    //               return DropdownMenuItem<String>(
+                    //                 value: value,
+                    //                 child: Text(value,
+                    //                     style: TextStyle(
+                    //                       fontFamily: 'Inter',
+                    //                       color: OwnerColors.colorPrimary,
+                    //                     )),
+                    //               );
+                    //             }).toList(),
+                    //           ),
+                    //         ))),
+                    // SizedBox(height: Dimens.marginApplication),
                     Visibility(
                         visible: currentSelectedValue == "Pessoa Jurídica",
                         child: TextField(

@@ -1180,8 +1180,8 @@ class _ContainerHomeState extends State<ContainerHome> {
 }
 
 final List<Widget> carouselItems = [
-  CarouselItemBuilder(image: 'images/banner1_image.jpg'),
-  CarouselItemBuilder(image: 'images/banner2_image.jpg'),
+  CarouselItemBuilder(image: 'images/banner3_image.png'),
+  CarouselItemBuilder(image: 'images/banner4_image.png'),
 ];
 
 class CarouselItemBuilder extends StatelessWidget {

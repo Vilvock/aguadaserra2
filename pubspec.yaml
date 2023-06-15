@@ -89,6 +89,8 @@ flutter:
     - images/main_logo_2.png
     - images/banner1_image.jpg
     - images/banner2_image.jpg
+    - images/banner3_image.png
+    - images/banner4_image.png
     - images/intro1_image.png
     - images/intro2_image.png
     - images/intro3_image.png
